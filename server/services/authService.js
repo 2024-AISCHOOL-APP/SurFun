@@ -3,13 +3,13 @@ const db = require('../models/db');
 
 async function registerUser(username, password, email, phoneNumber, preference) {
     const hashedPassword = await bcrypt.hash(password, 10);
-    const query = `INSERT INTO Users (username, password, email, phone_number, preference) VALUES (?, ?, ?, ?, ?)`;
+    const query = `INSERT INTO User (username, password, email, phone_number, preference) VALUES (?, ?, ?, ?, ?)`;
     const params = [username, hashedPassword, email, phoneNumber, preference];
     await db.executeQuery(query, params);
 }
 
 async function authenticateUser(username, password) {
-    const query = `SELECT * FROM Users WHERE username = ?`;
+    const query = `SELECT * FROM User WHERE username = ?`;
     const users = await db.executeQuery(query, [username]);
 
     if (users.length === 0) {
