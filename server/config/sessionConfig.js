@@ -1,17 +1,6 @@
 const session = require('express-session');
 const RedisStore = require('connect-redis').default;
-const Redis = require('ioredis');
-
-let redisClient;
-try {
-    redisClient = new Redis();
-    redisClient.on('error', err => {
-        console.error('Redis connection error:', err);
-    });
-} catch (err) {
-    console.error('Could not establish a connection with Redis. Exiting...');
-    process.exit(1);
-}
+const redisClient =require('./redisConfig');
 
 const sessionConfig = session({
     store: new RedisStore({ client: redisClient }),
