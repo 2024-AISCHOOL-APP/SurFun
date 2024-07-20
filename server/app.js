@@ -13,10 +13,9 @@ app.use(cors());
 app.use(express.json());
 app.use(sessionConfig);
 
-app.use('/auth', authRoutes);
 
-//특정 경로에 대해서만 캐싱 미들웨어를 적용
-app.use('api',cacheMiddleware,apiRoutes);
+app.use('/auth', authRoutes);
+app.use('api',apiRoutes); //특정 경로에 대해서만 캐싱 미들웨어를 적용
 
 
 module.exports = app;
