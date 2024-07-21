@@ -5,7 +5,8 @@ const Profile=()=> {
     
         return (
             <div>
-                <h1>Welcome to ProfilePage</h1>
+                
+                <h2> TEST NAMU</h2>
                 <video autoPlay loop muted className="video-background">
                 <source src="/videos/surfing.mp4" type="video/mp4" />
             </video>
