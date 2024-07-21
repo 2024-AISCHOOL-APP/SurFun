@@ -89,7 +89,15 @@ function Main({ onLoginSuccess }) {
                     </video>
                     {/* 환영 메시지 */}
                     <div className="welcome-message">
-                        <h1>Welcome to SurFun</h1>
+                        <br></br>
+                        <br></br>
+                        <br /><br /><br /><br />
+                        <br></br>
+                        <br /><br /><br /><br /><br />
+                        <br /><br /><br /><br /><br /><br /><br /><br /><br /><br />
+                        <h1> SurFun</h1>
+                        <h2>서핑을 즐기자</h2>
+                        <button >서핑하러 가기</button>
                     </div>
                     {/* 즐겨찾기 컴포넌트 */}
                     <Favorites />

@@ -10,14 +10,14 @@ body {
 
 /* 비디오 컨테이너 스타일 */
 .video-container {
-    flex: 0 0 60%; /* 전체 높이의 60%를 차지 */
+    flex: 0 0 0%; /* 전체 높이의 60%를 차지 */
     position: relative; /* 자식 요소를 위한 상대적 위치 설정 */
 }
 
 /* 비디오 배경 스타일 */
 .video-background {
     width: 100%; /* 가로 100% */
-    height: 100%; /* 세로 100% */
+    height: 25%; /* 세로 100% */
     object-fit: cover; /* 비디오를 컨테이너에 맞게 조정 */
 }
 
