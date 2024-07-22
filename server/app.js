@@ -8,7 +8,7 @@ const cacheMiddleware =require('./middlewares/cacheMiddleware');
 const apiRoutes =require('./routes/apiRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const zonesRoutes = require('./routes/zones'); // 추가
+const zonesRoutes = require('./routes/zones'); 
 
 
 const app = express();
