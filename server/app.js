@@ -10,6 +10,7 @@ const apiRoutes =require('./routes/apiRoutes');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const passport = require('./config/passportConfig');
+const zonesRoutes = require('./routes/zones'); 
 
 
 const app = express();
@@ -44,13 +45,13 @@ app.use(session({
 
 
 app.use(cors());
-app.use(express.json());
 app.use(sessionConfig);
 
 //passport 전용 middleware
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.use('/zones', zonesRoutes); // zones.js 라우트
 app.use('/auth', authRoutes); //회원가입,로그인 로직 에서의 미들웨어를 적용
 app.use('/api',apiRoutes); //특정 경로에 대해서만 캐싱 미들웨어를 적용
 app.use('/api-docs',swaggerUi.serve,swaggerUi.setup(swaggerDocs));  //swagger-ui
