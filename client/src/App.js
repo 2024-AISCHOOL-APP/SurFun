@@ -8,6 +8,8 @@ import Header from './components/layout/Header';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
 
+import './assets/scss/Modal.css'; // 스타일을 import합니다.
+
 function App() {
     // 상태 변수들 정의
     const [loggedIn, setLoggedIn] = useState(false); // 로그인 여부
@@ -62,13 +64,9 @@ function App() {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <div style={{
-                            backgroundColor: 'white',
-                            padding: '20px',
-                            borderRadius: '5px',
-                            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
-                        }}>
-                            <LoginModal onLoginSuccess={handleLoginSuccess} />
+                        <div className='login-modal'>
+                            
+                            <LoginModal onLoginSuccess={handleLoginSuccess} onClose={toggleLoginModal}/>
                         </div>
                     </div>
                 )}
@@ -85,13 +83,8 @@ function App() {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                        <div style={{
-                            backgroundColor: 'white',
-                            padding: '20px',
-                            borderRadius: '5px',
-                            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
-                        }}>
-                            <JoinModal onJoinSuccess={() => setIsJoinModalOpen(false)} />
+                        <div className='join-modal'>
+                            <JoinModal onJoinSuccess={() => setIsJoinModalOpen(false)} onClose={toggleJoinModal} />
                         </div>
                     </div>
                 )}

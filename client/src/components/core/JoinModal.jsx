@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-function JoinModal({ onJoinSuccess }) {
+function JoinModal({ onJoinSuccess, onClose }) {
     const [registerUsername, setRegisterUsername] = useState('');
     const [registerPassword, setRegisterPassword] = useState('');
     const [registerPhoneNumber, setRegisterPhoneNumber] = useState('');
@@ -29,6 +29,12 @@ function JoinModal({ onJoinSuccess }) {
 
     return (
         <div>
+            <button
+                className="close-button" 
+                onClick={onClose} // 닫기 버튼 클릭 시 모달창 닫기
+                >
+                &times; {/* 닫기 버튼을 '×'로 표시 */}
+            </button>
             <h1>Register</h1>
             <input
                 type="text"

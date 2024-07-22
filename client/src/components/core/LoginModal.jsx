@@ -1,10 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../../assets/scss/Modal.css'; // 스타일을 import합니다.
 
-function LoginModal({ onLoginSuccess }) {
+function LoginModal({ onLoginSuccess, onClose }) {
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [errorMessage, setErrorMessage]=useState('');
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
+
+    // const onClose = () => {
+    //     console.log('Close buttion is clicked');
+    //     setIsLoginModalOpen(false);
+    // }
 
     const login = async () => {
         try {
@@ -23,15 +31,22 @@ function LoginModal({ onLoginSuccess }) {
 
     return (
         <div>
-            <h1>Login</h1>
-            {errorMessage && <p style={{color:'red'}}>{errorMessage}</p>}
+            <button
+                className="close-button" 
+                onClick={onClose} // 닫기 버튼 클릭 시 모달창 닫기
+                >
+                &times; {/* 닫기 버튼을 '×'로 표시 */}
+            </button>
+            <h1 align="center">로그인</h1>
+            <p>아이디*</p>
             <input
                 type="text"
-                placeholder="Username"
+                placeholder="ID"
                 value={loginUsername}
                 onChange={(e) => setLoginUsername(e.target.value)}
             />
             <br/>
+            <p>비밀번호*</p>
             <input
                 type="password"
                 placeholder="Password"
@@ -39,7 +54,13 @@ function LoginModal({ onLoginSuccess }) {
                 onChange={(e) => setLoginPassword(e.target.value)}
             />
             <br/>
-            <button onClick={login}>Login</button>
+            {errorMessage && <p style={{color:'red'}}>{errorMessage}</p>}
+            <button
+                onClick={login}
+                className="login-button"
+            >
+                로그인
+            </button>
         </div>
     );
 }
