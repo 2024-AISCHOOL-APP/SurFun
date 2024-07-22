@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const cacheMiddleware =require('../middlewares/cacheMiddleware');
+const passport = require('passport');
 
 /**
  * @swagger
@@ -88,6 +89,14 @@ router.post('/login', authController.login);
 router.get('/protected', authController.authenticateSession, (req, res) => {
     res.send('This is a protected route');
 });
+
+router.get('/google',passport.authenticate('google',{scope:['profile','email']}));
+
+router.get('/google/callback',
+    passport.authenticate('google',{failureRedirect:'/'})),
+    (req,res)=>{
+        res.redirect('/');
+    }
 
 
 module.exports = router;

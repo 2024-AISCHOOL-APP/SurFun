@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link,useNavigate } from 'react-router-dom';
+import GoogleLoginButton from '../core/GoogleLoginButton';
 
 function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
     const navigate = useNavigate();
@@ -21,6 +22,9 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
                             {`Welcome, ${username}`}
                         </li>
                     )}
+                    <div>
+                        <GoogleLoginButton/>
+                    </div>
                     <li style={{ margin: '0 10px' }}>
                         <button onClick={() => handleNavigation('/spot-select')}>Spot Select</button>
                     </li>
