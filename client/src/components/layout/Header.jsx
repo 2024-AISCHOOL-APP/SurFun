@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link,useNavigate } from 'react-router-dom';
 import GoogleLoginButton from '../core/GoogleLoginButton';
+import GoogleJoinButton from '../core/GoogleJoinButton';
 
 function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
     const navigate = useNavigate();
@@ -22,6 +23,9 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
                             {`Welcome, ${username}`}
                         </li>
                     )}
+                    <div>
+                        <GoogleJoinButton></GoogleJoinButton>
+                    </div>
                     <div>
                         <GoogleLoginButton/>
                     </div>
