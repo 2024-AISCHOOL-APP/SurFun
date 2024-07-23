@@ -7,6 +7,7 @@ import SpotSelect from './components/pages/SpotSelect';
 import Header from './components/layout/Header';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
+import PostDetail from './components/pages/PostDetail';
 
 function App() {
     // 상태 변수들 정의
@@ -48,6 +49,7 @@ function App() {
                     <Route path="/community" element={<Community />} />
                     <Route path="/profile" element={<Profile />} />
                     <Route path="/spot-select" element={<SpotSelect />} />
+                    <Route path="/post/:id" element={<PostDetail />} />
                 </Routes>
                 {/* 로그인 모달 */}
                 {isLoginModalOpen && (
