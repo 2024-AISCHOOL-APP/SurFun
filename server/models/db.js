@@ -1,19 +1,20 @@
-const getMySQLConnection = require('../config/dbConfig');
 
-async function executeQuery(query, params) {
-    let connection;
-    try {
-        connection = await getMySQLConnection();
-        const [results] = await connection.execute(query, params);
-        return results;
-    } catch (err) {
-        console.error('Database query error:', err);
-        throw err;
-    } finally {
-        if (connection) {
-            await connection.end();
-        }
-    }
-}
+const pool = require('../config/dbConfig');
 
-module.exports = { executeQuery };
+const getMySQLConnection = () => pool;
+
+const executeQuery = async (query, params) => {
+  const connection = getMySQLConnection();
+  try {
+    const [results] = await connection.execute(query, params);
+    return results;
+  } catch (err) {
+    console.error('Database query error:', err);
+    throw err;
+  }
+};
+
+module.exports = {
+  getMySQLConnection,
+  executeQuery
+};
