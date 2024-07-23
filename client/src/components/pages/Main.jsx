@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import LoginModal from '../core/LoginModal';
-import JoinModal from '../core/JoinModal';
 import WeatherDisplay from '../../components/widgets/WeatherDisplay';
 import getWeatherData from '../../services/WeatherService';
 import MapView from '../../components/widgets/MapView';

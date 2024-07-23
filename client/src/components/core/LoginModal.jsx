@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 
-function LoginModal({ onLoginSuccess }) {
+function LoginModal({ onLoginSuccess ,onClose}) {
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [errorMessage, setErrorMessage]=useState('');
@@ -40,6 +40,7 @@ function LoginModal({ onLoginSuccess }) {
             />
             <br/>
             <button onClick={login}>Login</button>
+            <button onClick={onClose}>Close</button>
         </div>
     );
 }

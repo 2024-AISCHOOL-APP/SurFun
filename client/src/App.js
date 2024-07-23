@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from './components/pages/Main';
 import Community from './components/pages/Community';
@@ -68,7 +68,7 @@ function App() {
                             borderRadius: '5px',
                             boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
                         }}>
-                            <LoginModal onLoginSuccess={handleLoginSuccess} />
+                            <LoginModal onLoginSuccess={handleLoginSuccess} onClose={toggleLoginModal} />
                         </div>
                     </div>
                 )}
@@ -91,7 +91,7 @@ function App() {
                             borderRadius: '5px',
                             boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
                         }}>
-                            <JoinModal onJoinSuccess={() => setIsJoinModalOpen(false)} />
+                            <JoinModal onJoinSuccess={() => setIsJoinModalOpen(false)} onClose={toggleJoinModal}/>
                         </div>
                     </div>
                 )}
