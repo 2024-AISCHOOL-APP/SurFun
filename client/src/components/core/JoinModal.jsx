@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import "../../assets/scss/Main.scss"
+
 
 function JoinModal({ onJoinSuccess, onClose }) {
     const [registerUsername, setRegisterUsername] = useState('');
@@ -28,68 +30,70 @@ function JoinModal({ onJoinSuccess, onClose }) {
     };
 
     return (
-        <div>
-            <button
-                className="close-button" 
-                onClick={onClose} // 닫기 버튼 클릭 시 모달창 닫기
-                >
-                &times; {/* 닫기 버튼을 '×'로 표시 */}
-            </button>
-            <h1 align='center'>회원가입</h1>
-            <br/>
-            아이디*
-            <br/>
-            <input
-                type="text"
-                placeholder="ID"
-                value={registerUsername}
-                onChange={(e) => setRegisterUsername(e.target.value)}
-            />
-            <br/>
-            비밀번호*
-            <br/>
-            <input
-                type="password"
-                placeholder="●●●●●●●●"
-                value={registerPassword}
-                onChange={(e) => setRegisterPassword(e.target.value)}
-            />
-            <br/>
-            비밀번호확인*
-            <br/>
-            <input
-                type="password"
-                placeholder="●●●●●●●●"
-            />
-            <br/>
-            휴대폰번호*
-            <br/>
-            <input
-                type="text"
-                placeholder="Phone Number"
-                value={registerPhoneNumber}
-                onChange={(e) => setRegisterPhoneNumber(e.target.value)}
-            />
-            <br/>
-            이메일
-            <br/>
-            <input
-                type="text"
-                placeholder="Email"
-                value={registerEmail}
-                onChange={(e) => setRegisterEmail(e.target.value)}
-            />
-            <br/>
-            Preference가 선호지역인가?
-            <br/>
-            <input
-                type="text"
-                placeholder="Preference"
-                value={registerPreference}
-                onChange={(e) => setRegisterPreference(e.target.value)}
-            />
-            <br/>
-            <button onClick={register}>가입</button>
+        <div className="register-container" style={{zIndex : '445'}}>
+            <div className="register-box">
+                <button
+                    className="close-button" 
+                    onClick={onClose} // 닫기 버튼 클릭 시 모달창 닫기
+                    >
+                    &times; {/* 닫기 버튼을 '×'로 표시 */}
+                </button>
+                <h1 align='center'>회원가입</h1>
+                <br/>
+                아이디*
+                <br/>
+                <input
+                    type="text"
+                    placeholder="ID"
+                    value={registerUsername}
+                    onChange={(e) => setRegisterUsername(e.target.value)}
+                />
+                <br/>
+                비밀번호*
+                <br/>
+                <input
+                    type="password"
+                    placeholder="●●●●●●●●"
+                    value={registerPassword}
+                    onChange={(e) => setRegisterPassword(e.target.value)}
+                />
+                <br/>
+                비밀번호확인*
+                <br/>
+                <input
+                    type="password"
+                    placeholder="●●●●●●●●"
+                />
+                <br/>
+                휴대폰번호*
+                <br/>
+                <input
+                    type="text"
+                    placeholder="Phone Number"
+                    value={registerPhoneNumber}
+                    onChange={(e) => setRegisterPhoneNumber(e.target.value)}
+                />
+                <br/>
+                이메일
+                <br/>
+                <input
+                    type="text"
+                    placeholder="Email"
+                    value={registerEmail}
+                    onChange={(e) => setRegisterEmail(e.target.value)}
+                />
+                <br/>
+                Preference가 선호지역인가?
+                <br/>
+                <input
+                    type="text"
+                    placeholder="Preference"
+                    value={registerPreference}
+                    onChange={(e) => setRegisterPreference(e.target.value)}
+                />
+                <br/>
+                <button onClick={register}>가입</button>
+            </div>
         </div>
     );
 }

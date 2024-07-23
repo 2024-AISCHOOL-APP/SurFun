@@ -10,27 +10,126 @@ body {
 
 /* 비디오 컨테이너 스타일 */
 .video-container {
-    flex: 0 0 60%; /* 전체 높이의 60%를 차지 */
+    flex: 0 0 20%; /* 전체 높이의 60%를 차지 */
     position: relative; /* 자식 요소를 위한 상대적 위치 설정 */
 }
 
 /* 비디오 배경 스타일 */
 .video-background {
     width: 100%; /* 가로 100% */
-    height: 100%; /* 세로 100% */
-    object-fit: cover; /* 비디오를 컨테이너에 맞게 조정 */
+    height: 0%; /* 세로 100% */
+    object-fit:contain; /* 비디오를 컨테이너에 맞게 조정 */
 }
 
 /* 환영 메시지 스타일 (필요 시 삭제 가능) */
 .welcome-message {
     position: absolute; /* 부모의 위치를 기준으로 절대적 위치 설정 */
-    top: 10%; /* 상단에서 10% 위치 */
+    top: 30%; /* 상단에서 10% 위치 */
     left: 50%; /* 좌측에서 50% 위치 */
     transform: translate(-50%, -50%); /* 중앙 정렬 */
     color: white; /* 글자 색상 흰색 */
     text-align: center; /* 텍스트 가운데 정렬 */
-    z-index: 1; /* z-index 설정으로 다른 요소 위에 표시 */
+    // z-index: 1; /* z-index 설정으로 다른 요소 위에 표시 */
+    font-size: 50px;
 }
+.register-container {
+    position: relative;
+    z-index: 999; /* 원하는 z-index 값 설정 */
+  }
+  
+  .register-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px;
+  }
+ .loginbox{
+    position: relative;
+    z-index: 999; /* 원하는 z-index 값 설정 */
+ } 
+ .logincontainer{
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 10px;
+ }
+  .sortable-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    padding: 0 30px 0 30px;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+  
+  .heading {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .description {
+    font-size: 16px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+  
+  .sortable-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .sortable-item a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .delete-icon {
+    color: red;
+    cursor: pointer;
+  }
+  
+  //.drag-handle {
+    /* 추가적인 아이콘 스타일링 */
+  //}
+.main-button{ 
+    font-size:25px ;
+}
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.map {
+    width: 1700px;
+    height: 1000Px;
+    align-items: center;
+    justify-content: center;
+    margin-left: 0;
+    margin-right: 0;
+    border-style: solid;
+    border-width: medium;
+    border-color: #D8D8D8;
+  }
+  .map-container {
+    display: flex;
+    height: 60%;
+  }  
+
+
+  .spot-content {
+    flex: 1; /* 남은 공간을 모두 차지하도록 설정합니다 */
+    padding-left: 20px; /* 왼쪽 여백을 추가하여 지도와 내용 사이의 간격을 설정합니다 */
+    /* 내용의 스타일링을 추가할 수 있습니다 */
+  }
+  .loacate-select-button{
+    height: 10%;
+  }
+
 
 /* 메인 컨텐츠 스타일 */
 .content {
@@ -43,6 +142,36 @@ body {
     margin: 0 auto; /* 중앙 정렬 */
     border-radius: 10px; /* 모서리 둥글게 */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
+}
+.search-h1{
+  text-align: center;
+}
+.graph-h2{
+  text-align: center;
+  margin-top: 150px;
+}
+.graph-h2span {
+  display: inline;
+  margin-left: 500px; /* 필요한 경우 간격 조정 */
+}
+.realgraph{
+  text-align: center;
+  margin-top:150px ;
+}
+.real-graphspan{
+  display: inline;
+  margin-left: 500px;
+}
+.todayseah1{
+  margin-top:300px ;
+}
+.surfgoodimg{
+  margin-top: 30px;
+  margin-left:100px ;
+  max-width: 8%;
+}
+.todayexplain{
+  margin-bottom: 2px;
 }
 
 /* 헤더 스타일 */
@@ -98,17 +227,6 @@ header ul li button.black-button {
     cursor: pointer; /* 마우스 커서 포인토 */
 }
 
-/* 지도 컨테이너 스타일 (필요 시 삭제 가능) */
-.map-container {
-    position: fixed; /* 고정 위치 */
-    bottom: 20px; /* 하단 여백 20px */
-    right: 20px; /* 오른쪽 여백 20px */
-    width: 25%; /* 너비 25% */
-    height: 25%; /* 높이 25% */
-    border-radius: 10px; /* 모서리 둥글게 */
-    overflow: hidden; /* 넘치는 내용 숨기기 */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3); /* 그림자 설정 */
-}
 
 /* 즐겨찾기 및 하단 섹션 스타일 (필요 시 삭제 가능) */
 .favorites-section, .lower-sections {
@@ -124,12 +242,7 @@ header ul li button.black-button {
 
 /* 미디어 쿼리: 화면 너비가 768px 이하일 때 */
 @media (max-width: 768px) {
-    .map-container {
-        width: 50%; /* 너비 50% */
-        height: 25%; /* 높이 25% */
-        bottom: 10px; /* 하단 여백 10px */
-        right: 10px; /* 오른쪽 여백 10px */
-    }
+
 
     .favorites-section, .lower-sections {
         flex-direction: column; /* 플렉스 아이템을 세로로 정렬 */
@@ -144,12 +257,7 @@ header ul li button.black-button {
 
 /* 미디어 쿼리: 화면 너비가 480px 이하일 때 */
 @media (max-width: 480px) {
-    .map-container {
-        width: 90%; /* 너비 90% */
-        height: 25%; /* 높이 25% */
-        bottom: 10px; /* 하단 여백 10px */
-        right: 5%; /* 오른쪽 여백 5% */
-    }
+   
     .favorites-section, .lower-sections {
         flex-direction: column; /* 플렉스 아이템을 세로로 정렬 */
         align-items: center; /* 아이템을 수직 가운데 정렬 */
@@ -158,4 +266,6 @@ header ul li button.black-button {
     .popular-posts, .news-section {
         width: 90%; /* 너비 90% */
     }
+    
 }
+

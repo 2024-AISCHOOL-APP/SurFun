@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "../../assets/scss/Main.scss"
 import '../../assets/scss/Modal.css'; // 스타일을 import합니다.
 
 function LoginModal({ onLoginSuccess, onClose }) {
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [errorMessage, setErrorMessage]=useState('');
+
+    const close = () => {
+        
+    }
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
 
 
@@ -30,6 +35,27 @@ function LoginModal({ onLoginSuccess, onClose }) {
     };
 
     return (
+        <div className="loginbox" style={{zIndex : '999'}}>
+            <div className='logincontainer'>
+                <button onClick={close}>닫기</button>
+                <h1>Login</h1>
+                {errorMessage && <p style={{color:'red'}}>{errorMessage}</p>}
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={loginUsername}
+                    onChange={(e) => setLoginUsername(e.target.value)}
+                />
+                <br/>
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                />
+                <br/>
+                <button onClick={login}>Login</button>
+            </div>
         <div className='login-modal-content'>
             <button
                 className="close-button" 
