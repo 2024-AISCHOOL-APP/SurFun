@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import "../../assets/scss/Main.scss"
+
 
 function JoinModal({ onJoinSuccess }) {
     const [registerUsername, setRegisterUsername] = useState('');
@@ -28,44 +30,47 @@ function JoinModal({ onJoinSuccess }) {
     };
 
     return (
-        <div>
-            <h1>Register</h1>
-            <input
-                type="text"
-                placeholder="Username"
-                value={registerUsername}
-                onChange={(e) => setRegisterUsername(e.target.value)}
-            />
-            <br/>
-            <input
-                type="password"
-                placeholder="Password"
-                value={registerPassword}
-                onChange={(e) => setRegisterPassword(e.target.value)}
-            />
-            <br/>
-            <input
-                type="text"
-                placeholder="Phone Number"
-                value={registerPhoneNumber}
-                onChange={(e) => setRegisterPhoneNumber(e.target.value)}
-            />
-            <br/>
-            <input
-                type="text"
-                placeholder="Email"
-                value={registerEmail}
-                onChange={(e) => setRegisterEmail(e.target.value)}
-            />
-            <br/>
-            <input
-                type="text"
-                placeholder="Preference"
-                value={registerPreference}
-                onChange={(e) => setRegisterPreference(e.target.value)}
-            />
-            <br/>
-            <button onClick={register}>Register</button>
+        <div className="register-container" style={{zIndex : '445'}}>
+            <div className="register-box">
+
+
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={registerUsername}
+                    onChange={(e) => setRegisterUsername(e.target.value)}
+                />
+                <br/>
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={registerPassword}
+                    onChange={(e) => setRegisterPassword(e.target.value)}
+                />
+                <br/>
+                <input
+                    type="text"
+                    placeholder="Phone Number"
+                    value={registerPhoneNumber}
+                    onChange={(e) => setRegisterPhoneNumber(e.target.value)}
+                />
+                <br/>
+                <input
+                    type="text"
+                    placeholder="Email"
+                    value={registerEmail}
+                    onChange={(e) => setRegisterEmail(e.target.value)}
+                />
+                <br/>
+                <input
+                    type="text"
+                    placeholder="Preference"
+                    value={registerPreference}
+                    onChange={(e) => setRegisterPreference(e.target.value)}
+                />
+                <br/>
+                <button onClick={register}>Register</button>
+            </div>
         </div>
     );
 }

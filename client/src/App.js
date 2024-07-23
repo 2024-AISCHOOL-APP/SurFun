@@ -2,11 +2,12 @@ import { React, useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from './components/pages/Main';
 import Community from './components/pages/Community';
-import Profile from './components/pages/Profile';
 import SpotSelect from './components/pages/SpotSelect';
 import Header from './components/layout/Header';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
+import SpotSearch from './components/pages/SpotSearch';
+import Detail from './components/pages/Detail';
 
 function App() {
     // 상태 변수들 정의
@@ -46,8 +47,11 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Main onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/community" element={<Community />} />
-                    <Route path="/profile" element={<Profile />} />
+                   
                     <Route path="/spot-select" element={<SpotSelect />} />
+                    <Route path="/SpotSearch" element={<SpotSearch />} />
+                    <Route path="/Detail" element={<Detail />} />
+                    
                 </Routes>
                 {/* 로그인 모달 */}
                 {isLoginModalOpen && (

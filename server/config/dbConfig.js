@@ -5,7 +5,7 @@ async function getMySQLConnection() {
         host: 'project-db-stu3.smhrd.com',
         user: 'Insa5_App_hacksim_6',
         password: 'aischool6',
-        database: 'SurFun',
+        database: 'Insa5_App_hacksim_6',
         port: 3307  // 포트 설정 추가
     });
 }

@@ -25,7 +25,7 @@ async function login(req, res) {
 
     try {
         const user = await authService.authenticateUser(username, password);
-        req.session.userId = user.user_id;
+        req.session.userId = user.user_id;  //세션에 사용자 ID 저장
         res.send('Login successful');
     } catch (err) {
         console.error('Error during login:', err);
