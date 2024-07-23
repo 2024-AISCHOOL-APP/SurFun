@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 const cacheMiddleware =require('../middlewares/cacheMiddleware');
+const passport = require('passport');
 
 /**
  * @swagger
@@ -88,6 +89,39 @@ router.post('/login', authController.login);
 router.get('/protected', authController.authenticateSession, (req, res) => {
     res.send('This is a protected route');
 });
+
+/**
+ * @swagger
+ * /auth/google:
+ *   get:
+ *     summary: Redirect to Google for authentication
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       302:
+ *         description: Redirect to Google OAuth 2.0 login page
+ */
+router.get('/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+/**
+ * @swagger
+ * /auth/google/callback:
+ *   get:
+ *     summary: Google OAuth2 callback
+ *     tags:
+ *       - Auth
+ *     responses:
+ *       302:
+ *         description: Redirect on successful login
+ *       401:
+ *         description: Unauthorized
+ */
+
+router.get('/google/callback',
+    passport.authenticate('google',{failureRedirect:'/'})),
+    (req,res)=>{
+        res.redirect('/');
+    }
 
 
 module.exports = router;

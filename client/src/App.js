@@ -1,15 +1,13 @@
-import { React, useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from './components/pages/Main';
 import Community from './components/pages/Community';
+import Profile from './components/pages/Profile';
 import SpotSelect from './components/pages/SpotSelect';
 import Header from './components/layout/Header';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
-import PostModal from './components/core/PostModal';
-import SpotSearch from './components/pages/SpotSearch';
-import Detail from './components/pages/Detail';
-import './assets/scss/Modal.css'; // 스타일을 import합니다.
+import PostDetail from './components/pages/PostDetail';
 
 function App() {
     // 상태 변수들 정의
@@ -17,7 +15,6 @@ function App() {
     const [username, setUsername] = useState(''); // 사용자 이름
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 열림 여부
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false); // 회원가입 모달 열림 여부
-    // const [postContent, setPostContent] = useState(''); // 게시글 내용
 
     // 로그인 성공 처리 함수
     const handleLoginSuccess = (username) => {
@@ -36,11 +33,6 @@ function App() {
         setIsLoginModalOpen(!isLoginModalOpen);
     };
 
-    // // 게시글작성 모달 열기/닫기 함수
-    // const togglePostModal = () => {
-    //     setIsPostModalOpen(!isPostModalOpen);
-    // }
-
     return (
         <>
             <Router>
@@ -55,38 +47,56 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Main onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/community" element={<Community />} />
-                   
+                    <Route path="/profile" element={<Profile />} />
                     <Route path="/spot-select" element={<SpotSelect />} />
-                    <Route path="/SpotSearch" element={<SpotSearch />} />
-                    <Route path="/Detail" element={<Detail />} />
-                    
+                    <Route path="/post/:id" element={<PostDetail />} />
                 </Routes>
                 {/* 로그인 모달 */}
                 {isLoginModalOpen && (
-                    <div className='modal-background'>
-                        <div className='login-modal'>
-                            <LoginModal onLoginSuccess={handleLoginSuccess} onClose={toggleLoginModal}/>
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <div style={{
+                            backgroundColor: 'white',
+                            padding: '20px',
+                            borderRadius: '5px',
+                            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+                        }}>
+                            <LoginModal onLoginSuccess={handleLoginSuccess} onClose={toggleLoginModal} />
                         </div>
                     </div>
                 )}
                 {/* 회원가입 모달 */}
                 {isJoinModalOpen && (
-                    <div className='modal-background'>
-                        <div className='join-modal'>
-                            <JoinModal onJoinSuccess={() => setIsJoinModalOpen(false)} onClose={toggleJoinModal} />
+                    <div style={{
+                        position: 'fixed',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <div style={{
+                            backgroundColor: 'white',
+                            padding: '20px',
+                            borderRadius: '5px',
+                            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+                        }}>
+                            <JoinModal onJoinSuccess={() => setIsJoinModalOpen(false)} onClose={toggleJoinModal}/>
                         </div>
                     </div>
                 )}
-                {/* 게시글 작성 모달
-                {isPostModalOpen && (
-                    <div className='modal-background'>
-                        <div className='post-modal'>
-                            <PostModal onLoginSuccess={() => setIsPostModalOpen(false)} onClose={toggleJoinModal} />
-                        </div>
-                    </div>
-                )} */}
-                
-
             </Router>
         </>
     );
