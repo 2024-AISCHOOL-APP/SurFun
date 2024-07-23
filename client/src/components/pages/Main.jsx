@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import LoginModal from '../core/LoginModal';
-import JoinModal from '../core/JoinModal';
 import WeatherDisplay from '../../components/widgets/WeatherDisplay';
 import getWeatherData from '../../services/WeatherService';
 import MapView from '../../components/widgets/MapView';
 import '../../assets/scss/Main.scss';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,Link } from 'react-router-dom';
 import Favorites from '../widgets/Favorites';
 
 function Main({ onLoginSuccess }) {
-    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 열림 여부
+        
+    const [isLoginModalOpen, setIsLoginModalOpen] =  useState(false); // 로그인 모달 열림 여부
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false); // 회원가입 모달 열림 여부
     const [loggedIn, setLoggedIn] = useState(false); // 로그인 상태
     const [weatherData, setWeatherData] = useState(null); // 날씨 데이터
@@ -19,9 +18,15 @@ function Main({ onLoginSuccess }) {
     const [username, setUsername] = useState(''); // 로그인한 사용자 이름
     const navigate = useNavigate(); // 페이지 이동을 위한 hook
 
+    
+    const handleNavigation = (path) => {
+         navigate(path);
+    };
+
     // 로그인 모달 토글 함수
     const toggleLoginModal = () => {
         setIsLoginModalOpen(!isLoginModalOpen);
+        console.log('Login modal toggled:', isLoginModalOpen)
     };
 
     // 회원가입 모달 토글 함수
@@ -89,11 +94,15 @@ function Main({ onLoginSuccess }) {
                     </video>
                     {/* 환영 메시지 */}
                     <div className="welcome-message">
-                        <h1>Welcome to SurFun</h1>
+                        
+                        <h1>Surfun</h1>
+                        <h2>서핑을 즐기자</h2>
+                        <button onClick={() => handleNavigation('/spot-select')} className='main-button'>서핑하러 가기</button>
+                        
                     </div>
-                    {/* 즐겨찾기 컴포넌트 */}
-                    <Favorites />
-                </div>
+                    
+                            <Favorites />
+                    </div>
 
                 {/* 메인 컨텐츠 */}
                 <div className="content">
@@ -120,7 +129,7 @@ function Main({ onLoginSuccess }) {
                 </div>
             </div>
         </>
-    );
-}
+    )};
+
 
 export default Main;

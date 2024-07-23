@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import "../../assets/scss/Main.scss"
 
 function LoginModal({ onLoginSuccess }) {
     const [loginUsername, setLoginUsername] = useState('');
     const [loginPassword, setLoginPassword] = useState('');
     const [errorMessage, setErrorMessage]=useState('');
+
+    const close = () => {
+        
+    }
 
     const login = async () => {
         try {
@@ -22,24 +27,27 @@ function LoginModal({ onLoginSuccess }) {
     };
 
     return (
-        <div>
-            <h1>Login</h1>
-            {errorMessage && <p style={{color:'red'}}>{errorMessage}</p>}
-            <input
-                type="text"
-                placeholder="Username"
-                value={loginUsername}
-                onChange={(e) => setLoginUsername(e.target.value)}
-            />
-            <br/>
-            <input
-                type="password"
-                placeholder="Password"
-                value={loginPassword}
-                onChange={(e) => setLoginPassword(e.target.value)}
-            />
-            <br/>
-            <button onClick={login}>Login</button>
+        <div className="loginbox" style={{zIndex : '999'}}>
+            <div className='logincontainer'>
+                <button onClick={close}>닫기</button>
+                <h1>Login</h1>
+                {errorMessage && <p style={{color:'red'}}>{errorMessage}</p>}
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={loginUsername}
+                    onChange={(e) => setLoginUsername(e.target.value)}
+                />
+                <br/>
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={loginPassword}
+                    onChange={(e) => setLoginPassword(e.target.value)}
+                />
+                <br/>
+                <button onClick={login}>Login</button>
+            </div>
         </div>
     );
 }

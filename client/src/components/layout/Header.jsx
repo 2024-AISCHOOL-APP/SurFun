@@ -12,7 +12,7 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
             <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div className="logo">
                     <Link to="/">
-                        <img src="/path/to/logo.png" alt="SurFun Logo" />
+                        <img src="./surfing.jfif" alt="SurFun Logo" />
                     </Link>
                 </div>
                 <ul style={{ listStyleType: 'none', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -22,14 +22,18 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
                         </li>
                     )}
                     <li style={{ margin: '0 10px' }}>
-                        <button onClick={() => handleNavigation('/spot-select')}>Spot Select</button>
+                        <button onClick={() => handleNavigation('/spot-select')}>지역 지도</button>
                     </li>
                     <li style={{ margin: '0 10px' }}>
-                        <button onClick={() => handleNavigation('/community')}>Community</button>
+                        <button onClick={() => handleNavigation('/SpotSearch')}>지역 검색</button>
                     </li>
                     <li style={{ margin: '0 10px' }}>
-                        <button  onClick={() => handleNavigation('/profile')}>Profile</button>
+                        <button onClick={() => handleNavigation('/Detail')}>상세 정보</button>
                     </li>
+                    <li style={{ margin: '0 10px' }}>
+                        <button onClick={() => handleNavigation('/community')}>커뮤니티</button>
+                    </li>
+                    
                     {!loggedIn && (
                         <>
                             <li style={{ margin: '0 10px' }}>
