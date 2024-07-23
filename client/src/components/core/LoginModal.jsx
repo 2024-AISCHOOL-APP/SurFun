@@ -30,7 +30,7 @@ function LoginModal({ onLoginSuccess, onClose }) {
     };
 
     return (
-        <div>
+        <div className='login-modal-content'>
             <button
                 className="close-button" 
                 onClick={onClose} // 닫기 버튼 클릭 시 모달창 닫기
@@ -38,18 +38,16 @@ function LoginModal({ onLoginSuccess, onClose }) {
                 &times; {/* 닫기 버튼을 '×'로 표시 */}
             </button>
             <h1 align="center">로그인</h1>
-            <p>아이디*</p>
             <input
                 type="text"
-                placeholder="ID"
+                placeholder="아이디"
                 value={loginUsername}
                 onChange={(e) => setLoginUsername(e.target.value)}
             />
             <br/>
-            <p>비밀번호*</p>
             <input
                 type="password"
-                placeholder="Password"
+                placeholder="비밀번호"
                 value={loginPassword}
                 onChange={(e) => setLoginPassword(e.target.value)}
             />
@@ -60,6 +58,13 @@ function LoginModal({ onLoginSuccess, onClose }) {
                 className="login-button"
             >
                 로그인
+            </button>
+            <br></br>
+            <button
+                // onClick={login}
+                className="login-button"
+            >
+                Google로그인
             </button>
         </div>
     );

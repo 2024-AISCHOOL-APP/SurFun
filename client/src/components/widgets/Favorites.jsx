@@ -1,6 +1,13 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from "axios";
 
 const Favorites=()=>{
+        const navigate = useNavigate();
+
+        const handlePopularPostsClick = () => {
+            navigate('/community');
+        };
 
         return (
             <div className="additional-sections">
@@ -12,7 +19,12 @@ const Favorites=()=>{
                 </section>
                 <section className="lower-sections">
                     <div className="popular-posts">
-                        <h2>인기글</h2>
+                        <h2
+                            onClick={handlePopularPostsClick}
+                            style={{ cursor: 'pointer' }}
+                        >
+                                인기글
+                        </h2>
                         인기글 목록 표시 컴포넌트
                     </div>
                     <div className="news-section">

@@ -35,20 +35,34 @@ function JoinModal({ onJoinSuccess, onClose }) {
                 >
                 &times; {/* 닫기 버튼을 '×'로 표시 */}
             </button>
-            <h1>Register</h1>
+            <h1 align='center'>회원가입</h1>
+            <br/>
+            아이디*
+            <br/>
             <input
                 type="text"
-                placeholder="Username"
+                placeholder="ID"
                 value={registerUsername}
                 onChange={(e) => setRegisterUsername(e.target.value)}
             />
             <br/>
+            비밀번호*
+            <br/>
             <input
                 type="password"
-                placeholder="Password"
+                placeholder="●●●●●●●●"
                 value={registerPassword}
                 onChange={(e) => setRegisterPassword(e.target.value)}
             />
+            <br/>
+            비밀번호확인*
+            <br/>
+            <input
+                type="password"
+                placeholder="●●●●●●●●"
+            />
+            <br/>
+            휴대폰번호*
             <br/>
             <input
                 type="text"
@@ -57,12 +71,16 @@ function JoinModal({ onJoinSuccess, onClose }) {
                 onChange={(e) => setRegisterPhoneNumber(e.target.value)}
             />
             <br/>
+            이메일
+            <br/>
             <input
                 type="text"
                 placeholder="Email"
                 value={registerEmail}
                 onChange={(e) => setRegisterEmail(e.target.value)}
             />
+            <br/>
+            Preference가 선호지역인가?
             <br/>
             <input
                 type="text"
@@ -71,7 +89,7 @@ function JoinModal({ onJoinSuccess, onClose }) {
                 onChange={(e) => setRegisterPreference(e.target.value)}
             />
             <br/>
-            <button onClick={register}>Register</button>
+            <button onClick={register}>가입</button>
         </div>
     );
 }

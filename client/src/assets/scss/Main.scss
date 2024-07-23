@@ -95,6 +95,7 @@ header ul li button:hover {
 header ul li button.black-button {
     background-color: black; /* 배경색 검정 */
     color: white; /* 글자 색상 흰색 */
+    cursor: pointer; /* 마우스 커서 포인토 */
 }
 
 /* 지도 컨테이너 스타일 (필요 시 삭제 가능) */

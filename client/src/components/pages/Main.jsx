@@ -19,6 +19,10 @@ function Main({ onLoginSuccess }) {
     const [username, setUsername] = useState(''); // 로그인한 사용자 이름
     const navigate = useNavigate(); // 페이지 이동을 위한 hook
 
+    const handleNavigation = (path) => {
+        navigate(path);
+   };
+   
     // 로그인 모달 토글 함수
     const toggleLoginModal = () => {
         setIsLoginModalOpen(!isLoginModalOpen);
@@ -118,6 +122,9 @@ function Main({ onLoginSuccess }) {
                         </>
                     )}
                 </div>
+            
+
+
             </div>
         </>
     );
