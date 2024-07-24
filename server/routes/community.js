@@ -3,6 +3,8 @@ const express = require('express');
 const db = require('../config/dbConfig');
 const router = express.Router();
 const validatePostInput = require('../middlewares/validatePostInput'); 
+const upload = require('../middlewares/upload');
+const path = require('path');
 
 function formatDateToMySQL(date) {
     const d = new Date(date);
@@ -18,7 +20,7 @@ function formatDateToMySQL(date) {
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         multipart/form-data:
  *           schema:
  *             type: object
  *             properties:
@@ -35,6 +37,9 @@ function formatDateToMySQL(date) {
  *                 type: number
  *               longitude:
  *                 type: number
+ *               image:
+ *                 type: string
+ *                 format: binary
  *     responses:
  *       201:
  *         description: The created community post
@@ -42,13 +47,17 @@ function formatDateToMySQL(date) {
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 post_id:
+ *                   type: integer
  *       400:
  *         description: Bad Request - Username does not exist
  *       500:
  *         description: Internal server error
  */
-router.post('/posts', validatePostInput, async (req, res) => {
+router.post('/posts', upload.single('image'), validatePostInput, async (req, res) => {
     const { username, title, content, post_date, latitude, longitude } = req.body;
+    const image = req.file ? req.file.filename : null;
     try {
         const [user] = await db.query('SELECT * FROM User WHERE username = ?', [username]);
         if (user.length === 0) {
@@ -57,15 +66,16 @@ router.post('/posts', validatePostInput, async (req, res) => {
 
         const formattedDate = formatDateToMySQL(post_date);
         const [result] = await db.query(
-            'INSERT INTO Community_Post (username, title, content, post_date, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)',
-            [username, title, content, formattedDate, latitude, longitude]
+            'INSERT INTO Community_Post (username, title, content, post_date, latitude, longitude, image) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            [username, title, content, formattedDate, latitude, longitude, image]
         );
-        res.status(201).json({ post_id: result.insertId });
+        res.status(201).json({ post_id: result.insertId, imageUrl: `/uploads/${image}` });
     } catch (err) {
         console.error('Error during POST request:', err);
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // Get all posts
 /**
