@@ -35,10 +35,6 @@ function formatDateToMySQL(date) {
  *                 type: string
  *                 format: date-time
  *                 description: The date when the favorite was added, in ISO 8601 format.
- *               notify_method:
- *                 type: string
- *                 enum: [email, sms]
- *                 description: The method by which notifications are sent. Options are `email` or `sms`.
  *               last_notified:
  *                 type: string
  *                 format: date-time
@@ -85,7 +81,7 @@ function formatDateToMySQL(date) {
  *                   example: 'Internal server error message'
  */
 router.post('/', async (req, res) => {
-    const { username, surfing_zone_id, diving_zone_id, favorite_date, notify_method, last_notified } = req.body;
+    const { username, surfing_zone_id, diving_zone_id, favorite_date, last_notified } = req.body;
 
     if (!surfing_zone_id && !diving_zone_id) {
         return res.status(400).json({ error: 'At least one of surfing_zone_id or diving_zone_id must be provided' });
@@ -112,8 +108,8 @@ router.post('/', async (req, res) => {
             latitude = zone[0].latitude;
             longitude = zone[0].longitude;
 
-            await db.query('INSERT INTO Favorite (username, surfing_zone_id, favorite_date, notify_method, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-                [username, surfing_zone_id, formattedFavoriteDate, notify_method, latitude, longitude, formattedLastNotified]
+            await db.query('INSERT INTO Favorite (username, surfing_zone_id, favorite_date, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?)', 
+                [username, surfing_zone_id, formattedFavoriteDate, latitude, longitude, formattedLastNotified]
             );
         }
 
@@ -126,8 +122,8 @@ router.post('/', async (req, res) => {
             latitude = zone[0].latitude;
             longitude = zone[0].longitude;
 
-            await db.query('INSERT INTO Favorite (username, diving_zone_id, favorite_date, notify_method, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?, ?)', 
-                [username, diving_zone_id, formattedFavoriteDate, notify_method, latitude, longitude, formattedLastNotified]
+            await db.query('INSERT INTO Favorite (username, diving_zone_id, favorite_date, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?)', 
+                [username, diving_zone_id, formattedFavoriteDate, latitude, longitude, formattedLastNotified]
             );
         }
 
