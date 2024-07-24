@@ -111,7 +111,7 @@ function LoginModal({ onLoginSuccess, onClose }) {
         <input type="checkbox" />
         로그인 상태 유지
       </label>
-      <Button onClick={login}>Log In</Button>
+      <Button onClick={login}>Sign In</Button>
       <GoogleButtonWrapper>
         <GoogleLoginButton />
       </GoogleButtonWrapper>

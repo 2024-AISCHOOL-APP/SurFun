@@ -117,11 +117,7 @@ router.get('/google', passport.authenticate('google', { scope: ['profile', 'emai
  *         description: Unauthorized
  */
 
-router.get('/google/callback',
-    passport.authenticate('google',{failureRedirect:'/'})),
-    (req,res)=>{
-        res.redirect('/');
-    }
+router.get('/google/callback', passport.authenticate('google', { failureRedirect: '/' }), authController.googleCallback);
 
 
 module.exports = router;

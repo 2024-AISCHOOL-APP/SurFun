@@ -1,23 +1,25 @@
 const bcrypt = require('bcryptjs');
 const db = require('../models/db');
 
-async function findOrCreateUser(profile){
-    const username = profile;
+async function findOrCreateUser(profile) {
+    const username = profile.displayName;
     const email = profile.emails[0].value;
     const provider = 'google';
-    const provider_id =profile.id;
+    const provider_id = profile.id;
 
-    let user = await db.query('SELECT * FROM User WHERE username = ?',[username]);
+    let user = await db.query('SELECT * FROM User WHERE username = ?', [username]);
 
-    if(user.length === 0 ){
-        await db.query('INSERT INTO User (username, email) VALUES(?,?)',[username, email]);
-        await db.query('INSERT INTO Social_Logins(username,provider,provider_id)VALUES(?,?,?)',[username,provider,provider_id]);
-        user= await db.query('SELECT * FROM User WHERE username=?',[username]);
+    if (user.length === 0) {
+        await db.query('INSERT INTO User (username, email) VALUES (?, ?)', [username, email]);
+        await db.query('INSERT INTO Social_Logins (username, provider, provider_id) VALUES (?, ?, ?)', [username, provider, provider_id]);
+        user = await db.query('SELECT * FROM User WHERE username = ?', [username]);
     }
+
     return user[0];
 }
-async function findUserByUsername(username){
-    const user = await db.query('SELECT * FROM User WHERE username =?',[username]);
+
+async function findUserByUsername(username) {
+    const user = await db.query('SELECT * FROM User WHERE username = ?', [username]);
     return user[0];
 }
 
@@ -46,4 +48,4 @@ async function authenticateUser(username, password) {
     return user;
 }
 
-module.exports = {findOrCreateUser,findUserByUsername, registerUser, authenticateUser };
+module.exports = { findOrCreateUser, findUserByUsername, registerUser, authenticateUser };

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import logo from '../../assets/img/surfun-logo1.png';
 
 const HeaderContainer = styled.header`
-  background-color: #0077b6; /* 바다 느낌의 배경색 */
+  // background-color: #0077b6; /* 바다 느낌의 배경색 */
   padding: 10px 0;
 `;
 
@@ -74,7 +74,7 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
         </Logo>
         <Menu>
           {loggedIn && (
-            <MenuItem style={{ color: 'white' }}>
+            <MenuItem style={{ color: '#0077b6' }}>
               {`Welcome, ${username}`}
             </MenuItem>
           )}
@@ -90,10 +90,10 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
           {!loggedIn && (
             <>
               <MenuItem>
-                <BlackButton onClick={toggleJoinModal}>회원가입</BlackButton>
+                <BlackButton onClick={toggleJoinModal}>Sign Up</BlackButton>
               </MenuItem>
               <MenuItem>
-                <BlackButton onClick={toggleLoginModal}>로그인</BlackButton>
+                <BlackButton onClick={toggleLoginModal}>Sign In</BlackButton>
               </MenuItem>
             </>
           )}
