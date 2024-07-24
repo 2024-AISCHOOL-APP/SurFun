@@ -13,6 +13,8 @@ const passport = require('./config/passportConfig');
 const zonesRoutes = require('./routes/zones'); 
 const communityRoutes = require('./routes/community'); 
 const path = require('path');
+const favoritesRouter = require('./routes/favorites');
+const notifyRouter = require('./routes/notify');
 
  
 const app = express();
@@ -60,6 +62,8 @@ app.get('/', (req, res) => {
     res.send('Welcome to the API!');
 });
 
+app.use('/notify', notifyRouter); // notify
+app.use('/favorites', favoritesRouter); // favorites
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // 정적 파일 제공을 위한 미들웨어 설정
 app.use('/community', communityRoutes); // community 
 app.use('/zones', zonesRoutes); // zones.js 라우트
