@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-google-maps/api": "^2.19.3",
+    "@react-oauth/google": "^0.12.1",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
@@ -13,10 +13,10 @@
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
-    "react-kakao-maps-sdk": "^1.1.27",
     "react-leaflet": "^4.2.1",
     "react-router-dom": "^6.24.1",
     "react-scripts": "^5.0.1",
+    "styled-components": "^6.1.12",
     "swagger-ui-react": "^5.17.14",
     "web-vitals": "^2.1.4"
   },
