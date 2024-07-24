@@ -12,6 +12,7 @@ body {
 .video-container {
     flex: 0 0 20%; /* 전체 높이의 60%를 차지 */
     position: relative; /* 자식 요소를 위한 상대적 위치 설정 */
+    height: 30%;
 }
 
 /* 비디오 배경 스타일 */
@@ -98,6 +99,10 @@ body {
   //}
 .main-button{ 
     font-size:25px ;
+    background-color:skyblue;
+    color: #f0f0f0;
+    border: none;
+    
 }
 * {
     margin: 0;
@@ -129,6 +134,14 @@ body {
   .loacate-select-button{
     height: 10%;
   }
+  .surfgoodimg2{
+    max-width: 40px;
+    margin-left: 15px;
+    margin-top: 20px;
+    position: relative;
+    top: 10fpx;
+    // margin-top: ;
+  }
 
 
 /* 메인 컨텐츠 스타일 */
@@ -143,6 +156,18 @@ body {
     border-radius: 10px; /* 모서리 둥글게 */
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 설정 */
 }
+.detailcontainer{
+  background-color:wheat ;
+ 
+}
+.solimg{
+  max-width: 50px;
+}
+.csshr{
+  background-color:coral;
+  color: chartreuse;
+  height: 20px;
+}
 .search-h1{
   text-align: center;
 }
@@ -152,7 +177,7 @@ body {
 }
 .graph-h2span {
   display: inline;
-  margin-left: 500px; /* 필요한 경우 간격 조정 */
+  margin-left: 300px; /* 필요한 경우 간격 조정 */
 }
 .realgraph{
   text-align: center;
@@ -172,6 +197,11 @@ body {
 }
 .todayexplain{
   margin-bottom: 2px;
+}
+.first-line{
+  background-color: gray;
+  text-align: center;
+  height: 50px;
 }
 
 /* 헤더 스타일 */

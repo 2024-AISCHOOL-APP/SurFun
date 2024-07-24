@@ -12,7 +12,7 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
             <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <div className="logo">
                     <Link to="/">
-                        <img src="./surfing.jfif" alt="SurFun Logo" />
+                        <img src="./surfing.png" alt="SurFun Logo" />
                     </Link>
                 </div>
                 <ul style={{ listStyleType: 'none', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>

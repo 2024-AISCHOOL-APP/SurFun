@@ -97,7 +97,10 @@ function Main({ onLoginSuccess }) {
                         
                         <h1>Surfun</h1>
                         <h2>서핑을 즐기자</h2>
-                        <button onClick={() => handleNavigation('/spot-select')} className='main-button'>서핑하러 가기</button>
+                        <button onClick={() => handleNavigation('/spot-select')} className='main-button'>
+                            서핑하러 가기!
+                            </button>
+                            <img src='surfgood.png' className='surfgoodimg2'></img>
                         
                     </div>
                     
