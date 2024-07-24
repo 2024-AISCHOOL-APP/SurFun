@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from './components/pages/Main';
 import Community from './components/pages/Community';
 import SpotSelect from './components/pages/SpotSelect';
+import SpotSearch from './components/pages/SpotSearch';
+import Detail from './components/pages/Detail';
 import Header from './components/layout/Header';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
@@ -47,6 +49,10 @@ function App() {
                     <Route path="/" element={<Main onLoginSuccess={handleLoginSuccess} />} />
                     <Route path="/community" element={<Community />} />
                     <Route path="/spot-select" element={<SpotSelect />} />
+                    <Route path="/SpotSearch" element={<SpotSearch />} />
+                    <Route path="/Detail" element={<Detail />} />
+                    
+
                     <Route path="/post/:id" element={<PostDetail />} />
                 </Routes>
                 {/* 로그인 모달 */}
