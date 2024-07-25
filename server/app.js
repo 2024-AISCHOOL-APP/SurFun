@@ -44,7 +44,11 @@ app.use(session({
 }));
 
 
-app.use(cors());
+app.use(cors({
+    origin:'*', //이후에 허용 도메인 수정
+    methods:['GET','POST','PUT','DELETE'],
+    credentials:true
+}));
 app.use(sessionConfig);
 
 //passport 전용 middleware
