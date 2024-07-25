@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import GoogleLoginButton from './GoogleLoginButton';
 import styled from 'styled-components';
+import instagramLogo from '../../assets/img/instagram-logo.png';
+import facebookLogo from '../../assets/img/facebook-logo.png';
 
 const ModalContainer = styled.div`
   display: flex;
@@ -15,6 +17,28 @@ const ModalContainer = styled.div`
   margin: auto;
   text-align: center;
   font-family: 'Arial, sans-serif';
+`;
+
+const SocialButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+`;
+
+const SocialButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    width: 40px; /* 로고 이미지 크기 */
+    height: 40px;
+  }
+
+  &:hover img {
+    opacity: 0.7; /* 호버 시 투명도 조절 */
+  }
 `;
 
 const Title = styled.h1`
@@ -115,6 +139,14 @@ function LoginModal({ onLoginSuccess, onClose }) {
       <GoogleButtonWrapper>
         <GoogleLoginButton />
       </GoogleButtonWrapper>
+      <SocialButtonWrapper>
+        <SocialButton>
+          <img src={instagramLogo} alt="Instagram" />
+        </SocialButton>
+        <SocialButton>
+          <img src={facebookLogo} alt="Facebook" />
+        </SocialButton>
+      </SocialButtonWrapper>
       <FooterText>
         <a href="#">아이디/비밀번호 찾기</a>
       </FooterText>
