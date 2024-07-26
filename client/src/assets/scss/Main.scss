@@ -162,12 +162,16 @@ body {
   max-width: 50px;
 }
 .csshr{
-  background-color:coral;
-  color: chartreuse;
+  background-color:rgb(80, 252, 255);
+ 
   height: 20px;
 }
 .search-h1{
   text-align: center;
+  background-color: #D8D8D8;
+}
+.detail-h1{
+  background-color: #D8D8D8;
 }
 .graph-h2{
   text-align: center;
@@ -243,7 +247,14 @@ body {
   font-size: 20px;
   
 }
-
+.divingbut{
+  width: 100px;
+  height: 30px;
+}
+.canvas{
+  max-height: 300px;
+  max-width: 800px;
+}
 /* 헤더 스타일 */
 header {
     background-color: white; /* 배경색 흰색 */
@@ -307,6 +318,22 @@ header ul li button.black-button {
 /* 하단 섹션의 인기글과 뉴스 스타일 */
 .popular-posts, .news-section {
     width: 45%; /* 너비 45% */
+}
+.beach-info-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px; /* 테이블 위 여백 설정 */
+}
+
+.beach-info-table th, .beach-info-table td {
+  padding: 8px 12px; /* 셀 안의 여백 설정 */
+  text-align: center; /* 셀 안의 텍스트 정렬 */
+  border: 1px solid #ddd; /* 테이블 선 설정 */
+}
+
+.beach-info-table th {
+  background-color: #f2f2f2; /* 헤더 배경색 설정 */
+  font-weight: bold; /* 헤더 글꼴 굵게 설정 */
 }
 
 /* 미디어 쿼리: 화면 너비가 768px 이하일 때 */

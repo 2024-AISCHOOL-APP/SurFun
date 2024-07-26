@@ -9,7 +9,7 @@ const SpotSearch = () => {
       <div className='welcome-message'>
       <h1>지역검색</h1>
         <div>
-        <input placeholder='지역검색' className='search'></input>
+        <input placeholder='ex)제주 서귀포' className='search'></input>
         <button className='search-button'>검색</button>
         </div>
       </div>

@@ -87,8 +87,12 @@ function Main({ onLoginSuccess }) {
     return (
         <>
             <div className="Main">
+                
                 {/* 비디오 배경 컨테이너 */}
                 <div className="video-container">
+                    <Link to="/Divemain" >
+                    <button className='divingbut' >GO DIVE</button>
+                    </Link>
                     <video autoPlay loop muted className="video-background">
                         <source src="/videos/surfing.mp4" type="video/mp4" />
                     </video>
