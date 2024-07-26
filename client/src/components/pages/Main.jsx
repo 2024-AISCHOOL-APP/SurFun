@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '../../assets/scss/Main.scss';
 import { useNavigate } from 'react-router-dom';
 import Favorites from '../widgets/Favorites';
+import Footer from '../layout/Footer';
 
 function Main({ onLoginSuccess }) {
         
@@ -49,13 +50,11 @@ function Main({ onLoginSuccess }) {
     },[]);
 
     return (
-        <>
             <div className="Main">
                 {/* 비디오 배경 컨테이너 */}
                 <div className="video-container">
                     <video autoPlay loop muted className="video-background">
                         <source src="/videos/surfing.mp4" type="video/mp4" />
-                    </video>
                     {/* 환영 메시지 */}
                     <div className="welcome-message">
                         
@@ -64,10 +63,11 @@ function Main({ onLoginSuccess }) {
                         <button onClick={() => handleNavigation('/spot-select')} className='main-button'>서핑하러 가기</button>
                         
                     </div>
+                    </video>
                     
-                            <Favorites />
-                    </div>
+                </div>
 
+                <Favorites />
                 {/* 메인 컨텐츠 */}
                 <div className="content">
                     {!loggedIn && (
@@ -81,9 +81,12 @@ function Main({ onLoginSuccess }) {
                             )}
                         </>
                     )}
+                    <Footer />
                 </div>
+            
+
+
             </div>
-        </>
     )};
 
 

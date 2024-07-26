@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import TextModal from '../core/TextModal'; // TextModal import
+import Layout from '../layout/Layout';
 
 const CommunityContainer = styled.div`
   text-align: center;
@@ -13,7 +14,7 @@ const CommunityContainer = styled.div`
 const VideoContainer = styled.div`
   position: relative;
   width: 100%;
-  height: 60vh; /* 비디오 높이 설정 */
+  height: 100vh; /* 비디오 높이 설정 */
   overflow: hidden;
 `;
 
@@ -170,7 +171,7 @@ const Community = ({ username }) => {
   };
 
   return (
-    <>
+    <Layout>
       <VideoContainer>
         <VideoBackground autoPlay loop muted>
           <source src="/videos/surfing.mp4" type="video/mp4" />
@@ -216,7 +217,7 @@ const Community = ({ username }) => {
         </BoardContainer>
       </CommunityContainer>
       <TextModal isOpen={isTextModalOpen} onClose={toggleTextModal} onSave={handleSave} username={username} />
-    </>
+    </Layout>
   );
 };
 

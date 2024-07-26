@@ -91,10 +91,16 @@ const LinkText = styled.a`
   }
 `;
 
-function LoginModal({ onLoginSuccess, onClose }) {
+function LoginModal({ onLoginSuccess, onClose, toggleJoinModal, toggleLoginModal }) {
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  
+  const handleClick = (event) => {
+    event.preventDefault();
+    toggleLoginModal(); // Login Modal을 닫고
+    toggleJoinModal(); // Join Modal을 열기
+  };
 
   const handleGoogleLogin = () => {
     window.location.href = 'http://localhost:5000/auth/google';
@@ -151,7 +157,7 @@ function LoginModal({ onLoginSuccess, onClose }) {
       </FooterText>
       <FooterText>
         계정이 없으신가요?
-        <LinkText href="/register">회원가입</LinkText>
+        <LinkText onClick={handleClick}>회원가입</LinkText>
       </FooterText>
       <Button onClick={onClose}>Close</Button>
     </ModalContainer>

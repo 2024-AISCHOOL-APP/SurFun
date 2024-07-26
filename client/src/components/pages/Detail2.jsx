@@ -1,22 +1,17 @@
-// https://apihub.kma.go.kr/api/json?authKey=UYw_-6P6SPeMP_uj-uj3PwY
-// https://apihub.kma.go.kr/api/typ01/json/kma_buoy.php?tm=202301241200&stn=0&help=1&authKey=UYw_-6P6SPeMP_uj-uj3Pw
-
 import React, { useEffect, useState } from 'react';
 
-const Detail = () => {
+const WeatherData = () => {
   const [weatherData, setWeatherData] = useState(null); // 날씨 정보를 저장할 상태
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 에러 상태 추가
 
   useEffect(() => {
-    const fetchDetail = async () => {
-      const apiUrl = 'http://www.khoa.go.kr/api/oceangrid/beach/search.do?ServiceKey=cu0xn0qs6k9NGAdddoJtjg==&BeachCode=BCH001&ResultType=json'; // CORS 프록시를 사용한 API 주소
+    const fetchWeatherData = async () => {
+      const apiUrl = 'https://cors-anywhere.herokuapp.com/http://www.khoa.go.kr/api/oceangrid/beach/search.do?ServiceKey=cu0xn0qs6k9NGAdddoJtjg==&BeachCode=BCH001&ResultType=json'; // CORS 프록시를 사용한 API 주소
       try {
-        const response = await fetch(apiUrl)
-        
-        // const response = await fetch(apiUrl, {
-        //   mode: 'no-cors'
-        // });
+        const response = await fetch(apiUrl, {
+          //mode: 'no-cors'
+        });
         if (!response.ok) {
           throw new Error('날씨 정보를 불러오는 데 문제가 발생했습니다.');
         }
@@ -31,7 +26,7 @@ const Detail = () => {
       }
     };
 
-    fetchDetail(); // 날씨 데이터를 가져오는 함수 호출
+    fetchWeatherData(); // 날씨 데이터를 가져오는 함수 호출
   }, []);
 
   if (loading) {
@@ -50,4 +45,4 @@ const Detail = () => {
   );
 };
 
-export default Detail;
+export default WeatherData;
