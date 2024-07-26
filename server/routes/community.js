@@ -50,6 +50,8 @@ function formatDateToMySQL(date) {
  *               properties:
  *                 post_id:
  *                   type: integer
+ *                 imageUrl:
+ *                   type: string
  *       400:
  *         description: Bad Request - Username does not exist
  *       500:
@@ -66,8 +68,8 @@ router.post('/posts', upload.single('image'), validatePostInput, async (req, res
 
         const formattedDate = formatDateToMySQL(post_date);
         const [result] = await db.query(
-            'INSERT INTO Community_Post (username, title, content, post_date, latitude, longitude, image) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            [username, title, content, formattedDate, latitude, longitude, image]
+            'INSERT INTO Community_Post (username, title, content, post_date, latitude, longitude, image, views) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+            [username, title, content, formattedDate, latitude, longitude, image, 0] 
         );
         res.status(201).json({ post_id: result.insertId, imageUrl: `/uploads/${image}` });
     } catch (err) {
@@ -75,7 +77,6 @@ router.post('/posts', upload.single('image'), validatePostInput, async (req, res
         res.status(500).json({ error: err.message });
     }
 });
-
 
 // Get all posts
 /**
@@ -92,6 +93,26 @@ router.post('/posts', upload.single('image'), validatePostInput, async (req, res
  *               type: array
  *               items:
  *                 type: object
+ *                 properties:
+ *                   post_id:
+ *                     type: integer
+ *                   username:
+ *                     type: string
+ *                   title:
+ *                     type: string
+ *                   content:
+ *                     type: string
+ *                   post_date:
+ *                     type: string
+ *                     format: date-time
+ *                   latitude:
+ *                     type: number
+ *                   longitude:
+ *                     type: number
+ *                   image:
+ *                     type: string
+ *                   views:          
+ *                     type: integer
  */
 router.get('/posts', async (req, res) => {
     try {
@@ -123,12 +144,34 @@ router.get('/posts', async (req, res) => {
  *           application/json:
  *             schema:
  *               type: object
+ *               properties:
+ *                 post_id:
+ *                   type: integer
+ *                 username:
+ *                   type: string
+ *                 title:
+ *                   type: string
+ *                 content:
+ *                   type: string
+ *                 post_date:
+ *                   type: string
+ *                   format: date-time
+ *                 latitude:
+ *                   type: number
+ *                 longitude:
+ *                   type: number
+ *                 image:
+ *                   type: string
+ *                 views:          
+ *                   type: integer 
  *       404:
  *         description: Post not found
  */
 router.get('/posts/:id', async (req, res) => {
     const { id } = req.params;
     try {
+        await db.query('UPDATE Community_Post SET views = views + 1 WHERE post_id = ?', [id]);
+
         const [rows] = await db.query('SELECT * FROM Community_Post WHERE post_id = ?', [id]);
         if (rows.length === 0) {
             return res.status(404).json({ error: 'Post not found' });
