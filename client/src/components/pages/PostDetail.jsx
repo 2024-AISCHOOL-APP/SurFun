@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
+import Layout from '../layout/Layout'
 
 const PostDetailContainer = styled.div`
   max-width: 800px;
@@ -49,13 +50,15 @@ const PostDetail = () => {
   }
 
   return (
-    <PostDetailContainer>
-      <Title>{post.title}</Title>
-      <MetaInfo>
-        {post.username} | {new Date(post.post_date).toLocaleDateString()} | 조회수: {post.views}
-      </MetaInfo>
-      <Content>{post.content}</Content>
-    </PostDetailContainer>
+    <Layout>
+      <PostDetailContainer>
+        <Title>{post.title}</Title>
+        <MetaInfo>
+          {post.username} | {new Date(post.post_date).toLocaleDateString()} | 조회수: {post.views}
+        </MetaInfo>
+        <Content>{post.content}</Content>
+      </PostDetailContainer>
+    </Layout>
   );
 };
 

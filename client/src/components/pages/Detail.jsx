@@ -1,39 +1,53 @@
-import React from 'react'
+// https://apihub.kma.go.kr/api/json?authKey=UYw_-6P6SPeMP_uj-uj3PwY
+// https://apihub.kma.go.kr/api/typ01/json/kma_buoy.php?tm=202301241200&stn=0&help=1&authKey=UYw_-6P6SPeMP_uj-uj3Pw
+
+import React, { useEffect, useState } from 'react';
 
 const Detail = () => {
-  return (
-    <div>
-        <h1 className='search-h1'>바다예보</h1>
-        <br></br>
-        <div >
-            <h1>00해변
-                <button>관심스팟</button>
-                <button>추천일 알람설정</button>
-            </h1>
-            <hr/>
-        </div>    
-    <div className='graph'>
-        <h2 className='graph-h2'>
-            주간예보 <span className='graph-h2span'>일간예보</span>
-         </h2>
-                
-            <h3 className='realgraph'>
-                 그래프 1<span className='real-graphspan'>그래프 2</span>
-                  {/* 나중에 진짜 그래프 넣어라 */}
-             </h3>
-    <div className='todaysea'>    
-        <h1 className='todayseah1'>오늘의바다</h1>
-        <hr/>
-        <img src='/surfgood.png' className='surfgoodimg'></img>
-        <h3 className='todayexplain'>
-        오늘 000은 서핑 하기 참 좋은날이어유
-            초보 서퍼들은 서핑보드들고 냅다 나가봐유
-        </h3>
-    </div>                   
-    </div>
-        
-    </div>
-  )
-}
+  const [weatherData, setWeatherData] = useState(null); // 날씨 정보를 저장할 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [error, setError] = useState(null); // 에러 상태 추가
 
-export default Detail
+  useEffect(() => {
+    const fetchDetail = async () => {
+      const apiUrl = 'http://www.khoa.go.kr/api/oceangrid/beach/search.do?ServiceKey=cu0xn0qs6k9NGAdddoJtjg==&BeachCode=BCH001&ResultType=json'; // CORS 프록시를 사용한 API 주소
+      try {
+        const response = await fetch(apiUrl)
+        
+        // const response = await fetch(apiUrl, {
+        //   mode: 'no-cors'
+        // });
+        if (!response.ok) {
+          throw new Error('날씨 정보를 불러오는 데 문제가 발생했습니다.');
+        }
+        const data = await response.json();
+        console.log('Data:', data); // 응답 데이터를 콘솔에 출력
+
+        setWeatherData(data.result.data); // 날씨 데이터를 상태에 설정합니다.
+      } catch (error) {
+        setError('날씨 정보를 불러오는 도중 에러가 발생했습니다.'); // 에러 상태 설정
+      } finally {
+        setLoading(false); // 로딩 상태 종료
+      }
+    };
+
+    fetchDetail(); // 날씨 데이터를 가져오는 함수 호출
+  }, []);
+
+  if (loading) {
+    return <p>로딩 중...</p>; // 로딩 중일 때 표시할 메시지
+  }
+
+  if (error) {
+    return <p>{error}</p>; // 에러 메시지 표시
+  }
+
+  return (
+    <div className='weather-data'>
+      <h2>해변 정보</h2>
+      <pre>{JSON.stringify(weatherData, null, 2)}</pre>
+    </div>
+  );
+};
+
+export default Detail;

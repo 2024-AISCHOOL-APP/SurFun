@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Layout from '../layout/Layout';
 
 function SpotSelect() {
   const [selectedCoordinates, setSelectedCoordinates] = useState({
@@ -74,10 +75,9 @@ function SpotSelect() {
   };
 
   return ( 
-    <div className="App">
+    <Layout>
       <div className="map-container">
         <div id="map" className="map"></div>
-
         <div className="spot-content">
           <hr />
           <br />
@@ -108,7 +108,7 @@ function SpotSelect() {
           </div>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }
 
