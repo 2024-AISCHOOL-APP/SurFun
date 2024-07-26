@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import GoogleLoginButton from './GoogleLoginButton';
 import styled from 'styled-components';
 import instagramLogo from '../../assets/img/instagram-logo.png';
-import facebookLogo from '../../assets/img/facebook-logo.png';
+import facebookLogo from '../../assets/img/facebook-logo2.png';
+import googlelogo from '../../assets/img/google-logo2.png';
 
 const ModalContainer = styled.div`
   display: flex;
@@ -72,11 +72,6 @@ const Button = styled.button`
   }
 `;
 
-const GoogleButtonWrapper = styled.div`
-  width: 100%;
-  margin: 10px 0;
-`;
-
 const ErrorMessage = styled.p`
   color: red;
 `;
@@ -100,6 +95,10 @@ function LoginModal({ onLoginSuccess, onClose }) {
   const [loginUsername, setLoginUsername] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:5000/auth/google';
+  };
 
   const login = async () => {
     try {
@@ -136,10 +135,10 @@ function LoginModal({ onLoginSuccess, onClose }) {
         로그인 상태 유지
       </label>
       <Button onClick={login}>Sign In</Button>
-      <GoogleButtonWrapper>
-        <GoogleLoginButton />
-      </GoogleButtonWrapper>
       <SocialButtonWrapper>
+        <SocialButton onClick={handleGoogleLogin}>
+          <img src={googlelogo} alt="google" />
+        </SocialButton>
         <SocialButton>
           <img src={instagramLogo} alt="Instagram" />
         </SocialButton>

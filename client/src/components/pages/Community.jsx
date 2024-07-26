@@ -30,6 +30,7 @@ const BoardContainer = styled.div`
   margin: 50px auto;
   width: 80%;
   max-width: 1200px;
+  position: relative;
 `;
 
 const Table = styled.table`
@@ -42,6 +43,7 @@ const Th = styled.th`
   background-color: #f2f2f2;
   padding: 10px;
   border: 1px solid #ddd;
+  cursor: pointer; /* 클릭할 수 있음을 나타내는 커서 변경 */
 `;
 
 const Td = styled.td`
@@ -82,11 +84,25 @@ const WriteButton = styled.button`
   color: white;
   font-size: 16px;
   cursor: pointer;
-  margin-bottom: 20px;
+  position: absolute;
+  bottom: 20px;
+  right: 20px; /* 이 부분을 수정하면 버튼 위치 변경 가능 */
 
   &:hover {
     background-color: #005f8d;
   }
+`;
+
+const WeatherContainer = styled.div`
+  margin: 20px 0;
+  padding: 20px;
+  background-color: #e0f7fa;
+  border-radius: 10px;
+`;
+
+const PostImage = styled.img`
+  max-width: 100px;
+  height: auto;
 `;
 
 const Community = ({ username }) => {
@@ -94,6 +110,7 @@ const Community = ({ username }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false); // Modal 상태 추가
+  const [sortConfig, setSortConfig] = useState({ key: 'post_date', direction: 'desc' });
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -104,9 +121,32 @@ const Community = ({ username }) => {
         console.error('Failed to fetch posts:', error);
       }
     };
-
     fetchPosts();
-  }, []);
+  }, []); // 빈 의존성 배열을 추가하여 초기 로딩 시에만 데이터를 불러오도록 설정
+
+  useEffect(() => {
+    let sortedPosts = [...posts];
+    if (sortConfig !== null) {
+      sortedPosts.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'asc' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    setPosts(sortedPosts);
+  }, [sortConfig]); // sortConfig가 변경될 때만 실행
+
+  const requestSort = (key) => {
+    let direction = 'asc';
+    if (sortConfig.key === key && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ key, direction });
+  };
 
   // Pagination logic
   const indexOfLastPost = currentPage * postsPerPage;
@@ -140,24 +180,21 @@ const Community = ({ username }) => {
         </div>
       </VideoContainer>
       <CommunityContainer>
-        <WriteButton onClick={toggleTextModal}>글쓰기</WriteButton>
         <BoardContainer>
           <Table>
             <thead>
               <Tr>
-                <Th>번호</Th>
-                <Th>말머리</Th>
-                <Th>제목</Th>
-                <Th>글쓴이</Th>
-                <Th>날짜</Th>
-                <Th>조회수</Th>
+                <Th onClick={() => requestSort('index')}>번호</Th>
+                <Th onClick={() => requestSort('title')}>제목</Th>
+                <Th onClick={() => requestSort('username')}>글쓴이</Th>
+                <Th onClick={() => requestSort('post_date')}>날짜</Th>
+                <Th onClick={() => requestSort('views')}>조회수</Th>
               </Tr>
             </thead>
             <tbody>
               {currentPosts.map((post, index) => (
                 <Tr key={post.post_id}>
                   <Td>{indexOfFirstPost + index + 1}</Td>
-                  <Td>{post.category}</Td>
                   <Td><Link to={`/post/${post.post_id}`}>{post.title}</Link></Td>
                   <Td>{post.username}</Td>
                   <Td>{new Date(post.post_date).toLocaleDateString()}</Td>
@@ -175,6 +212,7 @@ const Community = ({ username }) => {
             ))}
             <PageNumber onClick={() => paginate(currentPage + 1)}>Next &gt;</PageNumber>
           </Pagination>
+          <WriteButton onClick={toggleTextModal}>글쓰기</WriteButton>
         </BoardContainer>
       </CommunityContainer>
       <TextModal isOpen={isTextModalOpen} onClose={toggleTextModal} onSave={handleSave} username={username} />
