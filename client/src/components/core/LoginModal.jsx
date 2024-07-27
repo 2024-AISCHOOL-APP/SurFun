@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import GoogleLoginButton from './GoogleLoginButton';
 import styled from 'styled-components';
+import instagramLogo from '../../assets/img/instagram-logo.png';
+import facebookLogo from '../../assets/img/facebook-logo2.png';
+import googlelogo from '../../assets/img/google-logo2.png';
 
 const ModalContainer = styled.div`
   display: flex;
@@ -15,6 +17,28 @@ const ModalContainer = styled.div`
   margin: auto;
   text-align: center;
   font-family: 'Arial, sans-serif';
+`;
+
+const SocialButtonWrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 10px 0;
+`;
+
+const SocialButton = styled.button`
+  background: none;
+  border: none;
+  cursor: pointer;
+
+  img {
+    width: 40px; /* 로고 이미지 크기 */
+    height: 40px;
+  }
+
+  &:hover img {
+    opacity: 0.7; /* 호버 시 투명도 조절 */
+  }
 `;
 
 const Title = styled.h1`
@@ -48,11 +72,6 @@ const Button = styled.button`
   }
 `;
 
-const GoogleButtonWrapper = styled.div`
-  width: 100%;
-  margin: 10px 0;
-`;
-
 const ErrorMessage = styled.p`
   color: red;
 `;
@@ -81,6 +100,10 @@ function LoginModal({ onLoginSuccess, onClose, toggleJoinModal, toggleLoginModal
     event.preventDefault();
     toggleLoginModal(); // Login Modal을 닫고
     toggleJoinModal(); // Join Modal을 열기
+  };
+
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:5000/auth/google';
   };
 
   const login = async () => {
@@ -117,10 +140,18 @@ function LoginModal({ onLoginSuccess, onClose, toggleJoinModal, toggleLoginModal
         <input type="checkbox" />
         로그인 상태 유지
       </label>
-      <Button onClick={login}>Log In</Button>
-      <GoogleButtonWrapper>
-        <GoogleLoginButton />
-      </GoogleButtonWrapper>
+      <Button onClick={login}>Sign In</Button>
+      <SocialButtonWrapper>
+        <SocialButton onClick={handleGoogleLogin}>
+          <img src={googlelogo} alt="google" />
+        </SocialButton>
+        <SocialButton>
+          <img src={instagramLogo} alt="Instagram" />
+        </SocialButton>
+        <SocialButton>
+          <img src={facebookLogo} alt="Facebook" />
+        </SocialButton>
+      </SocialButtonWrapper>
       <FooterText>
         <a href="#">아이디/비밀번호 찾기</a>
       </FooterText>

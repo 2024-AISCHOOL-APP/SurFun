@@ -3,7 +3,6 @@ require('dotenv').config();
 const session = require('express-session');
 const express = require('express');
 const cors = require('cors');
-// const helmet = require('helmet'); // 1. helmet 패키지 불러오기
 const sessionConfig = require('./config/sessionConfig');
 const authRoutes = require('./routes/authRoutes');
 const cacheMiddleware = require('./middlewares/cacheMiddleware');
@@ -16,6 +15,7 @@ const communityRoutes = require('./routes/community');
 const path = require('path');
 const favoritesRouter = require('./routes/favorites');
 const notifyRouter = require('./routes/notify');
+
 const notificationServiceRouter = require('./routes/notificationService');
 const commentRouter = require('./routes/comment');    
 const likesRouter = require('./routes/likes');
@@ -50,14 +50,16 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
-app.use(cors());
+app.use(cors({
+    origin:'*', //이후에 허용 도메인 수정
+    methods:['GET','POST','PUT','DELETE'],
+    credentials:true
+}));
 app.use(sessionConfig);
 
 //passport 전용 middleware
 app.use(passport.initialize());
 app.use(passport.session());
-
 
 
 // 루트 경로에 대한 처리 추가
@@ -76,5 +78,13 @@ app.use('/zones', zonesRoutes); // zones.js 라우트
 app.use('/auth', authRoutes); // 회원가입, 로그인 로직의 미들웨어를 적용
 app.use('/api', apiRoutes); // 특정 경로에 대해서만 캐싱 미들웨어를 적용
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); // swagger-ui
+
+// 동적 import 사용
+const fetchData = async () => {
+    const { default: fetch } = await import('node-fetch');
+    // fetch 사용 코드
+};
+
+fetchData().catch(err => console.error(err));
 
 module.exports = app;

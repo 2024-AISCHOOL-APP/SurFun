@@ -3,6 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import GoogleJoinButton from './GoogleJoinButton';
 import styled from 'styled-components';
+import GoogleLoginButton from './GoogleLoginButton';
+import { GoogleLogin } from '@react-oauth/google';
 
 
 const ModalContainer = styled.div`
