@@ -1,8 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import GoogleJoinButton from './GoogleJoinButton';
 import styled from 'styled-components';
+import GoogleLoginButton from './GoogleLoginButton';
+import { GoogleLogin } from '@react-oauth/google';
+
 
 const ModalContainer = styled.div`
   display: flex;
@@ -90,7 +93,7 @@ const Message = styled.p`
   color: ${props => props.color || 'black'};
 `;
 
-function JoinModal({ onJoinSuccess, onClose, toggleLoginModal }) {
+function JoinModal({ onJoinSuccess, onClose, toggleJoinModal, toggleLoginModal}) {
   const [registerUsername, setRegisterUsername] = useState('');
   const [registerPassword, setRegisterPassword] = useState('');
   const [registerPasswordCheck, setRegisterPasswordCheck] = useState('');
@@ -99,7 +102,16 @@ function JoinModal({ onJoinSuccess, onClose, toggleLoginModal }) {
   const [registerPreference, setRegisterPreference] = useState('');
   const [passwordMessage, setPasswordMessage] = useState('');
   const [passwordMessageColor, setPasswordMessageColor] = useState('');
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 열림 여부
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false); // 회원가입 모달 열림 여부
+
   const navigate = useNavigate();
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    toggleJoinModal(); // Join Modal을 닫고
+    toggleLoginModal(); // Login Modal을 열기
+  };
 
   const register = async () => {
     if (registerPassword !== registerPasswordCheck) {
@@ -184,8 +196,8 @@ function JoinModal({ onJoinSuccess, onClose, toggleLoginModal }) {
         <GoogleJoinButton />
       </GoogleButtonWrapper>
       <FooterText>
-        Already have an account? 
-        <LinkText href="#" onClick={toggleLoginModal}>Sign In</LinkText>
+        Already have an account?
+        <LinkText href="#" onClick={handleClick}>Sign In</LinkText> 
       </FooterText>
       <Button onClick={onClose}>Close</Button>
     </ModalContainer>

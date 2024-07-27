@@ -7,9 +7,14 @@ import SpotSearch from './components/pages/SpotSearch';
 import Detail from './components/pages/Detail';
 import Divemain from './components/pages/Divemain';
 import Header from './components/layout/Header';
+import Layout from './components/layout/Layout';
+// import styled from 'styled-components';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
 import PostDetail from './components/pages/PostDetail';
+// import OceanData from './components/pages/OceanData';
+import Detail from './components/pages/Detail';
+import WeatherData from './components/pages/Detail';
 
 function App() {
     // 상태 변수들 정의
@@ -57,6 +62,8 @@ function App() {
                     
 
                     <Route path="/post/:id" element={<PostDetail />} />
+                    <Route path="/Detail" element={< Detail/>} />
+                    <Route path="/Weather-data" element={< WeatherData/>} />
                 </Routes>
                 {/* 로그인 모달 */}
                 {isLoginModalOpen && (
@@ -77,7 +84,12 @@ function App() {
                             borderRadius: '5px',
                             boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
                         }}>
-                            <LoginModal onLoginSuccess={handleLoginSuccess} onClose={toggleLoginModal} />
+                            <LoginModal
+                                onLoginSuccess={handleLoginSuccess}
+                                onClose={toggleLoginModal}
+                                toggleJoinModal={toggleJoinModal}
+                                toggleLoginModal={toggleLoginModal}
+                            />
                         </div>
                     </div>
                 )}
@@ -100,10 +112,16 @@ function App() {
                             borderRadius: '5px',
                             boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
                         }}>
-                            <JoinModal onJoinSuccess={() => setIsJoinModalOpen(false)} onClose={toggleJoinModal}/>
+                            <JoinModal
+                                onJoinSuccess={() => setIsJoinModalOpen(false)}
+                                onClose={toggleJoinModal}
+                                toggleJoinModal={toggleJoinModal}
+                                toggleLoginModal={toggleLoginModal}
+                            />
                         </div>
                     </div>
                 )}
+
             </Router>
         </>
     );

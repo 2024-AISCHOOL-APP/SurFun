@@ -16,6 +16,9 @@ const path = require('path');
 const favoritesRouter = require('./routes/favorites');
 const notifyRouter = require('./routes/notify');
 
+const notificationServiceRouter = require('./routes/notificationService');
+const commentRouter = require('./routes/comment');    
+const likesRouter = require('./routes/likes');
  
 const app = express();
 const swaggerOption ={
@@ -47,8 +50,11 @@ app.use(session({
     saveUninitialized: true
 }));
 
-
-app.use(cors());
+app.use(cors({
+    origin:'*', //이후에 허용 도메인 수정
+    methods:['GET','POST','PUT','DELETE'],
+    credentials:true
+}));
 app.use(sessionConfig);
 
 //passport 전용 middleware
@@ -56,12 +62,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 
-
 // 루트 경로에 대한 처리 추가
 app.get('/', (req, res) => {
     res.send('Welcome to the API!');
 });
 
+app.use('/community', likesRouter);  // likes
+app.use('/community', commentRouter);  // comment
+app.use('/notificationService', notificationServiceRouter); // notificationService
 app.use('/notify', notifyRouter); // notify
 app.use('/favorites', favoritesRouter); // favorites
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // 정적 파일 제공을 위한 미들웨어 설정
@@ -70,5 +78,13 @@ app.use('/zones', zonesRoutes); // zones.js 라우트
 app.use('/auth', authRoutes); // 회원가입, 로그인 로직의 미들웨어를 적용
 app.use('/api', apiRoutes); // 특정 경로에 대해서만 캐싱 미들웨어를 적용
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); // swagger-ui
+
+// 동적 import 사용
+const fetchData = async () => {
+    const { default: fetch } = await import('node-fetch');
+    // fetch 사용 코드
+};
+
+fetchData().catch(err => console.error(err));
 
 module.exports = app;

@@ -16,8 +16,7 @@ const Nav = styled.nav`
 
 const Logo = styled.div`
   img {
-    width: 70px; /* 로고 너비를 px로 조정 */
-
+    width: 70px;
   }
 `;
 
@@ -35,25 +34,29 @@ const MenuItem = styled.li`
 const NavButton = styled.button`
   padding: 10px 20px;
   margin: 10px;
-  background-color: #90e0ef; /* 버튼 배경색 */
+  background-color: #90e0ef;
   border: none;
   border-radius: 5px;
-  color: #0077b6; /* 버튼 글자색 */
+  color: #0077b6;
   cursor: pointer;
   font-size: 16px;
+  white-space: nowrap;
+  min-width: 120px;
+  width: auto;
+  text-align: center; 
 
   &:hover {
-    background-color: #00b4d8; /* 호버 시 배경색 */
-    color: white; /* 호버 시 글자색 */
+    background-color: #00b4d8;
+    color: white;
   }
 `;
 
 const BlackButton = styled(NavButton)`
-  background-color: #023e8a; /* 검정색 버튼 배경색 */
+  background-color: #023e8a;
   color: white;
 
   &:hover {
-    background-color: #03045e; /* 호버 시 배경색 */
+    background-color: #03045e;
   }
 `;
 
@@ -70,16 +73,10 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
       <Nav>
         <Logo>
           <Link to="/">
-            <img src={logo} alt="SurFun logo"/>
+            <img src={logo} alt="SurFun logo" />
           </Link>
         </Logo>
         <Menu>
-          {loggedIn && (
-            <MenuItem style={{ color: '#0077b6' }}>
-              {`Welcome, ${username}`}
-            </MenuItem>
-          )}
-        
           <MenuItem>
             <NavButton onClick={() => handleNavigation('/spot-select')}>Spot Select</NavButton>
           </MenuItem>
@@ -92,13 +89,19 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
           <MenuItem>
             <NavButton onClick={() => handleNavigation('/SpotSearch')}>지역 검색</NavButton>
           </MenuItem>
+       
+          {loggedIn && (
+            <MenuItem style={{ color: 'white' }}>
+              {`Welcome, ${username}`}
+            </MenuItem>
+          )}
           {!loggedIn && (
             <>
               <MenuItem>
-                <BlackButton onClick={toggleJoinModal}>회원가입</BlackButton>
+                <BlackButton onClick={toggleJoinModal}>Sign Up</BlackButton>
               </MenuItem>
               <MenuItem>
-                <BlackButton onClick={toggleLoginModal}>로그인</BlackButton>
+                <BlackButton onClick={toggleLoginModal}>Sign In</BlackButton>
               </MenuItem>
             </>
           )}

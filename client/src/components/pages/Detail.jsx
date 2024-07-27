@@ -1,130 +1,157 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import '../../assets/scss/WeatherStyles.scss';
 
-const Detail = () => {
-  const [weatherData, setWeatherData] = useState(null); // 날씨 정보를 저장할 상태
+export default function DisplayWeather() {
+  const [midWeather, setMidWeather] = useState(null);
+  const [shortWeather, setShortWeather] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [expandedDates, setExpandedDates] = useState({});
+
+  const getMidWeather = async () => {
+    const response = await fetch(
+      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidSeaFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=12B10000&tmFc=202407270600`
+    );
+    const result = await response.json();
+    setMidWeather(result.response.body.items.item[0]);
+  };
+
+  const getShortWeather = async () => {
+    const response = await fetch(
+      `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20240727&base_time=0500&nx=33&ny=126`
+    );
+    const result = await response.json();
+    setShortWeather(result.response.body.items.item);
+  };
 
   useEffect(() => {
-    const fetchWeatherData = async () => {
-      const apiUrl = 'http://www.khoa.go.kr/api/oceangrid/beach/search.do?ServiceKey=wldhxng34hkddbsgm81lwldhxng34hkddbsgm81l==&BeachCode=BCH001&ResultType=json'; // API 주소
-
-      try {
-        const response = await fetch(apiUrl,{
-          mode:'no-cors'
-        });
-        if (!response.ok) {
-          throw new Error('날씨 정보를 불러오는 데 문제가 발생했습니다.');
-        }
-        const data = await response.json();
-        // API에서 필요한 날씨 데이터를 추출하여 설정합니다.
-        const weatherInfo = {
-          time: data.result.data[0].obs_time, // 날씨 관측 시간
-          wind: `${data.result.data[0].wind_direct} ${data.result.data[0].wind_speed} m/s`, // 바람 방향과 속도
-          wave: `${data.result.data[0].tide} m`, // 조수 (파고 예시)
-          temp: `${data.result.data[0].water_temp} °C`, // 기온
-          day1_am_status: data.result.data[0].day1_am_status, // 첫째 날 오전 상태
-          day1_pm_status: data.result.data[0].day1_pm_status, // 첫째 날 오후 상태
-          day2_am_status: data.result.data[0].day2_am_status, // 둘째 날 오전 상태
-          day2_pm_status: data.result.data[0].day2_pm_status, // 둘째 날 오후 상태
-          day3_am_status: data.result.data[0].day3_am_status, // 셋째 날 오전 상태
-          day3_pm_status: data.result.data[0].day3_pm_status, // 셋째 날 오후 상태
-        };
-        setWeatherData(weatherInfo); // 날씨 데이터를 상태에 설정합니다.
-      } catch (error) {
-        console.error('날씨 정보를 불러오는 도중 에러가 발생했습니다:', error.message);
-      }
+    const fetchData = async () => {
+      await getMidWeather();
+      await getShortWeather();
+      setLoading(false);
     };
-
-    fetchWeatherData(); // 날씨 데이터를 가져오는 함수 호출
+    fetchData();
   }, []);
 
-  return (
-    <div className='detailcontainer'>
-      <h1 className='search-h1'>
-        바다예보
-        <img src='/parassol.png' className='solimg' alt='sun' />
-      </h1>
-      <br />
-      <div>
-        <h1 className='detail-h1'>
-          {weatherData && (
-            <>
-              {weatherData.meta.beach_name} {/* 해변 이름 */}
-              <button>관심스팟</button>
-              <button>추천일 알람설정</button>
-            </>
-          )}
-        </h1>
-        <hr className='csshr' />
-      </div>
-      <div className='graph'>
-        <h2 className='graph-h2'>
-          주간예보 <span className='graph-h2span'>일간예보</span>
-        </h2>
-        <div>
-          <canvas className='canvas' />
-        </div>
-        <div className='todaysea'>
-          {weatherData && (
-            <>
-              <h1 className='todayseah1'>오늘의바다</h1>
-              <hr className='csshr' />
-              <img src='/surfgood.png' className='surfgoodimg' alt='surf' />
-              <h3 className='todayexplain'>
-                오늘 {weatherData.time}은 서핑 하기 참 좋은날이어유 초보 서퍼들은 서핑보드들고 냅다 나가봐유
-              </h3>
-            </>
-          )}
-        </div>
-        <div className='first-line'>
-          <h2>Beach Information</h2>
-          <table className='beach-info-table'>
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Wind</th>
-                <th>Wave</th>
-                <th>Temperature</th>
-                <th colSpan='2'>Weather Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {weatherData && (
-                <tr>
-                  <td>{weatherData.time}</td>
-                  <td>{weatherData.wind}</td>
-                  <td>{weatherData.wave}</td>
-                  <td>{weatherData.temp}</td>
-                  <td>AM</td>
-                  <td>PM</td>
-                </tr>
-              )}
-              {weatherData && (
-                <tr>
-                  <td colSpan='4'>Day 1</td>
-                  <td>{weatherData.day1_am_status}</td>
-                  <td>{weatherData.day1_pm_status}</td>
-                </tr>
-              )}
-              {weatherData && (
-                <tr>
-                  <td colSpan='4'>Day 2</td>
-                  <td>{weatherData.day2_am_status}</td>
-                  <td>{weatherData.day2_pm_status}</td>
-                </tr>
-              )}
-              {weatherData && (
-                <tr>
-                  <td colSpan='4'>Day 3</td>
-                  <td>{weatherData.day3_am_status}</td>
-                  <td>{weatherData.day3_pm_status}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-};
+  const formatShortForecast = (data) => {
+    const forecast = {};
+    data.forEach((item) => {
+      const date = item.fcstDate;
+      const time = item.fcstTime;
+      if (!forecast[date]) {
+        forecast[date] = {};
+      }
+      if (!forecast[date][time]) {
+        forecast[date][time] = {};
+      }
+      forecast[date][time][item.category] = item.fcstValue;
+    });
+    return forecast;
+  };
 
-export default Detail;
+  const shortForecastData = formatShortForecast(shortWeather);
+
+  const filterTimes = ['0600', '1200', '1800', '0000'];
+
+  const getWeatherIcon = (condition) => {
+    switch (condition) {
+      case '맑음':
+        return 'http://openweathermap.org/img/wn/01d.png';
+      case '구름조금':
+        return 'http://openweathermap.org/img/wn/02d.png';
+      case '구름많음':
+        return 'http://openweathermap.org/img/wn/03d.png';
+      case '흐림':
+        return 'http://openweathermap.org/img/wn/04d.png';
+      case '비':
+        return 'http://openweathermap.org/img/wn/09d.png';
+      case '눈':
+        return 'http://openweathermap.org/img/wn/13d.png';
+      default:
+        return 'http://openweathermap.org/img/wn/01d.png';
+    }
+  };
+
+  const days = ['일', '월', '화', '수', '목', '금', '토'];
+  const getDayLabel = (date) => {
+    const year = date.slice(0, 4);
+    const month = date.slice(4, 6);
+    const day = date.slice(6, 8);
+    const d = new Date(`${year}-${month}-${day}`);
+    return `${d.getMonth() + 1}.${d.getDate()} (${days[d.getDay()]})`;
+  };
+
+  const toggleDate = (date) => {
+    setExpandedDates((prev) => ({
+      ...prev,
+      [date]: !prev[date]
+    }));
+  };
+
+  return (
+    <>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <div className="weather-container">
+          <h1>Jeju Weather Forecast</h1>
+          {midWeather && (
+            <div className="weekly-forecast">
+              <h2>중기 예보 (2024/07/27 - 2024/08/03)</h2>
+              <div className="forecast-grid">
+                {[...Array(7)].map((_, index) => {
+                  const date = new Date(2024, 6, 27 + index); // Adjust the date to 27th July 2024 and onwards
+                  const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
+                  const label = getDayLabel(dateStr);
+                  return (
+                    <div key={index} className="daily-forecast">
+                      <h3>{label}</h3>
+                      <div className="morning">
+                        <img src={getWeatherIcon(midWeather[`wf${index + 3}Am`])} alt={midWeather[`wf${index + 3}Am`]} />
+                        <p>{midWeather[`wf${index + 3}Am`]} (파고: {midWeather[`wh${index + 3}AAm`]}m)</p>
+                      </div>
+                      <div className="afternoon">
+                        <img src={getWeatherIcon(midWeather[`wf${index + 3}Pm`])} alt={midWeather[`wf${index + 3}Pm`]} />
+                        <p>{midWeather[`wf${index + 3}Pm`]} (파고: {midWeather[`wh${index + 3}APm`]}m)</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+          <div className="detailed-forecast">
+            <h2>상세 예보 (6시간 간격)</h2>
+            {Object.keys(shortForecastData).map((date) => (
+              <div key={date} className="date-forecast">
+                <h3 onClick={() => toggleDate(date)}>{getDayLabel(date)}</h3>
+                {expandedDates[date] && (
+                  <div className="hourly-forecast-container">
+                    {Object.keys(shortForecastData[date]).filter(time => filterTimes.includes(time)).map((time) => (
+                      <div key={time} className="hourly-forecast">
+                        <h4>{time.slice(0, 2)}:00</h4>
+                        <p>기온: {shortForecastData[date][time]?.TMP}℃</p>
+                        <p>강수확률: {shortForecastData[date][time]?.POP}%</p>
+                        <p>강수형태: {shortForecastData[date][time]?.PTY}</p>
+                        <p>1시간 강수량: {shortForecastData[date][time]?.PCP}</p>
+                        <p>습도: {shortForecastData[date][time]?.REH}%</p>
+                        <p>1시간 신적설: {shortForecastData[date][time]?.SNO}</p>
+                        <p>하늘상태: {shortForecastData[date][time]?.SKY}</p>
+                        <p>일 최저기온: {shortForecastData[date][time]?.TMN}℃</p>
+                        <p>일 최고기온: {shortForecastData[date][time]?.TMX}℃</p>
+                        <p>풍속(동서성분): {shortForecastData[date][time]?.UUU}m/s</p>
+                        <p>풍속(남북성분): {shortForecastData[date][time]?.VVV}m/s</p>
+                        <p>파고: {shortForecastData[date][time]?.WAV}m</p>
+                        <p>풍향: {shortForecastData[date][time]?.VEC}deg</p>
+                        <p>풍속: {shortForecastData[date][time]?.WSD}m/s</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </>
+  );
+}

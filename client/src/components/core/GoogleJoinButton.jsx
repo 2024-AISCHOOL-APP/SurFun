@@ -1,5 +1,6 @@
 import React from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import '../../assets/scss/GoogleLoginButton.scss';
 
 const responseGoogle = (response) => {
   console.log(response);
@@ -18,13 +19,14 @@ const responseGoogle = (response) => {
 
 function GoogleJoinButton() {
   return (
-    <GoogleOAuthProvider clientId="process.env.REACT_APP_GOOGLE_CLIENT_ID">
-      <div className="GoogleJoin">
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+      <div className="google-login-wrapper">
         <GoogleLogin
           onSuccess={responseGoogle}
           onError={() => {
             console.log('Login Failed');
           }}
+          className="google-login-button"
         />
       </div>
     </GoogleOAuthProvider>
