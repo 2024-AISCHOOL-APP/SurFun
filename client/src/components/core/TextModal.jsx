@@ -67,6 +67,7 @@ const Button = styled.button`
 const TextModal = ({ isOpen, onClose, onSave, username }) => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [image, setImage] = useState(null);
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
 
@@ -79,6 +80,10 @@ const TextModal = ({ isOpen, onClose, onSave, username }) => {
     }
   }, []);
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const handleSave = async () => {
     try {
       const post_date = new Date().toISOString();
@@ -86,15 +91,21 @@ const TextModal = ({ isOpen, onClose, onSave, username }) => {
         console.error('Latitude or Longitude is null');
         return;
       }
-      const postData = {
-        username,
-        title,
-        content,
-        post_date,
-        latitude,
-        longitude,
-      };
-      const response = await axios.post('http://localhost:5000/community/posts', postData);
+
+      const formData = new FormData();
+      formData.append('username', username);
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('post_date', post_date);
+      formData.append('latitude', latitude);
+      formData.append('longitude', longitude);
+      formData.append('image', image);
+
+      const response = await axios.post('http://localhost:5000/community/posts', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       console.log(response.data);
       onSave(); // 저장 후 호출
     } catch (error) {
@@ -118,6 +129,11 @@ const TextModal = ({ isOpen, onClose, onSave, username }) => {
           placeholder="내용"
           value={content}
           onChange={(e) => setContent(e.target.value)}
+        />
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
         />
         <div>
           <Button onClick={handleSave}>저장</Button>

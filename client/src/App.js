@@ -10,7 +10,7 @@ import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
 import PostDetail from './components/pages/PostDetail';
 // import OceanData from './components/pages/OceanData';
-import Detail from './components/pages/Detail2';
+import Detail from './components/pages/Detail';
 import WeatherData from './components/pages/Detail';
 
 function App() {
