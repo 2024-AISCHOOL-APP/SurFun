@@ -5,6 +5,8 @@ const router = express.Router();
 const validatePostInput = require('../middlewares/validatePostInput'); 
 const upload = require('../middlewares/upload');
 const path = require('path');
+const commentRouter = require('./comment'); 
+const likeRouter = require('./likes');
 
 function formatDateToMySQL(date) {
     const d = new Date(date);
@@ -276,4 +278,6 @@ router.delete('/posts/:id', async (req, res) => {
     }
 });
 
+router.use('/likes', likeRouter);
+router.use('/comment', commentRouter);
 module.exports = router;

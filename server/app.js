@@ -16,6 +16,10 @@ const path = require('path');
 const favoritesRouter = require('./routes/favorites');
 const notifyRouter = require('./routes/notify');
 
+const notificationServiceRouter = require('./routes/notificationService');
+const commentRouter = require('./routes/comment');    
+const likesRouter = require('./routes/likes');
+ 
 const app = express();
 const swaggerOption ={
     swaggerDefinition:{
@@ -57,11 +61,15 @@ app.use(sessionConfig);
 app.use(passport.initialize());
 app.use(passport.session());
 
+
 // 루트 경로에 대한 처리 추가
 app.get('/', (req, res) => {
     res.send('Welcome to the API!');
 });
 
+app.use('/community', likesRouter);  // likes
+app.use('/community', commentRouter);  // comment
+app.use('/notificationService', notificationServiceRouter); // notificationService
 app.use('/notify', notifyRouter); // notify
 app.use('/favorites', favoritesRouter); // favorites
 app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // 정적 파일 제공을 위한 미들웨어 설정
