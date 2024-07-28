@@ -3,7 +3,7 @@ import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import '../../assets/scss/WeatherStyles.scss';
 
-export default function DisplayWeather() {
+export default function DetailGW() {
   const [midWeather, setMidWeather] = useState(null);
   const [shortWeather, setShortWeather] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,7 +11,7 @@ export default function DisplayWeather() {
 
   const getMidWeather = async () => {
     const response = await fetch(
-      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11G00201&tmFc=202407290600`
+      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11D20501&tmFc=202407290600`
     );
     const result = await response.json();
     setMidWeather(result.response.body.items.item[0]);
@@ -19,7 +19,7 @@ export default function DisplayWeather() {
 
   const getShortWeather = async () => {
     const response = await fetch(
-      `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20240729&base_time=0500&nx=33&ny=126`
+      `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20240729&base_time=0500&nx=38&ny=128`
     );
     const result = await response.json();
     setShortWeather(result.response.body.items.item);
@@ -33,17 +33,6 @@ export default function DisplayWeather() {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    // 페이지 로드 시 기본적으로 모든 차트를 열어놓기
-    if (shortWeather.length > 0) {
-      const dates = shortWeather.reduce((acc, item) => {
-        acc[item.fcstDate] = true;
-        return acc;
-      }, {});
-      setExpandedDates(dates);
-    }
-  }, [shortWeather]);
 
   const formatShortForecast = (data) => {
     const forecast = {};
@@ -146,22 +135,13 @@ export default function DisplayWeather() {
     };
   };
 
-  const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    animation: {
-      duration: 2000, // 애니메이션 시간 설정 (ms)
-      easing: 'easeInOutBounce', // 애니메이션 이징 함수 easeInQuad, easeOutQuad, easeInOutQuad, linear,easeInOutBounce, easeInOutElastic
-    }
-  };
-
   return (
     <>
       {loading ? (
         <div>Loading...</div>
       ) : (
         <div className="weather-container">
-          <h1>Jeju Weather Forecast</h1>
+          <h1>GangWon Weather Forecast</h1>
           {midWeather && (
             <div className="weekly-forecast">
               <h2>중기 예보 (2024/07/27 - 2024/08/03)</h2>
@@ -204,7 +184,7 @@ export default function DisplayWeather() {
                 <h3 onClick={() => toggleDate(date)}>{getDayLabel(date)}</h3>
                 {expandedDates[date] && (
                   <div className="hourly-forecast-container">
-                    <Line data={chartData(date)} options={chartOptions} />
+                    <Line data={chartData(date)} options={{ responsive: true, maintainAspectRatio: false }} />
                   </div>
                 )}
               </div>
