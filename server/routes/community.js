@@ -3,6 +3,7 @@ const express = require('express');
 const db = require('../config/dbConfig');
 const router = express.Router();
 const validatePostInput = require('../middlewares/validatePostInput'); 
+const validateCommentInput=require('../middlewares/validateCommentInput');
 const upload = require('../middlewares/upload');
 const path = require('path');
 const commentRouter = require('./comment'); 

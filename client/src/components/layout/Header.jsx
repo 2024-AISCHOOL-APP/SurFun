@@ -88,7 +88,7 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
             <NavButton onClick={() => handleNavigation('/Weather-data')}>날씨 정보</NavButton>
           </MenuItem>
           {loggedIn && (
-            <MenuItem style={{ color: 'white' }}>
+            <MenuItem style={{ color: 'black' }}>
               {`Welcome, ${username}`}
             </MenuItem>
           )}

@@ -84,7 +84,6 @@ function SpotSelect() {
           <h2>Home - 스팟선택</h2>
           <br />
           <hr />
-
           <input placeholder="내용을 입력하세요" />
           {/* 나중에 아이콘 추가 */}
           {/* 추가적인 내용을 넣으세요 */}

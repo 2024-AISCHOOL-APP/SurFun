@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
 import Layout from '../layout/Layout';
-import PostDetailModal from './PostDetail';
+import PostDetailModal from './PostDetailModal';
 import TextModal from '../core/TextModal';
 
 const CommunityContainer = styled.div`
@@ -180,6 +180,7 @@ const Community = ({ username }) => {
         </VideoBackground>
         <div className="welcome-message">
           <h1>Welcome to Community</h1>
+          <p>Logged in as : {username}</p>
         </div>
       </VideoContainer>
       <CommunityContainer>

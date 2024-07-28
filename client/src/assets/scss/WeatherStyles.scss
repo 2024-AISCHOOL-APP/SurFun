@@ -1,68 +1,61 @@
 .weather-container {
-    text-align: center;
-    font-family: Arial, sans-serif;
-  }
+    .weekly-forecast, .detailed-forecast {
+      margin: 20px 0;
+    }
   
-  .weekly-forecast {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+    .forecast-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
   
-  .forecast-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 10px;
-  }
+    .daily-forecast {
+      background: #f0f0f0;
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      flex: 1;
+      min-width: 100px;
   
-  .daily-forecast {
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    padding: 10px;
-    background: #f9f9f9;
-  }
+      h3 {
+        margin: 10px 0;
+      }
   
-  .morning, .afternoon {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+      .morning, .afternoon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 10px;
   
-  .morning img, .afternoon img {
-    width: 50px;
-    height: 50px;
-  }
+        img {
+          width: 50px;
+          height: 50px;
+        }
   
-  .detailed-forecast {
-    margin-top: 20px;
-  }
+        p {
+          margin: 5px 0;
+        }
+      }
   
-  .date-forecast {
-    margin-bottom: 20px;
-  }
+      .temperature {
+        p {
+          margin: 5px 0;
+        }
+      }
+    }
   
-  .hourly-forecast-container {
-    border-top: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 10px;
-  }
+    .date-forecast {
+      margin: 10px 0;
+      
+      h3 {
+        cursor: pointer;
+        margin-bottom: 10px;
+      }
+    }
   
-  .hourly-forecast {
-    border-top: 1px solid #ccc;
-    padding: 10px;
-    margin-top: 10px;
-  }
-  
-  h2, h3, h4 {
-    margin: 0;
-  }
-  
-  h2 {
-    margin-bottom: 20px;
-  }
-  
-  h3 {
-    cursor: pointer;
-    margin-top: 20px;
+    .hourly-forecast-container {
+      height: 400px; /* 차트 높이 설정 */
+      width: 100%;
+    }
   }
   

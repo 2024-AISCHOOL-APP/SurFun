@@ -7,12 +7,12 @@ async function findOrCreateUser(profile) {
     const provider = 'google';
     const provider_id = profile.id;
 
-    let user = await db.query('SELECT * FROM User WHERE username = ?', [username]);
+    let user = await db.query('SELECT * FROM User WHERE email = ?', [email]);
 
     if (user.length === 0) {
         await db.query('INSERT INTO User (username, email) VALUES (?, ?)', [username, email]);
         await db.query('INSERT INTO Social_Logins (username, provider, provider_id) VALUES (?, ?, ?)', [username, provider, provider_id]);
-        user = await db.query('SELECT * FROM User WHERE username = ?', [username]);
+        user = await db.query('SELECT * FROM User WHERE email = ?', [email]);
     }
 
     return user[0];
@@ -47,5 +47,9 @@ async function authenticateUser(username, password) {
 
     return user;
 }
+async function addSocialLogin(username,provider,providerId){
+    const query='INSERT INTO Social_Logins (username, provider, provider_id) VALUES(?,?,?)';
+    await db.executeQuery(query, [username, provider, providerId]);
+}
 
-module.exports = { findOrCreateUser, findUserByUsername, registerUser, authenticateUser };
+module.exports = { findOrCreateUser, findUserByUsername, registerUser, authenticateUser, addSocialLogin };

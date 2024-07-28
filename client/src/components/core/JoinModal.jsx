@@ -1,10 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import GoogleJoinButton from './GoogleJoinButton';
 import styled from 'styled-components';
-import GoogleLoginButton from './GoogleLoginButton';
-import { GoogleLogin } from '@react-oauth/google';
 
 
 const ModalContainer = styled.div`
@@ -192,9 +189,7 @@ function JoinModal({ onJoinSuccess, onClose, toggleJoinModal, toggleLoginModal})
         <option value="Gangwon">Gangwon</option>
       </Select>
       <Button onClick={register}>Sign Up</Button>
-      <GoogleButtonWrapper>
-        <GoogleJoinButton />
-      </GoogleButtonWrapper>
+      
       <FooterText>
         Already have an account?
         <LinkText href="#" onClick={handleClick}>Sign In</LinkText> 

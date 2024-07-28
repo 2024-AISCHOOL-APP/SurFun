@@ -38,8 +38,8 @@ async function googleCallback(req, res){
     if(req.user){
         const profile = req.user;
         const user = await authService.findOrCreateUser(profile);
-        req.session.userId=req.user.user_id; //세션에 사용자 ID 저장
-        res.redirect(`/?username=${req.user.username}`); //사용자 이름을 쿼리 파라미터로 전달
+        req.session.userId=user.username; //세션에 사용자 ID 저장
+        res.redirect(`/?username=${user.username}`); //사용자 이름을 쿼리 파라미터로 전달
     }else{
         res.redirect('/'); //실패시 홈으로 리다이렉트
     }
