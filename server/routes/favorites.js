@@ -69,6 +69,16 @@ function formatDateToMySQL(date) {
  *                 error:
  *                   type: string
  *                   example: 'At least one of surfing_zone_id or diving_zone_id must be provided'
+ *       409:
+ *         description: Conflict - Favorite already exists
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: 'Favorite already exists'
  *       500:
  *         description: Internal server error
  *         content:
@@ -108,6 +118,12 @@ router.post('/', async (req, res) => {
             latitude = zone[0].latitude;
             longitude = zone[0].longitude;
 
+            // Check for existing favorite
+            const [existingFavorite] = await db.query('SELECT * FROM Favorite WHERE username = ? AND surfing_zone_id = ?', [username, surfing_zone_id]);
+            if (existingFavorite.length > 0) {
+                return res.status(409).json({ error: 'Favorite already exists' });
+            }
+
             await db.query('INSERT INTO Favorite (username, surfing_zone_id, favorite_date, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?)', 
                 [username, surfing_zone_id, formattedFavoriteDate, latitude, longitude, formattedLastNotified]
             );
@@ -121,6 +137,12 @@ router.post('/', async (req, res) => {
 
             latitude = zone[0].latitude;
             longitude = zone[0].longitude;
+
+            // Check for existing favorite
+            const [existingFavorite] = await db.query('SELECT * FROM Favorite WHERE username = ? AND diving_zone_id = ?', [username, diving_zone_id]);
+            if (existingFavorite.length > 0) {
+                return res.status(409).json({ error: 'Favorite already exists' });
+            }
 
             await db.query('INSERT INTO Favorite (username, diving_zone_id, favorite_date, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?)', 
                 [username, diving_zone_id, formattedFavoriteDate, latitude, longitude, formattedLastNotified]

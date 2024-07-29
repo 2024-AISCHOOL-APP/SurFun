@@ -19,6 +19,8 @@ function formatDateToMySQL(date) {
  * @swagger
  * /community/posts:
  *   post:
+ *     tags:
+ *      - community
  *     summary: Create a new community post
  *     requestBody:
  *       required: true
@@ -86,6 +88,8 @@ router.post('/posts', upload.single('image'), validatePostInput, async (req, res
  * @swagger
  * /community/posts:
  *   get:
+ *     tags:
+ *      - community
  *     summary: Retrieve a list of community posts
  *     responses:
  *       200:
@@ -132,6 +136,8 @@ router.get('/posts', async (req, res) => {
  * @swagger
  * /community/posts/{id}:
  *   get:
+ *     tags:
+ *      - community
  *     summary: Retrieve a single community post
  *     parameters:
  *       - in: path
@@ -171,7 +177,13 @@ router.get('/posts', async (req, res) => {
  *         description: Post not found
  */
 router.get('/posts/:id', async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
+    console.log('Received post_id:', id);  // ID 값 확인용 로그 추가
+
+    if (!id || isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
     try {
         await db.query('UPDATE Community_Post SET views = views + 1 WHERE post_id = ?', [id]);
 
@@ -191,6 +203,8 @@ router.get('/posts/:id', async (req, res) => {
  * @swagger
  * /community/posts/{id}:
  *   put:
+ *     tags:
+ *      - community
  *     summary: Update a community post
  *     parameters:
  *       - in: path
@@ -226,8 +240,13 @@ router.get('/posts/:id', async (req, res) => {
  *         description: Internal server error
  */
 router.put('/posts/:id', async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
     const { title, content, post_date, latitude, longitude } = req.body;
+
+    if (!id || isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
     try {
         const formattedDate = formatDateToMySQL(post_date);
         const [result] = await db.query(
@@ -244,11 +263,14 @@ router.put('/posts/:id', async (req, res) => {
     }
 });
 
+
 // Delete a post
 /**
  * @swagger
  * /community/posts/{id}:
  *   delete:
+ *     tags:
+ *      - community
  *     summary: Delete a community post
  *     parameters:
  *       - in: path
@@ -266,7 +288,12 @@ router.put('/posts/:id', async (req, res) => {
  *         description: Internal server error
  */
 router.delete('/posts/:id', async (req, res) => {
-    const { id } = req.params;
+    const id = req.params.id;
+
+    if (!id || isNaN(id)) {
+        return res.status(400).json({ error: 'Invalid post ID' });
+    }
+
     try {
         const [result] = await db.query('DELETE FROM Community_Post WHERE post_id = ?', [id]);
         if (result.affectedRows === 0) {
@@ -278,6 +305,7 @@ router.delete('/posts/:id', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
 
 router.use('/likes', likeRouter);
 router.use('/comment', commentRouter);

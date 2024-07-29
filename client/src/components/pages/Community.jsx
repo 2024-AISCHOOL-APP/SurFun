@@ -191,7 +191,6 @@ const Community = ({ username }) => {
         </VideoBackground>
         <div className="welcome-message">
           <h1>Welcome to Community</h1>
-          <p>Logged in as : {username}</p>
         </div>
       </VideoContainer>
       <CommunityContainer>
@@ -250,7 +249,7 @@ const Community = ({ username }) => {
         </BoardContainer>
       </CommunityContainer>
       <TextModal isOpen={isTextModalOpen} onClose={toggleTextModal} onSave={handleSave} username={username} />
-      {selectedPostId && <PostDetailModal postId={selectedPostId} onClose={() => setSelectedPostId(null)} />}
+      {selectedPostId && <PostDetailModal postId={selectedPostId} onClose={() => setSelectedPostId(null)} username={username}/>}
     </>
   );
 };
