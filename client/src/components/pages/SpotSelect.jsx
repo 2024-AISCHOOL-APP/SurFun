@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SpotInfo from './SpotInfo';
+import Favorites from '../widgets/Favorites'; // 올바른 경로 확인
 import { useNavigate } from 'react-router-dom';
 
 function SpotSelect() {

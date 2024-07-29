@@ -93,6 +93,7 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal, handleL
   const [searchQuery, setSearchQuery] = useState(''); // 상태 변수 정의
 
 
+
   const handleNavigation = (path) => {
     navigate(path);
   };
