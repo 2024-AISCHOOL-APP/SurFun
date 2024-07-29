@@ -53,25 +53,6 @@ function Main({ loggedIn, username, onLoginSuccess }) {
             </div>
 
             <Footer />
-            <div className="video-container">
-                <video autoPlay loop muted className="video-background">
-                    <source src="/videos/surfing.mp4" type="video/mp4" />
-                    <div className="welcome-message">
-                        <h1>Surfun</h1>
-                        <h2>서핑을 즐기자</h2>
-                        <button onClick={() => handleNavigation('/spot-select')} className='main-button'>서핑하러 가기</button>
-                    </div>
-                </video>
-            </div>
-            <Favorites />
-            <div className="content">
-                {loggedIn && (
-                    <>
-                        <h1>Welcome, {username}!</h1>
-                    </>
-                )}
-                <Footer />
-            </div>
         </div>
     );
 }
