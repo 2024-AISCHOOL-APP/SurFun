@@ -16,6 +16,7 @@ const ModalContainer = styled.div`
   margin: auto;
   text-align: center;
   font-family: 'Arial, sans-serif';
+  z-index: 1100; /* Header와 Footer의 z-index보다 높게 설정 */
 `;
 
 const Title = styled.h1`

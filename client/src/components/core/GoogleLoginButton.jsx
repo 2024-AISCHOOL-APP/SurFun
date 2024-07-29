@@ -7,7 +7,7 @@ const GoogleLoginButton = () => {
     };
 
     return (
-        <button onClick={handleGoogleLogin}>
+        <button className='google-login-button' onClick={handleGoogleLogin}>
              <svg className="google-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48">
                 <path fill="#4285F4" d="M47.5 24.5c0-1.6-.1-3.1-.3-4.5H24v9h13.3c-.6 3-2.5 5.5-5.3 7.2v6h8.6c5-4.6 7.9-11.5 7.9-17.7z"/>
                 <path fill="#34A853" d="M24 48c6.5 0 12-2.1 16-5.6l-8.6-6c-2.2 1.5-5 2.4-7.4 2.4-5.7 0-10.5-3.8-12.2-9H3.3v6C7.3 43.2 15 48 24 48z"/>
@@ -16,7 +16,7 @@ const GoogleLoginButton = () => {
             </svg>
             Login with Google
         </button>
-    );
+    )
 };
 
 export default GoogleLoginButton;
