@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import '../../assets/scss/WeatherStyles.scss';
+import '../../assets/scss/WeatherStyles.scss'; //웹
 
 export default function DisplayWeather() {
   const [midWeather, setMidWeather] = useState(null);
@@ -173,7 +173,7 @@ export default function DisplayWeather() {
           <h1>Jeju Weather Forecast</h1>
           {midWeather && (
             <div className="weekly-forecast">
-              <h2>중기 예보 </h2>
+              <h2>주간 해양 </h2>
               <div className="forecast-grid">
                 {[...Array(7)].map((_, index) => {
                   const date =new Date();
@@ -208,7 +208,7 @@ export default function DisplayWeather() {
             </div>
           )}
           <div className="detailed-forecast">
-            <h2>상세 예보 (1시간 간격)</h2>
+            <h2>해양 상세</h2>
             {Object.keys(shortForecastData).map((date) => (
               <div key={date} className="date-forecast">
                 <h3 onClick={() => toggleDate(date)}>{getDayLabel(date)}</h3>

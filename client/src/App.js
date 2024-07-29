@@ -57,7 +57,7 @@ function App() {
                     <Route path="/post/:id" element={<PostDetailModal username={username} />} />
                     <Route path="/Detail" element={<Detail />} />
                     <Route path="/Detail2" element={<DetailGW />} />
-                    <Route path="/spot-select" element={<SpotSelect />} />
+                    <Route path="/spot-select" element={<SpotSelect username={username}/>} />
                     <Route path="/divemain" element={<Divemain />} />
                     <Route path='/SpotSearch' element={<SpotSearch/>} />
                 </Routes>

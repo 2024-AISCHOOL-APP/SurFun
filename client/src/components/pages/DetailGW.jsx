@@ -2,19 +2,31 @@ import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
 import '../../assets/scss/WeatherStyles.scss';
+import lv1 from '../../assets/img/lv1.png';
+import lv2 from '../../assets/img/lv2.png';
+import lv3 from '../../assets/img/lv3.png';
+import lv4 from '../../assets/img/lv4.png';
+import lv5 from '../../assets/img/lv5.png';
 
 export default function DetailGW() {
-  const [midWeather, setMidWeather] = useState(null);
-  const [shortWeather, setShortWeather] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [activityData, setActivityData] = useState([]);
+  const [shortWeather, setShortWeather] = useState([]);
   const [expandedDates, setExpandedDates] = useState({});
 
-  const getMidWeather = async () => {
-    const response = await fetch(
-      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11D20501&tmFc=202407290600`
-    );
-    const result = await response.json();
-    setMidWeather(result.response.body.items.item[0]);
+  const getActivityData = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:8000/modeling'); // Flask 서버에서 데이터 가져오기
+      const result = await response.json();
+      if (result.error) {
+        console.error(result.error);
+      } else {
+        setActivityData(result);
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+    setLoading(false);
   };
 
   const getShortWeather = async () => {
@@ -27,7 +39,7 @@ export default function DetailGW() {
 
   useEffect(() => {
     const fetchData = async () => {
-      await getMidWeather();
+      await getActivityData();
       await getShortWeather();
       setLoading(false);
     };
@@ -51,6 +63,23 @@ export default function DetailGW() {
   };
 
   const shortForecastData = formatShortForecast(shortWeather);
+
+  const getActivityLevelDescription = (level) => {
+    switch (level) {
+      case 1:
+        return ['매우 좋음', lv1];
+      case 2:
+        return ['좋음', lv2];
+      case 3:
+        return ['보통', lv3];
+      case 4:
+        return ['나쁨', lv4];
+      case 5:
+        return ['매우 나쁨', lv5];
+      default:
+        return ['알 수 없음', ''];
+    }
+  };
 
   const getWeatherIcon = (condition) => {
     switch (condition) {
@@ -135,6 +164,31 @@ export default function DetailGW() {
     };
   };
 
+  const calculateAverageActivityLevel = (data) => {
+    const dateMap = {};
+    data.forEach(entry => {
+      const date = entry.date.split(' ')[0];
+      if (!dateMap[date]) {
+        dateMap[date] = [];
+      }
+      dateMap[date].push(entry.act_lv);
+    });
+
+    const averageData = Object.keys(dateMap).map(date => {
+      const levels = dateMap[date];
+      const avgLevel = levels.reduce((sum, val) => sum + val, 0) / levels.length;
+      return {
+        date,
+        avgLevel: avgLevel.toFixed(2),
+        description: getActivityLevelDescription(Math.round(avgLevel))
+      };
+    });
+
+    return averageData;
+  };
+
+  const averageActivityData = calculateAverageActivityLevel(activityData);
+
   return (
     <>
       {loading ? (
@@ -142,38 +196,19 @@ export default function DetailGW() {
       ) : (
         <div className="weather-container">
           <h1>GangWon Weather Forecast</h1>
-          {midWeather && (
+          {averageActivityData.length > 0 && (
             <div className="weekly-forecast">
-              <h2>중기 예보 (2024/07/27 - 2024/08/03)</h2>
+              <h2>해양 액티비티 레벨</h2>
               <div className="forecast-grid">
-                {[...Array(7)].map((_, index) => {
-                  const date = new Date(2024, 6, 27 + index); // Adjust the date to 27th July 2024 and onwards
-                  const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
-                  const label = getDayLabel(dateStr);
-                  const taMin = midWeather[`taMin${index + 3}`];
-                  const taMax = midWeather[`taMax${index + 3}`];
-                  const amCondition = midWeather[`wf${index + 3}Am`] || '맑음';
-                  const pmCondition = midWeather[`wf${index + 3}Pm`] || '맑음';
-                  return (
-                    <div key={index} className="daily-forecast">
-                      <h3>{label}</h3>
-                      <div className="temperature">
-                        <p>최저: {taMin}℃</p>
-                        <p>최고: {taMax}℃</p>
-                      </div>
-                      <div className="condition">
-                        <div className="morning">
-                          <img src={getWeatherIcon(amCondition)} alt={amCondition} />
-                          <p>{amCondition}</p>
-                        </div>
-                        <div className="afternoon">
-                          <img src={getWeatherIcon(pmCondition)} alt={pmCondition} />
-                          <p>{pmCondition}</p>
-                        </div>
-                      </div>
+                {averageActivityData.map((data, index) => (
+                  <div key={index} className="daily-forecast">
+                    <h3>{data.date}</h3>
+                    <div className="condition">
+                      <img src={data.description[1]} alt={data.description[0]} />
+                      <p>예측 활동 수준: {data.description[0]} ({data.avgLevel})</p>
                     </div>
-                  );
-                })}
+                  </div>
+                ))}
               </div>
             </div>
           )}
