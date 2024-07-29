@@ -3,6 +3,8 @@ import React, { useState, useEffect } from 'react';
 import '../../assets/scss/Main.scss';
 import { useNavigate } from 'react-router-dom';
 import Favorites from '../widgets/Favorites';
+import Footer from '../layout/Footer'; 
+
 
 function Main({ onLoginSuccess, loggedIn: isLoggedInProp, favorites, onRemoveFavorite }) {
         

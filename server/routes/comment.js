@@ -8,6 +8,8 @@ const validateCommentInput = require('../middlewares/validateCommentInput');
  * @swagger
  * /community/comments:
  *   post:
+ *     tags:
+ *      - comments
  *     summary: Create a new comment
  *     requestBody:
  *       required: true
@@ -56,6 +58,8 @@ router.post('/comments', validateCommentInput, async (req, res) => {
  * @swagger
  * /community/comments/{post_id}:
  *   get:
+ *     tags:
+ *      - comments
  *     summary: Retrieve comments for a specific post
  *     parameters:
  *       - in: path
@@ -101,6 +105,113 @@ router.get('/comments/:post_id', async (req, res) => {
         res.json(rows);
     } catch (err) {
         console.error('Error during GET request:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update a comment
+/**
+ * @swagger
+ * /community/comments/{comment_id}:
+ *   patch:
+ *     tags:
+ *      - comments
+ *     summary: Update a comment
+ *     parameters:
+ *       - in: path
+ *         name: comment_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the comment to update
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               content:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: The updated comment
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 comment_id:
+ *                   type: integer
+ *                 content:
+ *                   type: string
+ *       400:
+ *         description: Bad Request - Invalid input
+ *       404:
+ *         description: Comment not found
+ *       500:
+ *         description: Internal server error
+ */
+router.patch('/comments/:comment_id', async (req, res) => {
+    const comment_id = parseInt(req.params.comment_id, 10);
+    const { content } = req.body;
+    if (isNaN(comment_id) || !content) {
+        return res.status(400).json({ error: 'Invalid input' });
+    }
+    try {
+        const [result] = await db.query(
+            'UPDATE Comments SET content = ? WHERE comment_id = ?',
+            [content, comment_id]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Comment not found' });
+        }
+        res.json({ comment_id, content });
+    } catch (err) {
+        console.error('Error during PATCH request:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete a comment
+/**
+ * @swagger
+ * /community/comments/{comment_id}:
+ *   delete:
+ *     tags:
+ *      - comments
+ *     summary: Delete a comment
+ *     parameters:
+ *       - in: path
+ *         name: comment_id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: The ID of the comment to delete
+ *     responses:
+ *       204:
+ *         description: Comment deleted successfully
+ *       404:
+ *         description: Comment not found
+ *       500:
+ *         description: Internal server error
+ */
+router.delete('/comments/:comment_id', async (req, res) => {
+    const comment_id = parseInt(req.params.comment_id, 10);
+    if (isNaN(comment_id)) {
+        return res.status(400).json({ error: 'Invalid comment ID' });
+    }
+    try {
+        const [result] = await db.query(
+            'DELETE FROM Comments WHERE comment_id = ?',
+            [comment_id]
+        );
+        if (result.affectedRows === 0) {
+            return res.status(404).json({ error: 'Comment not found' });
+        }
+        res.status(204).send(); // No content
+    } catch (err) {
+        console.error('Error during DELETE request:', err);
         res.status(500).json({ error: err.message });
     }
 });

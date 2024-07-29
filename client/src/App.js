@@ -12,8 +12,6 @@ import DetailGW from './components/pages/DetailGW';
 import PostDetailModal from './components/pages/PostDetailModal';
 import Divemain from './components/pages/Divemain';
 import Footer from './components/layout/Footer';
-import SpotSearch from './components/pages/SpotSearch';
-
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false); // 로그인 여부

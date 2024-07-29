@@ -62,6 +62,7 @@ const CommentsContainer = styled.div`
 const Comment = styled.div`
   border-bottom: 1px solid #ddd;
   padding: 10px 0;
+  position: relative;
 `;
 
 const CommentForm = styled.form`
@@ -95,6 +96,21 @@ const Button = styled.button`
   }
 `;
 
+const DeleteButton = styled.button`
+  background-color: transparent;
+  border: none;
+  color: #ff6b6b;
+  font-size: 14px;
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+
+  &:hover {
+    color: #e63946;
+  }
+`;
+
 const PostDetailModal = ({ postId, onClose, username }) => {
   const [post, setPost] = useState(null);
   const [comments, setComments] = useState([]);
@@ -116,7 +132,7 @@ const PostDetailModal = ({ postId, onClose, username }) => {
         setComments(response.data);
       } catch (error) {
         console.error('Failed to fetch comments:', error);
-        setComments([]); //댓글이 없는 경우 빈 배열로 설정!
+        setComments([]); // 댓글이 없는 경우 빈 배열로 설정
       }
     };
 
@@ -124,16 +140,8 @@ const PostDetailModal = ({ postId, onClose, username }) => {
     fetchComments();
   }, [postId]);
 
-  useEffect(() => {
-    console.log('PostDetailModal username:', username); // username 확인
-  }, [username]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log('postId:', postId);
-    console.log('username:', username);
-    console.log('newComment:', newComment);
 
     if (!postId || !username || !newComment) {
       console.error('Post ID, username, and content are required');
@@ -153,6 +161,15 @@ const PostDetailModal = ({ postId, onClose, username }) => {
     }
   };
 
+  const handleDeleteComment = async (commentId) => {
+    try {
+      await axios.delete(`http://localhost:5000/community/comments/${commentId}`);
+      setComments(comments.filter(comment => comment.comment_id !== commentId));
+    } catch (error) {
+      console.error('Failed to delete comment:', error);
+    }
+  };
+
   if (!post) {
     return <div>Loading...</div>;
   }
@@ -167,10 +184,15 @@ const PostDetailModal = ({ postId, onClose, username }) => {
         </MetaInfo>
         <Content>{post.content}</Content>
         <CommentsContainer>
-          {comments.map((comment, index) => (
-            <Comment key={index}>
+          {comments.map((comment) => (
+            <Comment key={comment.comment_id}>
               <p>{comment.content}</p>
               <small>{comment.username}</small>
+              {comment.username === username && ( // Only show delete button for the comment owner
+                <DeleteButton onClick={() => handleDeleteComment(comment.comment_id)}>
+                  Delete Comment
+                </DeleteButton>
+              )}
             </Comment>
           ))}
           <CommentForm onSubmit={handleSubmit}>
