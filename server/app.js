@@ -15,10 +15,11 @@ const communityRoutes = require('./routes/community');
 const path = require('path');
 const favoritesRouter = require('./routes/favorites');
 const notifyRouter = require('./routes/notify');
-
 const notificationServiceRouter = require('./routes/notificationService');
 const commentRouter = require('./routes/comment');    
 const likesRouter = require('./routes/likes');
+const newsRoutes = require('./routes/newsRoutes');
+
  
 const app = express();
 const swaggerOption ={
@@ -78,7 +79,7 @@ app.use('/zones', zonesRoutes); // zones.js 라우트
 app.use('/auth', authRoutes); // 회원가입, 로그인 로직의 미들웨어를 적용
 app.use('/api', apiRoutes); // 특정 경로에 대해서만 캐싱 미들웨어를 적용
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); // swagger-ui
-
+app.use('/api/news',newsRoutes);
 // 동적 import 사용
 const fetchData = async () => {
     const { default: fetch } = await import('node-fetch');

@@ -44,7 +44,7 @@ router.post('/comments', validateCommentInput, async (req, res) => {
             'INSERT INTO Comments (post_id, username, content) VALUES (?, ?, ?)',
             [post_id, username, content]
         );
-        res.status(201).json({ comment_id: result.insertId });
+        res.status(201).json({ comment_id: result.insertId, username, content });
     } catch (err) {
         console.error('Error during POST request:', err);
         res.status(500).json({ error: err.message });
@@ -89,7 +89,10 @@ router.post('/comments', validateCommentInput, async (req, res) => {
  *         description: Post not found
  */
 router.get('/comments/:post_id', async (req, res) => {
-    const { post_id } = req.params;
+    const post_id = parseInt(req.params.post_id,10); //문자열을 숫자로 변환
+    if(isNaN(post_id)){
+        return res.status(400).json({error: 'Invalid post ID'});
+    }
     try {
         const [rows] = await db.query('SELECT * FROM Comments WHERE post_id = ?', [post_id]);
         if (rows.length === 0) {

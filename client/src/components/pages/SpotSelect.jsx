@@ -1,130 +1,184 @@
 import React, { useEffect, useState } from 'react';
-import Layout from '../layout/Layout';
+import axios from 'axios';
+import SpotInfo from './SpotInfo';
+import Favorites from '../widgets/Favorites'; // 올바른 경로 확인
+import { useNavigate } from 'react-router-dom';
 
 function SpotSelect() {
   const [selectedCoordinates, setSelectedCoordinates] = useState({
-    latitude: 37.795, // Default latitude
-    longitude: 128.908, // Default longitude
+    latitude: 37.795,
+    longitude: 128.908,
   });
+  const [weatherCondition, setWeatherCondition] = useState(5);
+  const [allMarkers, setAllMarkers] = useState([]);
+  const [zoneType, setZoneType] = useState('surfing');
+  const [selectedRegion, setSelectedRegion] = useState('강원도');
+  const [favorites, setFavorites] = useState([]);
 
-  const [weatherCondition, setWeatherCondition] = useState(4); // 기본 날씨 상태 값
+  const navigate = useNavigate();
 
-  // 날씨 상태에 따른 이미지 파일 URL
   const weatherMarkerImages = {
-    1: '/verygood.png', // 날씨 상태 1에 해당하는 이미지 파일 경로
-    2: '/good.png', // 날씨 상태 2에 해당하는 이미지 파일 경로
-    3: '/cool.png', // 날씨 상태 3에 해당하는 이미지 파일 경로
-    4: '/bad.png', // 날씨 상태 4에 해당하는 이미지 파일 경로
-    5: '/sobad.png', // 날씨 상태 5에 해당하는 이미지 파일 경로
+    1: '/verygood.png',
+    2: '/good.png',
+    3: '/cool.png',
+    4: '/bad.png',
+    5: '/sobad.png',
   };
 
-  // 스크립트를 동적으로 로드하는 함수
-  const new_script = (src) => {
+  const loadKakaoMapScript = async () => {
     return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = src;
-      script.addEventListener('load', () => {
-        resolve();
-      });
-      script.addEventListener('error', (e) => {
-        reject(e);
-      });
-      document.head.appendChild(script);
+      if (window.kakao && window.kakao.maps) {
+        resolve(window.kakao);
+      } else {
+        const script = document.createElement('script');
+        script.src = 'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=cb8f3da28528e158b5e76f2e88e968b8';
+        script.onload = () => resolve(window.kakao);
+        script.onerror = (e) => reject(new Error('Failed to load script: ' + e.message));
+        document.head.appendChild(script);
+      }
     });
   };
 
   useEffect(() => {
-    // Kakao 지도 API 스크립트를 로드
-    const my_script = new_script(
-      'https://dapi.kakao.com/v2/maps/sdk.js?autoload=false&appkey=cb8f3da28528e158b5e76f2e88e968b8'
-    );
+    const initializeMap = async () => {
+      try {
+        const kakao = await loadKakaoMapScript();
+        kakao.maps.load(() => {
+          const mapContainer = document.getElementById('map');
+          const options = {
+            center: new kakao.maps.LatLng(selectedCoordinates.latitude, selectedCoordinates.longitude),
+            level: 9,
+          };
+          const map = new kakao.maps.Map(mapContainer, options);
 
-    my_script.then(() => {
-      console.log('script loaded!!!');
-      const kakao = window['kakao'];
-      kakao.maps.load(() => {
-        const mapContainer = document.getElementById('map');
-        const options = {
-          center: new kakao.maps.LatLng(
-            selectedCoordinates.latitude,
-            selectedCoordinates.longitude
-          ),
-          level: 9,
-        };
-        // Kakao 지도 객체 생성
-        const map = new kakao.maps.Map(mapContainer, options);
+          const markerImage = new kakao.maps.MarkerImage(weatherMarkerImages[weatherCondition], new kakao.maps.Size(64, 69), {
+            offset: new kakao.maps.Point(27, 69),
+          });
 
-        // 기본 마커 이미지 설정
-        const markerImage = new kakao.maps.MarkerImage(weatherMarkerImages[weatherCondition], new kakao.maps.Size(64, 69), {
-          offset: new kakao.maps.Point(27, 69),
+          allMarkers.forEach(markerData => {
+            const position = new kakao.maps.LatLng(markerData.latitude, markerData.longitude);
+            const marker = new kakao.maps.Marker({
+              position: position,
+              image: markerImage,
+            });
+            marker.setMap(map);
+
+            kakao.maps.event.addListener(marker, 'click', () => {
+              map.setCenter(position);
+            });
+
+            const content = `<div class="customoverlay" data-name="${encodeURIComponent(markerData.name)}">${markerData.name}</div>`;
+            const customOverlay = new kakao.maps.CustomOverlay({
+              position: position,
+              content: content,
+              yAnchor: 1,
+            });
+            customOverlay.setMap(map);
+          });
+
+          // Event delegation to handle clicks on custom overlay
+          document.querySelector('#map').addEventListener('click', (e) => {
+            if (e.target && e.target.classList.contains('customoverlay')) {
+              const name = decodeURIComponent(e.target.getAttribute('data-name'));
+              handleSpotClick({ name });
+            }
+          });
         });
+      } catch (error) {
+        console.error('Error initializing Kakao Map:', error.message);
+      }
+    };
 
-        // Default 마커 설정
-        const markerPosition = new kakao.maps.LatLng(
-          selectedCoordinates.latitude,
-          selectedCoordinates.longitude
-        );
-        const marker = new kakao.maps.Marker({
-          position: markerPosition,
-          image: markerImage,
-        });
-        marker.setMap(map);
+    initializeMap();
+  }, [selectedCoordinates, weatherCondition, allMarkers]);
 
-        // 추가적인 마커들 배열
-        const additionalMarkers = [
-          { latitude: 33.228, longitude: 126.308 }, // 사계
-          { latitude: 38.007, longitude: 128.731 }, // 기사문
-          { latitude: 37.973, longitude: 128.760 }, // 죽도
-          { latitude: 37.946, longitude: 128.784 }, // 남애
-          { latitude: 33.556, longitude: 126.795 }, // 
-          { latitude: 38.116, longitude: 128.636 }, // 낙산
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [surfingResponse, divingResponse] = await Promise.all([
+          axios.get('http://localhost:5000/zones/surfing-zones'),
+          axios.get('http://localhost:5000/zones/diving-zones')
+        ]);
+
+        const combinedMarkers = [
+          ...surfingResponse.data.map(item => ({ ...item, type: 'surfing', region: item.region })),
+          ...divingResponse.data.map(item => ({ ...item, type: 'diving', region: item.region }))
         ];
 
-        // 추가적인 마커들을 지도에 추가
-        additionalMarkers.forEach((coords) => {
-          const markerPosition = new kakao.maps.LatLng(coords.latitude, coords.longitude);
-          const marker = new kakao.maps.Marker({
-            position: markerPosition,
-            image: markerImage, // 여기서도 동일한 이미지를 사용하려면 이 줄을 수정해야 합니다.
-          });
-          marker.setMap(map);
+        console.log("Fetched and combined markers: ", combinedMarkers);
+        setAllMarkers(combinedMarkers);
+      } catch (err) {
+        console.error('Error fetching data:', err.message);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleFavoriteClick = async (markerData) => {
+    try {
+        // 1. 서버에 해변 이름으로 ID 조회 요청
+        const idResponse = await axios.get('http://localhost:5000/favorites/get-id-by-name', {
+            params: {
+                name: markerData.name,
+                type: markerData.type // 'surfing' 또는 'diving'
+            }
         });
 
-        // 커스텀 오버레이 설정
-        const content = '<div class="customoverlay"></div>';
-        const customOverlay = new kakao.maps.CustomOverlay({
-          position: markerPosition,
-          content: content,
-          yAnchor: 1,
-        });
-        customOverlay.setMap(map);
-      });
-    });
-  }, [selectedCoordinates, weatherCondition]);
+        const zoneId = idResponse.data.id;
 
-  // 지역 선택 변경 핸들러
-  const handleRegionChange = (e) => {
-    const selectedRegion = e.target.value;
-    switch (selectedRegion) {
-      case '강원도':
-        setSelectedCoordinates({ latitude: 37.8, longitude: 128.9 });
-        break;
-      case '제주':
-        setSelectedCoordinates({ latitude: 33.249, longitude: 126.413 });
-        break;
-      default:
-        setSelectedCoordinates({
-          latitude: 37.795,
-          longitude: 128.908,
+        // 2. 즐겨찾기 추가 요청
+        const response = await axios.post('http://localhost:5000/favorites', {
+            username: 'testuser', // 실제 로그인된 사용자 정보를 사용해야 함
+            surfing_zone_id: markerData.type === 'surfing' ? zoneId : null,
+            diving_zone_id: markerData.type === 'diving' ? zoneId : null,
+            favorite_date: new Date().toISOString()
         });
-        break;
+
+        if (response.status === 201) {
+            setFavorites(prevFavorites => [...prevFavorites, { 
+                id: response.data.id, 
+                name: markerData.name, 
+                type: markerData.type 
+            }]);
+        }
+    } catch (err) {
+        console.error('Error adding favorite:', err.message);
     }
   };
 
-  // 날씨 상태 변경 핸들러
-  const handleWeatherChange = (weather) => {
-    setWeatherCondition(weather); // 날씨 상태 업데이트
+  const handleRemoveFavorite = (id) => {
+    setFavorites(favorites.filter(fav => fav.id !== id));
   };
+
+  const getFilteredMarkers = () => {
+    const result = allMarkers.filter(marker => marker.type === zoneType && marker.region === selectedRegion);
+    console.log("Markers after filtering: ", result);
+    return result;
+  };
+
+  const handleRegionChange = (e) => {
+    const newRegion = e.target.value;
+    setSelectedRegion(newRegion);
+    setSelectedCoordinates(
+      newRegion === '강원도' ? { latitude: 37.795, longitude: 128.908 } : { latitude: 33.249, longitude: 126.413 }
+    );
+  };
+
+  const handleZoneTypeChange = (e) => {
+    setZoneType(e.target.value);
+  };
+
+  const handleAlarmClick = (markerData) => {
+    alert(`알람 설정: ${markerData.name}`);
+  };
+
+  const handleSpotClick = (markerData) => {
+    const detailPage = selectedRegion === '제주' ? 'detail2' : 'detail';
+    navigate(`/${detailPage}?name=${encodeURIComponent(markerData.name)}`);
+  };
+
+  const filteredMarkers = getFilteredMarkers();
 
   return (
     <div className="App">
@@ -133,29 +187,48 @@ function SpotSelect() {
         <div className="spot-content">
           <hr />
           <br />
-          <h2>Home - 스팟선택</h2>
+          <h2>Home - 스팟 선택</h2>
           <br />
           <hr />
           <input placeholder="내용을 입력하세요" />
           <div className="icon-container">
             <div>
-              <select onChange={handleRegionChange}>
+              <select onChange={handleRegionChange} value={selectedRegion}>
                 <option value="강원도">강원도</option>
                 <option value="제주">제주</option>
               </select>
             </div>
             <br />
-            <br />
-            <br />
-            <br />
-            <br />
-            <h2>검색결과</h2>
+            <div>
+              <select onChange={handleZoneTypeChange} value={zoneType}>
+                <option value="surfing">서핑존</option>
+                <option value="diving">다이빙존</option>
+              </select>
+            </div>
+            <br /> <br /> <br /> <br /> <br />
+            <h2>검색 결과</h2>
             <hr />
-            <div></div>
+            <div className='spot-info-container'>
+              {filteredMarkers.length === 0 ? (
+                <p>현재 보이는 스팟이 없습니다</p>
+              ) : (
+                filteredMarkers.map((markerData, index) => (
+                  <SpotInfo
+                    key={index}
+                    markerData={markerData}
+                    onAlarmClick={handleAlarmClick}
+                    onFavoriteClick={handleFavoriteClick}
+                    onSpotClick={() => handleSpotClick(markerData)} // Handle spot click
+                  />
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </Layout>
+      <h1> 정신차려 김규민
+      </h1>
+    </div>
   );
 }
 

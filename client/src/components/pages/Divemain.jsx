@@ -1,133 +1,138 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import WeatherDisplay from '../../components/widgets/WeatherDisplay';
+import getWeatherData from '../../services/WeatherService';
+import MapView from '../../components/widgets/MapView';
+import '../../assets/scss/Main.scss';
+import { useNavigate,Link } from 'react-router-dom';
+import Favorites from '../widgets/Favorites';
 
-const Detail = () => {
-  const [weatherData, setWeatherData] = useState(null); // 날씨 정보를 저장할 상태
+function Main({ onLoginSuccess }) {
+        
+    const [isLoginModalOpen, setIsLoginModalOpen] =  useState(false); // 로그인 모달 열림 여부
+    const [isJoinModalOpen, setIsJoinModalOpen] = useState(false); // 회원가입 모달 열림 여부
+    const [loggedIn, setLoggedIn] = useState(false); // 로그인 상태
+    const [weatherData, setWeatherData] = useState(null); // 날씨 데이터
+    const [error, setError] = useState(''); // 에러 메시지
+    const [latitude, setLatitude] = useState(33.4996); // 제주도 위도
+    const [longitude, setLongitude] = useState(126.5312); // 제주도 경도
+    const [username, setUsername] = useState(''); // 로그인한 사용자 이름
+    const navigate = useNavigate(); // 페이지 이동을 위한 hook
 
-  useEffect(() => {
-    const fetchWeatherData = async () => {
-      const apiUrl = 'http://www.khoa.go.kr/api/oceangrid/beach/search.do?ServiceKey=wldhxng34hkddbsgm81lwldhxng34hkddbsgm81l==&BeachCode=BCH001&ResultType=json'; // API 주소
-
-      try {
-        const response = await fetch(apiUrl, {
-          mode: 'cors', // CORS 모드로 변경
-        });
-
-        if (!response.ok) {
-          throw new Error('날씨 정보를 불러오지 못했습니다.');
-        }
-
-        const data = await response.json();
-        // API에서 필요한 날씨 데이터를 추출하여 설정합니다.
-        const weatherInfo = {
-          time: data.result.data[0].obs_time, // 날씨 관측 시간
-          wind: `${data.result.data[0].wind_direct} ${data.result.data[0].wind_speed} m/s`, // 바람 방향과 속도
-          wave: `${data.result.data[0].tide} m`, // 조수 (파고 예시)
-          temp: `${data.result.data[0].water_temp} °C`, // 기온
-          day1_am_status: data.result.data[0].day1_am_status, // 첫째 날 오전 상태
-          day1_pm_status: data.result.data[0].day1_pm_status, // 첫째 날 오후 상태
-          day2_am_status: data.result.data[0].day2_am_status, // 둘째 날 오전 상태
-          day2_pm_status: data.result.data[0].day2_pm_status, // 둘째 날 오후 상태
-          day3_am_status: data.result.data[0].day3_am_status, // 셋째 날 오전 상태
-          day3_pm_status: data.result.data[0].day3_pm_status, // 셋째 날 오후 상태
-        };
-
-        setWeatherData(weatherInfo); // 날씨 데이터를 상태에 설정합니다.
-      } catch (error) {
-        console.error('날씨 정보를 불러오는 도중 에러가 발생했습니다:', error);
-      }
+    
+    const handleNavigation = (path) => {
+         navigate(path);
     };
 
-    fetchWeatherData(); // 날씨 데이터를 가져오는 함수 호출
-  }, []);
+    // 로그인 모달 토글 함수
+    const toggleLoginModal = () => {
+        setIsLoginModalOpen(!isLoginModalOpen);
+        console.log('Login modal toggled:', isLoginModalOpen)
+    };
 
-  return (
-    <div className='detailcontainer'>
-      <h1 className='search-h1'>
-        바다예보
-        <img src='/parassol.png' className='solimg' alt='sun' />
-      </h1>
-      <br />
-      <div>
-        <h1 className='detail-h1'>
-          {weatherData && (
-            <>
-              {weatherData.meta.beach_name} 
-              <button>관심스팟</button>
-              <button>추천일 알람설정</button>
-            </>
-          )}
-        </h1>
-        <hr className='csshr' />
-      </div>
-      <div className='graph'>
-        <h2 className='graph-h2'>
-          주간예보 <span className='graph-h2span'>일간예보</span>
-        </h2>
-        <div>
-          <canvas className='canvas' />
-        </div>
-        <div className='todaysea'>
-          {weatherData && (
-            <>
-              <h1 className='todayseah1'>오늘의바다</h1>
-              <hr className='csshr' />
-              <img src='/surfgood.png' className='surfgoodimg' alt='surf' />
-              <h3 className='todayexplain'>
-                오늘 {weatherData.time}은 서핑 하기 참 좋은날이어유 초보 서퍼들은 서핑보드들고 냅다 나가봐유
-              </h3>
-            </>
-          )}
-        </div>
-        <div className='first-line'>
-          <h2>Beach Information</h2>
-          <table className='beach-info-table'>
-            <thead>
-              <tr>
-                <th>Time</th>
-                <th>Wind</th>
-                <th>Wave</th>
-                <th>Temperature</th>
-                <th colSpan='2'>Weather Status</th>
-              </tr>
-            </thead>
-            <tbody>
-              {weatherData && (
-                <tr>
-                  <td>{weatherData.time}</td>
-                  <td>{weatherData.wind}</td>
-                  <td>{weatherData.wave}</td>
-                  <td>{weatherData.temp}</td>
-                  <td>AM</td>
-                  <td>PM</td>
-                </tr>
-              )}
-              {weatherData && (
-                <tr>
-                  <td colSpan='4'>Day 1</td>
-                  <td>{weatherData.day1_am_status}</td>
-                  <td>{weatherData.day1_pm_status}</td>
-                </tr>
-              )}
-              {weatherData && (
-                <tr>
-                  <td colSpan='4'>Day 2</td>
-                  <td>{weatherData.day2_am_status}</td>
-                  <td>{weatherData.day2_pm_status}</td>
-                </tr>
-              )}
-              {weatherData && (
-                <tr>
-                  <td colSpan='4'>Day 3</td>
-                  <td>{weatherData.day3_am_status}</td>
-                  <td>{weatherData.day3_pm_status}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  );
-};
+    // 회원가입 모달 토글 함수
+    const toggleJoinModal = () => {
+        setIsJoinModalOpen(!isJoinModalOpen);
+    };
 
-export default Detail;
+    // 로그인 성공 시 호출되는 함수
+    const handleLoginSuccess = async (loggedInUsername) => {
+        setLoggedIn(true);
+        setUsername(loggedInUsername);
+        toggleLoginModal();
+        onLoginSuccess(loggedInUsername);
+
+        // 도시 이름 설정 (예: 제주)
+        const city = 'Jeju';
+
+        try {
+            console.log(`Fetching weather data for city: ${city}`);
+            const data = await getWeatherData(city);
+            setWeatherData(data);
+            setError(''); // 이전 에러 메시지 제거
+        } catch (error) {
+            console.error('Failed to fetch weather data:', error);
+
+            if (error.response && (error.response.status >= 400 && error.response.status < 500)) {
+                setError('Failed to fetch weather data. Please check the request and try again.');
+            } else if (error.response && (error.response.status >= 500)) {
+                setError('Failed to fetch weather data. Server error, please try again later.');
+            } else {
+                setError('Failed to fetch weather data. Please try again later.');
+            }
+        }
+
+        // 로그인 성공 후 이동경로
+        navigate('/');
+    };
+
+    // 초기화 작업 (예: 현재 위치의 날씨 정보 가져오기)
+    useEffect(() => {
+        const fetchInitialWeatherData = async () => {
+            if (loggedIn) {
+                const city = 'Jeju'; // 예시 도시 설정
+                try {
+                    const data = await getWeatherData(city);
+                    setWeatherData(data);
+                    setError('');
+                } catch (error) {
+                    console.error('Failed to fetch initial weather data:', error);
+                    setError('Failed to fetch weather data. Please try again later.');
+                }
+            }
+        };
+
+        fetchInitialWeatherData();
+    }, [loggedIn]);
+
+    return (
+        <>
+            <div className="Main">
+                {/* 비디오 배경 컨테이너 */}
+                <div className="video-container">
+                    <video autoPlay loop muted className="video-background">
+                        <source src="/videos/dive.mp4" type="video/mp4" />
+                    </video>
+                    {/* 환영 메시지 */}
+                    <div className="welcome-message">
+                        
+                        <h1>Divefun</h1>
+                        <h2>숨참고 Love Dive</h2>
+                        <button onClick={() => handleNavigation('/spot-select')} className='main-button'>
+                            다이빙하러 가기!
+                            </button>
+                            
+                        
+                    </div>
+                    
+                            <Favorites />
+                    </div>
+
+                {/* 메인 컨텐츠 */}
+                <div className="content">
+                    {!loggedIn && (
+                        <h1></h1>
+                    )}
+
+                    {loggedIn && (
+                        <>
+                            {error && (
+                                <p style={{ color: 'red' }}>{error}</p>
+                            )}
+
+                            {weatherData && (
+                                <WeatherDisplay weatherData={weatherData} />
+                            )}
+
+                            {/* 지도 컨테이너 */}
+                            <div className="map-container">
+                                <MapView latitude={latitude} longitude={longitude} />
+                            </div>
+                        </>
+                    )}
+                </div>
+            </div>
+        </>
+    )};
+
+
+export default Main;

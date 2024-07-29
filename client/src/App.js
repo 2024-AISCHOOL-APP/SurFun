@@ -1,71 +1,66 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Main from './components/pages/Main';
 import Community from './components/pages/Community';
 import SpotSelect from './components/pages/SpotSelect';
-import SpotSearch from './components/pages/SpotSearch';
-import Detail from './components/pages/Detail';
-import Divemain from './components/pages/Divemain';
 import Header from './components/layout/Header';
-import Layout from './components/layout/Layout';
-// import styled from 'styled-components';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
-import PostDetail from './components/pages/PostDetail';
-// import OceanData from './components/pages/OceanData';
 import Detail from './components/pages/Detail';
-import WeatherData from './components/pages/Detail';
+import DetailGW from './components/pages/DetailGW';
+import PostDetailModal from './components/pages/PostDetailModal';
+import Divemain from './components/pages/Divemain';
+import SpotSearch from './components/pages/SpotSearch';
+
 
 function App() {
-    // 상태 변수들 정의
     const [loggedIn, setLoggedIn] = useState(false); // 로그인 여부
     const [username, setUsername] = useState(''); // 사용자 이름
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false); // 로그인 모달 열림 여부
     const [isJoinModalOpen, setIsJoinModalOpen] = useState(false); // 회원가입 모달 열림 여부
 
-    // 로그인 성공 처리 함수
     const handleLoginSuccess = (username) => {
         setLoggedIn(true); // 로그인 상태로 설정
         setUsername(username); // 사용자 이름 설정
         setIsLoginModalOpen(false); // 로그인 모달 닫기
     };
 
-    // 회원가입 모달 열기/닫기 함수
     const toggleJoinModal = () => {
         setIsJoinModalOpen(!isJoinModalOpen);
     };
 
-    // 로그인 모달 열기/닫기 함수
     const toggleLoginModal = () => {
         setIsLoginModalOpen(!isLoginModalOpen);
     };
 
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const username = params.get('username');
+        if (username) {
+            handleLoginSuccess(username);
+        }
+    }, []);
+
     return (
         <>
             <Router>
-                {/* Header 컴포넌트에 로그인 상태와 모달 토글 함수들 전달 */}
                 <Header
                     loggedIn={loggedIn}
                     username={username}
                     toggleJoinModal={toggleJoinModal}
                     toggleLoginModal={toggleLoginModal}
                 />
-                {/* 라우팅 설정 */}
                 <Routes>
                     <Route path="/" element={<Main onLoginSuccess={handleLoginSuccess} />} />
-                    <Route path="/community" element={<Community />} />
-                    <Route path="/spot-select" element={<SpotSelect />} />
-                    <Route path="/SpotSearch" element={<SpotSearch />} />
+                    <Route path="*" element={<Main onLoginSuccess={handleLoginSuccess} />} />
+                    <Route path="/community" element={<Community username={username} />} />
+                    <Route path="/post/:id" element={<PostDetailModal username={username} />} />
                     <Route path="/Detail" element={<Detail />} />
-                    <Route path="/Divemain" element={<Divemain />} />
-                    
-                    
-
-                    <Route path="/post/:id" element={<PostDetail />} />
-                    <Route path="/Detail" element={< Detail/>} />
-                    <Route path="/Weather-data" element={< WeatherData/>} />
+                    <Route path="/Detail2" element={<DetailGW />} />
+                    <Route path="/spot-select" element={<SpotSelect />} />
+                    <Route path="/divemain" element={<Divemain />} />
+                    <Route path='/SpotSearch' element={<SpotSearch/>} />
                 </Routes>
-                {/* 로그인 모달 */}
                 {isLoginModalOpen && (
                     <div style={{
                         position: 'fixed',
@@ -93,7 +88,6 @@ function App() {
                         </div>
                     </div>
                 )}
-                {/* 회원가입 모달 */}
                 {isJoinModalOpen && (
                     <div style={{
                         position: 'fixed',
@@ -121,7 +115,6 @@ function App() {
                         </div>
                     </div>
                 )}
-
             </Router>
         </>
     );
