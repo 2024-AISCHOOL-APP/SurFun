@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import axios from 'axios';
-import Layout from '../layout/Layout';
 import PostDetailModal from './PostDetailModal';
 import TextModal from '../core/TextModal';
 
@@ -107,27 +106,29 @@ const PostImage = styled.img`
 
 const Community = ({ username }) => {
   const [posts, setPosts] = useState([]);
+  const [sortedPosts, setSortedPosts] = useState([]); // 추가
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(10);
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'post_date', direction: 'desc' });
   const [selectedPostId, setSelectedPostId] = useState(null);
-
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('http://localhost:5000/community/posts');
+        console.log(response.data); // 서버에서 받은 데이터 로그 출력, 추후 삭제할 부분
         setPosts(response.data);
       } catch (error) {
-        console.error('Failed to fetch posts:', error);
+        console.error('게시글을 불러오는데 실패했습니다:', error);
       }
     };
     fetchPosts();
   }, []);
 
+  // 정렬 설정이 변경되거나 posts가 변경될 때마다 게시글을 정렬
   useEffect(() => {
     const sortPosts = () => {
-      let sortedPosts = [...posts];
+      let sorted = [...posts];
       if (sortConfig !== null) {
         sortedPosts.sort((a, b) => {
           if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -139,12 +140,13 @@ const Community = ({ username }) => {
           return 0;
         });
       }
-      setPosts(sortedPosts);
+      setSortedPosts(sorted); // sortedPosts를 업데이트
     };
 
     sortPosts();
-  }, [sortConfig]);
+  }, [sortConfig, posts]); // posts가 변경될 때도 다시 정렬 로직을 실행하도록 의존성 배열에 posts 추가
 
+  // 정렬 요청 함수
   const requestSort = (key) => {
     let direction = 'asc';
     if (sortConfig.key === key && sortConfig.direction === 'asc') {
@@ -157,23 +159,32 @@ const Community = ({ username }) => {
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
+  // 페이지네이션 함수
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  
+  // 글쓰기 모달 토글 함수
   const toggleTextModal = () => {
     setIsTextModalOpen(!isTextModalOpen);
   };
-
+  
+  // 새 게시글 저장 후 게시글 목록 갱신
   const handleSave = () => {
     setIsTextModalOpen(false);
-    axios.get('http://localhost:5000/community/posts').then(response => {
-      setPosts(response.data);
-    }).catch(error => {
-      console.error('Failed to fetch posts:', error);
-    });
+    axios.get('http://localhost:5000/community/posts')
+      .then(response => {
+        console.log(response.data); // 서버에서 받은 데이터 로그 출력, 추후 삭제할 부분
+        setPosts(response.data);
+      })
+      .catch(error => {
+        console.error('게시글을 불러오는데 실패했습니다:', error);
+      });
   };
 
+  const totalPosts = posts.length; // 총 게시글 수
+  const totalPages = Math.ceil(totalPosts / postsPerPage); // 총 페이지 수
+
   return (
-    <Layout>
+    <>
       <VideoContainer>
         <VideoBackground autoPlay loop muted>
           <source src="/videos/surfing.mp4" type="video/mp4" />
@@ -210,20 +221,37 @@ const Community = ({ username }) => {
             </tbody>
           </Table>
           <Pagination>
-            <PageNumber onClick={() => paginate(currentPage - 1)}>&lt; Previous</PageNumber>
-            {[...Array(Math.ceil(posts.length / postsPerPage)).keys()].map(number => (
-              <PageNumber key={number + 1} onClick={() => paginate(number + 1)} className={currentPage === number + 1 ? 'active' : ''}>
+            {/* 이전 페이지 버튼, 첫 페이지에서는 비활성화 */}
+            <PageNumber 
+              onClick={() => currentPage > 1 && paginate(currentPage - 1)} 
+              disabled={currentPage === 1}
+            >
+              &lt; 이전
+            </PageNumber>
+            {[...Array(totalPages).keys()].map(number => (
+              // 페이지 번호 버튼
+              <PageNumber 
+                key={number + 1} 
+                onClick={() => paginate(number + 1)} 
+                className={currentPage === number + 1 ? 'active' : ''}
+              >
                 {number + 1}
               </PageNumber>
             ))}
-            <PageNumber onClick={() => paginate(currentPage + 1)}>Next &gt;</PageNumber>
+            {/* 다음 페이지 버튼, 마지막 페이지에서는 비활성화 */}
+            <PageNumber 
+              onClick={() => currentPage < totalPages && paginate(currentPage + 1)} 
+              disabled={currentPage === totalPages}
+            >
+              다음 &gt;
+            </PageNumber>
           </Pagination>
           <WriteButton onClick={toggleTextModal}>글쓰기</WriteButton>
         </BoardContainer>
       </CommunityContainer>
       <TextModal isOpen={isTextModalOpen} onClose={toggleTextModal} onSave={handleSave} username={username} />
       {selectedPostId && <PostDetailModal postId={selectedPostId} onClose={() => setSelectedPostId(null)} />}
-    </Layout>
+    </>
   );
 };
 
