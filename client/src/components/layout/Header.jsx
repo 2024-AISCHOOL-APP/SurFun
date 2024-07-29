@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import logo from '../../assets/img/surfun-logo1.png';
+import { useState } from 'react';
 
 const HeaderContainer = styled.header`
   padding: 10px 0;
@@ -59,11 +60,51 @@ const BlackButton = styled(NavButton)`
   }
 `;
 
+const SearchContainer = styled.div`
+  display: flex;
+  align-items: center;
+
+  input {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    
+  }
+
+  button {
+    padding: 8px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #00b4d8;
+    color: white;
+    cursor: pointer:
+    
+
+    &:hover {
+      background-color: #0077b6;
+    }
+  }
+`;
+
 function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
   const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState(''); // 상태 변수 정의
 
   const handleNavigation = (path) => {
     navigate(path);
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      // 검색어가 '기사문'일 때는 Detail2 페이지로 이동
+      if (searchQuery.trim() === '기사문') {
+        navigate(`/detail2?name=${encodeURIComponent(searchQuery)}`);
+      } else {
+        // 나머지 경우에는 Detail 페이지로 이동
+        navigate(`/detail?name=${encodeURIComponent(searchQuery)}`);
+      }
+    }
   };
 
   return (
@@ -74,6 +115,15 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
             <img src={logo} alt="SurFun logo" />
           </Link>
         </Logo>
+        <SearchContainer>
+          <input
+            type="text"
+            placeholder="Search for zones..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </SearchContainer>
         <Menu>
           <MenuItem>
             <NavButton onClick={() => handleNavigation('/spot-select')}>Spot Select</NavButton>
@@ -85,8 +135,9 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
             <NavButton onClick={() => handleNavigation('/Detail')}>상세 정보</NavButton>
           </MenuItem>
           <MenuItem>
-            <NavButton onClick={() => handleNavigation('/Weather-data')}>날씨 정보</NavButton>
+            <NavButton onClick={() => handleNavigation('/SpotSearch')}>지역 검색</NavButton>
           </MenuItem>
+       
           {loggedIn && (
             <MenuItem style={{ color: 'black' }}>
               {`Welcome, ${username}`}

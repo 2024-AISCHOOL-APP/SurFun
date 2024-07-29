@@ -9,6 +9,9 @@ import JoinModal from './components/core/JoinModal';
 import Detail from './components/pages/Detail';
 import DetailGW from './components/pages/DetailGW';
 import PostDetailModal from './components/pages/PostDetailModal';
+import Divemain from './components/pages/Divemain';
+import SpotSearch from './components/pages/SpotSearch';
+
 
 function App() {
     const [loggedIn, setLoggedIn] = useState(false); // 로그인 여부
@@ -55,6 +58,8 @@ function App() {
                     <Route path="/Detail" element={<Detail />} />
                     <Route path="/Detail2" element={<DetailGW />} />
                     <Route path="/spot-select" element={<SpotSelect />} />
+                    <Route path="/divemain" element={<Divemain />} />
+                    <Route path='/SpotSearch' element={<SpotSearch/>} />
                 </Routes>
                 {isLoginModalOpen && (
                     <div style={{
