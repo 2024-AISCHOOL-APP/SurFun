@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 import '../../assets/scss/Main.scss';
 import { useNavigate } from 'react-router-dom';
 import Favorites from '../widgets/Favorites';
@@ -87,7 +86,6 @@ function Main({ onLoginSuccess, loggedIn: isLoggedInProp, favorites, onRemoveFav
             </div>
 
             <Footer />
-
 
         </div>
     );

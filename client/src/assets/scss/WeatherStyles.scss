@@ -1,61 +1,151 @@
 .weather-container {
-    .weekly-forecast, .detailed-forecast {
-      margin: 20px 0;
-    }
-  
+  .weekly-forecast {
+    margin: 20px 0;
+
     .forecast-grid {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 10px;
+
+      @media (min-width: 401px) {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
     }
-  
+
     .daily-forecast {
-      background: #f0f0f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
       padding: 10px;
       border-radius: 8px;
-      text-align: center;
-      flex: 1;
-      min-width: 100px;
-  
-      h3 {
-        margin: 10px 0;
+      border: 1px solid #ddd;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+      .date {
+        font-size: 0.9rem;
+        color: #555;
+
+        @media (min-width: 401px) {
+          font-size: 1rem;
+          color: #333;
+        }
       }
-  
-      .morning, .afternoon {
+
+      .condition {
         display: flex;
-        flex-direction: column;
         align-items: center;
-        margin-bottom: 10px;
-  
         img {
-          width: 50px;
-          height: 50px;
+          width: 20px;
+          height: 20px;
+          margin-right: 5px;
+
+          @media (min-width: 401px) {
+            width: 50px;
+            height: 50px;
+          }
         }
-  
-        p {
-          margin: 5px 0;
+        div {
+          font-size: 0.9rem;
+          color: #555;
+
+          @media (min-width: 401px) {
+            font-size: 1rem;
+          }
         }
       }
-  
+
       .temperature {
-        p {
-          margin: 5px 0;
+        font-size: 1rem;
+        color: #333;
+        span {
+          margin-right: 5px;
+
+          @media (min-width: 401px) {
+            font-size: 1.2rem;
+          }
         }
       }
-    }
-  
-    .date-forecast {
-      margin: 10px 0;
-      
-      h3 {
-        cursor: pointer;
-        margin-bottom: 10px;
+
+      @media (min-width: 401px) {
+        flex: 1;
+        min-width: 100px;
+        text-align: center;
+        padding: 10px;
+        background: #f0f0f0;
+
+        h3 {
+          margin: 10px 0;
+          font-size: 1.2rem;
+        }
+
+        .morning, .afternoon {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-bottom: 10px;
+
+          p {
+            margin: 5px 0;
+            font-size: 1rem;
+          }
+        }
+
+        .temperature {
+          p {
+            margin: 5px 0;
+            font-size: 1rem;
+          }
+        }
       }
-    }
-  
-    .hourly-forecast-container {
-      height: 400px; /* 차트 높이 설정 */
-      width: 100%;
     }
   }
-  
+
+  .date-forecast {
+    margin: 10px 0;
+
+    h3 {
+      cursor: pointer;
+      margin-bottom: 10px;
+      font-size: 1rem;
+
+      @media (min-width: 401px) {
+        font-size: 1.2rem;
+      }
+    }
+  }
+
+  .hourly-forecast-container {
+    height: 300px; /* 작은 화면에 맞춰 차트 높이 조정 */
+    width: 100%;
+
+    @media (min-width: 401px) {
+      height: 400px; /* 큰 화면에 맞춰 차트 높이 조정 */
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .weather-container {
+    .weekly-forecast {
+      .forecast-grid {
+        display: block;
+        gap: 5px;
+      }
+
+      .daily-forecast {
+        padding: 5px;
+
+        .date, .condition div, .temperature {
+          font-size: 0.8rem;
+        }
+
+        .condition img {
+          width: 15px;
+          height: 15px;
+        }
+      }
+    }
+  }
+}

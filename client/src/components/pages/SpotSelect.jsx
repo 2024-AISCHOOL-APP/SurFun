@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SpotInfo from './SpotInfo';
-import Favorites from '../widgets/Favorites'; // 올바른 경로 확인
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { addFavorite, removeFavorite, setFavorites } from '../../store/slices/favoritesSlices.js';
+import '../../assets/scss/SpotSelect.scss';
 
-function SpotSelect() {
+function SpotSelect({ username }) {
   const [selectedCoordinates, setSelectedCoordinates] = useState({
     latitude: 37.795,
     longitude: 128.908,
@@ -13,8 +15,8 @@ function SpotSelect() {
   const [allMarkers, setAllMarkers] = useState([]);
   const [zoneType, setZoneType] = useState('surfing');
   const [selectedRegion, setSelectedRegion] = useState('강원도');
-  const [favorites, setFavorites] = useState([]);
-
+  const favorites = useSelector((state) => state.favorites);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const weatherMarkerImages = {
@@ -112,43 +114,90 @@ function SpotSelect() {
       }
     };
 
+    const fetchFavorites = async () => {
+      try {
+        const response = await axios.get(`http://localhost:5000/favorites/${username}`);
+        dispatch(setFavorites(response.data));
+        console.log('Fetched favorites:', response.data);
+      } catch (err) {
+        console.error('Error fetching favorites:', err.message);
+      }
+    };
+
     fetchData();
-  }, []);
+    fetchFavorites();
+  }, [username, dispatch]);
 
   const handleFavoriteClick = async (markerData) => {
     try {
-        // 1. 서버에 해변 이름으로 ID 조회 요청
-        const idResponse = await axios.get('http://localhost:5000/favorites/get-id-by-name', {
-            params: {
-                name: markerData.name,
-                type: markerData.type // 'surfing' 또는 'diving'
-            }
-        });
-
-        const zoneId = idResponse.data.id;
-
-        // 2. 즐겨찾기 추가 요청
-        const response = await axios.post('http://localhost:5000/favorites', {
-            username: 'testuser', // 실제 로그인된 사용자 정보를 사용해야 함
-            surfing_zone_id: markerData.type === 'surfing' ? zoneId : null,
-            diving_zone_id: markerData.type === 'diving' ? zoneId : null,
-            favorite_date: new Date().toISOString()
-        });
-
-        if (response.status === 201) {
-            setFavorites(prevFavorites => [...prevFavorites, { 
-                id: response.data.id, 
-                name: markerData.name, 
-                type: markerData.type 
-            }]);
-        }
+      console.log('Marker Data:', markerData); // markerData 로그 출력
+      
+      const payload = {
+        username, // 실제 로그인된 사용자 정보를 사용해야 함
+        favorite_date: new Date().toISOString()
+      };
+  
+      // zone type에 따라 적절한 필드 설정
+      if (markerData.type === 'surfing') {
+        payload.surfing_zone_id = markerData.surfing_zone_id;
+      } else if (markerData.type === 'diving') {
+        payload.diving_zone_id = markerData.diving_zone_id;
+      }
+  
+      console.log('Sending payload:', payload); // 요청 데이터 로그 출력
+  
+      const response = await axios.post('http://localhost:5000/favorites', payload);
+  
+      console.log('Response:', response); // 응답 데이터 로그 출력
+  
+      if (response.status === 201) {
+        dispatch(addFavorite({
+          id: response.data.id,
+          name: markerData.name,
+          type: markerData.type,
+          surfing_zone_name: markerData.type === 'surfing' ? markerData.name : null,
+          diving_zone_name: markerData.type === 'diving' ? markerData.name : null
+        }));
+      }
     } catch (err) {
+      if (err.response) {
+        // 서버가 400 에러를 반환한 경우
+        console.error('Error adding favorite:', err.response.data); // 상세 에러 메시지 출력
+        console.error('Status:', err.response.status); // 상태 코드 출력
+        console.error('Headers:', err.response.headers); // 응답 헤더 출력
+      } else if (err.request) {
+        // 요청이 전송되었으나 응답이 없을 경우
+        console.error('Error adding favorite: No response received:', err.request);
+      } else {
+        // 기타 에러
         console.error('Error adding favorite:', err.message);
+      }
     }
   };
 
-  const handleRemoveFavorite = (id) => {
-    setFavorites(favorites.filter(fav => fav.id !== id));
+  const handleRemoveFavorite = async (markerData) => {
+    try {
+      console.log('Removing Favorite Marker Data:', markerData); // markerData 로그 출력
+
+      const favorite = favorites.find(fav => fav.name === markerData.name && fav.type === markerData.type);
+      if (!favorite) {
+        console.error('Favorite not found');
+        return;
+      }
+
+      console.log('Removing Favorite ID:', favorite.id); // 삭제할 즐겨찾기 ID 로그 출력
+
+      const response = await axios.delete(`http://localhost:5000/favorites/${favorite.id}`);
+      if (response.status === 200) {
+        dispatch(removeFavorite(favorite));
+      }
+    } catch (err) {
+      console.error('Error removing favorite:', err.message);
+    }
+  };
+
+  const isFavorite = (markerData) => {
+    return favorites.some(fav => fav.name === markerData.name && fav.type === markerData.type);
   };
 
   const getFilteredMarkers = () => {
@@ -217,9 +266,11 @@ function SpotSelect() {
                 filteredMarkers.map((markerData, index) => (
                   <SpotInfo
                     key={index}
+                    username={username} // username 전달
                     markerData={markerData}
                     onAlarmClick={handleAlarmClick}
-                    onFavoriteClick={handleFavoriteClick}
+                    onFavoriteClick={() => isFavorite(markerData) ? handleRemoveFavorite(markerData) : handleFavoriteClick(markerData)}
+                    isFavorite={isFavorite(markerData)}
                     onSpotClick={() => handleSpotClick(markerData)} // Handle spot click
                   />
                 ))

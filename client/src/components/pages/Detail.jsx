@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import '../../assets/scss/WeatherStyles.scss';
+import '../../assets/scss/WeatherStyles.scss'; //웹
 
 export default function DisplayWeather() {
   const [midWeather, setMidWeather] = useState(null);
@@ -9,21 +9,30 @@ export default function DisplayWeather() {
   const [loading, setLoading] = useState(true);
   const [expandedDates, setExpandedDates] = useState({});
 
+
+  
   const getMidWeather = async () => {
     const response = await fetch(
-      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11G00201&tmFc=202407290600`
+      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11G00201&tmFc=202407300600`
     );
     const result = await response.json();
     setMidWeather(result.response.body.items.item[0]);
   };
 
   const getShortWeather = async () => {
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const baseDate = `${year}${month}${day}`;
+  
     const response = await fetch(
-      `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=20240729&base_time=0500&nx=33&ny=126`
+      `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=${baseDate}&base_time=0500&nx=33&ny=126`
     );
     const result = await response.json();
     setShortWeather(result.response.body.items.item);
   };
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -164,10 +173,11 @@ export default function DisplayWeather() {
           <h1>Jeju Weather Forecast</h1>
           {midWeather && (
             <div className="weekly-forecast">
-              <h2>중기 예보 (2024/07/27 - 2024/08/03)</h2>
+              <h2>주간 해양 </h2>
               <div className="forecast-grid">
                 {[...Array(7)].map((_, index) => {
-                  const date = new Date(2024, 6, 27 + index); // Adjust the date to 27th July 2024 and onwards
+                  const date =new Date();
+                  date.setDate(date.getDate() + index); //오늘 날짜부터 시작
                   const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
                   const label = getDayLabel(dateStr);
                   const taMin = midWeather[`taMin${index + 3}`];
@@ -198,7 +208,7 @@ export default function DisplayWeather() {
             </div>
           )}
           <div className="detailed-forecast">
-            <h2>상세 예보 (1시간 간격)</h2>
+            <h2>해양 상세</h2>
             {Object.keys(shortForecastData).map((date) => (
               <div key={date} className="date-forecast">
                 <h3 onClick={() => toggleDate(date)}>{getDayLabel(date)}</h3>
