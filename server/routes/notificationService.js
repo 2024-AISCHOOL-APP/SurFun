@@ -9,6 +9,24 @@ const router = express.Router();
 const API_KEY = process.env.API_KEY;
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
+// weatherCondition 변환 매핑
+const weatherConditionMap = {
+    'clear sky': '맑음',
+    'few clouds': '구름 한 점 없는 하늘',
+    'scattered clouds': '흩어진 구름',
+    'broken clouds': '구름이 많음',
+    'shower rain': '소나기',
+    'rain': '비',
+    'thunderstorm': '뇌우',
+    'snow': '눈',
+    'mist': '안개',
+    'light rain': '가랑비',
+    'moderate rain': '적당한 비',
+    'overcast clouds': '구름이 잔뜩 낀 하늘'
+
+    // 필요한 만큼 추가
+};
+
 // Nodemailer 설정
 const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -73,11 +91,31 @@ async function checkWeatherChanges(req, res) {
         console.log('Favorites retrieved:', favorites);
 
         for (const favorite of favorites) {
-            const { latitude, longitude } = favorite;
+            const { latitude, longitude, surfing_zone_id, diving_zone_id } = favorite;
 
             if (!latitude || !longitude) {
                 console.warn(`Skipping favorite with missing coordinates: ${JSON.stringify(favorite)}`);
                 continue;
+            }
+
+            // 해변 이름 가져오기
+            let beachName = '즐겨찾기한 해변';
+            if (surfing_zone_id) {
+                const [surfingZoneRows] = await connection.execute(
+                    'SELECT name FROM Surfing_Zone WHERE surfing_zone_id = ?',
+                    [surfing_zone_id]
+                );
+                if (surfingZoneRows.length > 0) {
+                    beachName = surfingZoneRows[0].name;
+                }
+            } else if (diving_zone_id) {
+                const [divingZoneRows] = await connection.execute(
+                    'SELECT name FROM Diving_Zone WHERE diving_zone_id = ?',
+                    [diving_zone_id]
+                );
+                if (divingZoneRows.length > 0) {
+                    beachName = divingZoneRows[0].name;
+                }
             }
 
             // 날씨 데이터 가져오기
@@ -86,6 +124,9 @@ async function checkWeatherChanges(req, res) {
 
             const weatherCondition = weatherData.weather[0].description;
             const temperature = weatherData.main.temp;
+
+            // weatherCondition 한글로 변환
+            const weatherConditionKorean = weatherConditionMap[weatherCondition] || weatherCondition;
 
             // 이전 날씨 데이터 가져오기
             const [oldWeatherRows] = await connection.execute(
@@ -97,7 +138,7 @@ async function checkWeatherChanges(req, res) {
 
             if (oldWeatherRows.length > 0) {
                 const oldWeather = oldWeatherRows[0];
-                if (temperature !== oldWeather.temperature || weatherCondition !== oldWeather.weather_condition) {
+                if (temperature !== oldWeather.temperature || weatherConditionKorean !== oldWeather.weather_condition) {
                     weatherChanged = true;
                 }
             } else {
@@ -114,7 +155,7 @@ async function checkWeatherChanges(req, res) {
                 console.log('Users retrieved:', userRows);
 
                 for (const user of userRows) {
-                    const message = `즐겨찾기한 날씨는 ${weatherCondition} ${temperature}°C.`;
+                    const message = `Good day to SurFun 🏄‍♂ ${beachName}의 날씨가 ${weatherConditionKorean}이고 기온은 ${temperature}°C으로 서핑하기 좋습니다 :)`;
 
                     // 이메일 발송
                     if (user.email) {
@@ -148,7 +189,7 @@ async function checkWeatherChanges(req, res) {
                 // 날씨 데이터 저장
                 await connection.execute(
                     'INSERT INTO Weather (latitude, longitude, weather_condition, temperature, last_updated) VALUES (?, ?, ?, ?, NOW()) ON DUPLICATE KEY UPDATE weather_condition = VALUES(weather_condition), temperature = VALUES(temperature), last_updated = VALUES(last_updated)',
-                    [latitude, longitude, weatherCondition, temperature]
+                    [latitude, longitude, weatherConditionKorean, temperature]
                 );
                 console.log(`Weather data updated for ${latitude}, ${longitude}`);
             }
@@ -174,7 +215,7 @@ async function checkWeatherChanges(req, res) {
 // 라우트 설정
 router.get('/notifications/check', checkWeatherChanges);
 
-// 1시간마다 알림 전송
+// 6시간마다 알림 전송
 const runCheckWeatherChanges = async () => {
     try {
         await checkWeatherChanges({}, { status: () => ({ send: () => {} }) });
@@ -182,6 +223,6 @@ const runCheckWeatherChanges = async () => {
         console.error('Error in interval function:', error);
     }
 };
-setInterval(runCheckWeatherChanges, 3600000);
+setInterval(runCheckWeatherChanges, 21600000); // 6시간 = 21600000 밀리초
 
 module.exports = router;
