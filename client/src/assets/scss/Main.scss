@@ -308,6 +308,19 @@ body {
   max-height: 300px;
   max-width: 800px;
 }
+.tide-info {
+  margin-top: 20px;
+}
+
+.tide-entry {
+  font-size: 14px;
+  padding: 5px;
+  border-bottom: 1px solid #ddd;
+}
+
+.tide-entry:last-child {
+  border-bottom: none;
+}
 
 .spot-info-container {
   display: grid;
@@ -331,6 +344,28 @@ body {
   margin-left: 150px;
   margin-bottom: 80px;
 }
+.weather-icons {
+  display: flex;
+  align-items: center; /* 수직 중앙 정렬 */
+  justify-content: flex-start; /* 왼쪽 정렬, 필요에 따라 center, space-between, space-around 등 사용 가능 */
+  gap: 20px; /* 아이템 사이의 간격 */
+}
+
+.weather-item {
+  display: flex;
+  flex-direction: column; /* 이미지와 텍스트를 세로로 정렬 */
+  align-items: center; /* 이미지와 텍스트를 수평으로 중앙 정렬 */
+}
+
+.weather-item img {
+  width: 50px; /* 이미지 크기 조정, 필요에 따라 변경 */
+  height: auto; /* 비율에 맞게 이미지 높이 조정 */
+}
+
+.weather-item h4 {
+  margin: 0; /* 기본 마진 제거 */
+}
+
 
 @media (max-width: 768px) {
   .favorites-section,

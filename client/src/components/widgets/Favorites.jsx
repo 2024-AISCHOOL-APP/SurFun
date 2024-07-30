@@ -104,7 +104,6 @@ const Favorites = () => {
                   </section>
               </div>
     );
-
 };
 
 export default Favorites;
