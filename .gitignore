@@ -1,4 +1,3 @@
-<<<<<<< Updated upstream
 # .gitignore
 
 # Node modules
@@ -8,7 +7,4 @@ client/node_modules/.cache/
 
 #.env
 .env
-=======
-.env
 node_modules/
->>>>>>> Stashed changes

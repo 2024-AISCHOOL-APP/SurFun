@@ -78,7 +78,6 @@ function SpotSelect({ username }) {
             customOverlay.setMap(map);
           });
 
-          // Event delegation to handle clicks on custom overlay
           document.querySelector('#map').addEventListener('click', (e) => {
             if (e.target && e.target.classList.contains('customoverlay')) {
               const name = decodeURIComponent(e.target.getAttribute('data-name'));
@@ -96,6 +95,8 @@ function SpotSelect({ username }) {
 
   useEffect(() => {
     const fetchData = async () => {
+      const username = params.get('username');
+
       try {
         const [surfingResponse, divingResponse] = await Promise.all([
           axios.get('http://localhost:5000/zones/surfing-zones'),
@@ -103,11 +104,22 @@ function SpotSelect({ username }) {
         ]);
 
         const combinedMarkers = [
-          ...surfingResponse.data.map(item => ({ ...item, type: 'surfing', region: item.region })),
-          ...divingResponse.data.map(item => ({ ...item, type: 'diving', region: item.region }))
+          ...surfingResponse.data.map(item => ({ 
+            ...item,
+            type: 'surfing',
+            activity: 'surfing',
+            region: item.region,
+            name: item.name,
+          })),
+          ...divingResponse.data.map(item => ({
+            ...item,
+            type: 'diving',
+            activity: 'diving',
+            region: item.region,
+            name: item.name,
+           }))
         ];
 
-        console.log("Fetched and combined markers: ", combinedMarkers);
         setAllMarkers(combinedMarkers);
       } catch (err) {
         console.error('Error fetching data:', err.message);
@@ -128,7 +140,7 @@ function SpotSelect({ username }) {
     fetchFavorites();
   }, [username, dispatch]);
 
-  const handleFavoriteClick = async (markerData) => {
+  const fetchFavorites = async () => {
     try {
       console.log('Marker Data:', markerData); // markerData 로그 출력
       
@@ -201,9 +213,7 @@ function SpotSelect({ username }) {
   };
 
   const getFilteredMarkers = () => {
-    const result = allMarkers.filter(marker => marker.type === zoneType && marker.region === selectedRegion);
-    console.log("Markers after filtering: ", result);
-    return result;
+    return allMarkers.filter(marker => marker.type === zoneType && marker.region === selectedRegion);
   };
 
   const handleRegionChange = (e) => {
@@ -227,6 +237,22 @@ function SpotSelect({ username }) {
     navigate(`/${detailPage}?name=${encodeURIComponent(markerData.name)}`);
   };
 
+  const handleFavoriteClick = async (markerData) => {
+    try {
+      const favoriteData = {
+        username,
+        surfing_zone_id: markerData.type === 'surfing' ? markerData.id : null,
+        diving_zone_id: markerData.type === 'diving' ? markerData.id : null,
+        favorite_date: new Date().toISOString(),
+        last_notified: null
+      };
+      await axios.post('http://localhost:5000/favorites', favoriteData);
+      fetchFavorites(); // 즐겨찾기 목록을 다시 불러옵니다.
+    } catch (error) {
+      console.error('Error adding favorite:', error);
+    }
+  };
+
   const filteredMarkers = getFilteredMarkers();
 
   return (
@@ -234,7 +260,6 @@ function SpotSelect({ username }) {
       <div className="map-container">
         <div id="map" className="map"></div>
       </div>
-      {/* 오른쪽 스팟 목록 영역 */}
       <div className="spot-content">
           <hr />
           <br />
@@ -278,6 +303,7 @@ function SpotSelect({ username }) {
             </div>
           </div>
       </div>
+      <Favorites loggedIn={true} favorites={favorites} onRemoveFavorite={fetchFavorites} />
     </div>
   );
 }
