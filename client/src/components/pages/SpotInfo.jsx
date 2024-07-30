@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import emptyStar from '../../assets/img/empty_star.jpg';
@@ -28,7 +28,7 @@ const SpotInfoContainer = styled.div`
 
 function SpotInfo({ username, markerData, onAlarmClick, onFavoriteClick, onSpotClick, isFavorite }) {
   return (
-    <SpotInfoContainer onClick={onSpotClick}>
+    <SpotInfoContainer onClick={() => onSpotClick(markerData)}>
       <div className="buttons">
         <button onClick={(e) => { e.stopPropagation(); onAlarmClick(markerData); }}>🔔 알람</button>
         <button onClick={(e) => { e.stopPropagation(); onFavoriteClick(markerData); }}>

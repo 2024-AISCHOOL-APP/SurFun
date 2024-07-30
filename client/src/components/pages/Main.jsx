@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '../../assets/scss/Main.scss';
 import { useNavigate } from 'react-router-dom';
-import Favorites from '../widgets/Favorites';
-import Footer from '../layout/Footer'; 
+import Favorites from '../widgets/Favorites'; 
 
 
 function Main({ onLoginSuccess, loggedIn: isLoggedInProp, favorites, onRemoveFavorite }) {
@@ -78,15 +77,6 @@ function Main({ onLoginSuccess, loggedIn: isLoggedInProp, favorites, onRemoveFav
 
              {/* 즐겨찾기 */}
             <Favorites loggedIn={isLoggedInProp} favorites={favorites} onRemoveFavorite={onRemoveFavorite} />
-
-            {/* 메인 컨텐츠 */}
-            <div className="content">
-                {!loggedIn && <h1>로그인해주세요</h1>}
-                {loggedIn && <h1>Welcome, {username}!</h1>}
-            </div>
-
-            <Footer />
-
         </div>
     );
 }

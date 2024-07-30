@@ -7,6 +7,7 @@ import Main from './components/pages/Main';
 import Community from './components/pages/Community';
 import SpotSelect from './components/pages/SpotSelect';
 import Header from './components/layout/Header';
+import Footer from './components/layout/Footer';
 import LoginModal from './components/core/LoginModal';
 import JoinModal from './components/core/JoinModal';
 import Detail from './components/pages/Detail';
@@ -55,77 +56,81 @@ function App() {
 
   return (
     <Router>
-      <Header
-        loggedIn={loggedIn}
-        username={username}
-        toggleJoinModal={toggleJoinModal}
-        toggleLoginModal={toggleLoginModal}
-      />
-      <Routes>
-        <Route path="/" element={<Main onLoginSuccess={handleLoginSuccess} username={username} />} />
-        <Route path="*" element={<Main onLoginSuccess={handleLoginSuccess} />} />
-        <Route path="/community" element={<Community username={username} />} />
-        <Route path="/post/:id" element={<PostDetailModal username={username} />} />
-        <Route path="/Detail" element={<Detail />} />
-        <Route path="/Detail2" element={<DetailGW />} />
-        <Route path="/spot-select" element={<SpotSelect username={username} />} />
-        <Route path="/divemain" element={<Divemain />} />
-        <Route path='/SpotSearch' element={<SpotSearch />} />
-      </Routes>
-      {isLoginModalOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
+      {/* 푸터가 모든 페이지의 하단에 위치 */}
+      <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+        <Header
+          loggedIn={loggedIn}
+          username={username}
+          toggleJoinModal={toggleJoinModal}
+          toggleLoginModal={toggleLoginModal}
+        />
+        <Routes>
+          <Route path="/" element={<Main onLoginSuccess={handleLoginSuccess} username={username} />} />
+          <Route path="*" element={<Main onLoginSuccess={handleLoginSuccess} />} />
+          <Route path="/community" element={<Community username={username} />} />
+          <Route path="/post/:id" element={<PostDetailModal username={username} />} />
+          <Route path="/Detail" element={<Detail />} />
+          <Route path="/Detail2" element={<DetailGW />} />
+          <Route path="/spot-select" element={<SpotSelect username={username} />} />
+          <Route path="/divemain" element={<Divemain />} />
+          <Route path='/SpotSearch' element={<SpotSearch />} />
+        </Routes>
+        {isLoginModalOpen && (
           <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '5px',
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}>
-            <LoginModal
-              onLoginSuccess={handleLoginSuccess}
-              onClose={toggleLoginModal}
-              toggleJoinModal={toggleJoinModal}
-              toggleLoginModal={toggleLoginModal}
-            />
+            <div style={{
+              backgroundColor: 'white',
+              padding: '20px',
+              borderRadius: '5px',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+            }}>
+              <LoginModal
+                onLoginSuccess={handleLoginSuccess}
+                onClose={toggleLoginModal}
+                toggleJoinModal={toggleJoinModal}
+                toggleLoginModal={toggleLoginModal}
+              />
+            </div>
           </div>
-        </div>
-      )}
-      {isJoinModalOpen && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          backgroundColor: 'rgba(0, 0, 0, 0.5)',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}>
+        )}
+        {isJoinModalOpen && (
           <div style={{
-            backgroundColor: 'white',
-            padding: '20px',
-            borderRadius: '5px',
-            boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
           }}>
-            <JoinModal
-              onJoinSuccess={() => setIsJoinModalOpen(false)}
-              onClose={toggleJoinModal}
-              toggleJoinModal={toggleJoinModal}
-              toggleLoginModal={toggleLoginModal}
-            />
+            <div style={{
+              backgroundColor: 'white',
+              padding: '20px',
+              borderRadius: '5px',
+              boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)'
+            }}>
+              <JoinModal
+                onJoinSuccess={() => setIsJoinModalOpen(false)}
+                onClose={toggleJoinModal}
+                toggleJoinModal={toggleJoinModal}
+                toggleLoginModal={toggleLoginModal}
+              />
+            </div>
           </div>
-        </div>
-      )}
+        )}
+        <Footer />
+      </div>
     </Router>
   );
 }

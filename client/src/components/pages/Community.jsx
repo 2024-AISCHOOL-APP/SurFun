@@ -112,6 +112,7 @@ const Community = ({ username }) => {
   const [isTextModalOpen, setIsTextModalOpen] = useState(false);
   const [sortConfig, setSortConfig] = useState({ key: 'post_date', direction: 'desc' });
   const [selectedPostId, setSelectedPostId] = useState(null);
+  
   useEffect(() => {
     const fetchPosts = async () => {
       try {
