@@ -5,6 +5,7 @@ import logo from '../../assets/img/surfun-logo1.png';
 import { useState } from 'react';
 
 const HeaderContainer = styled.header`
+  // background-color: #0077b6; /* 바다 느낌의 배경색 */
   padding: 10px 0;
   @media (max-width: 768px) {
     padding: 5px 0;
@@ -127,9 +128,11 @@ const SearchContainer = styled.div`
   }
 `;
 
-function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
+function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal, handleLogout }) {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
+
+
 
   const handleNavigation = (path) => {
     navigate(path);
@@ -176,9 +179,14 @@ function Header({ loggedIn, username, toggleJoinModal, toggleLoginModal }) {
             <NavButton onClick={() => handleNavigation('/SpotSearch')}>지역 검색</NavButton>
           </MenuItem>
           {loggedIn && (
-            <MenuItem style={{ color: 'black' }}>
-              {`Welcome, ${username}`}
-            </MenuItem>
+            <>
+              <MenuItem style={{ color: 'black' }}>
+                {`Welcome, ${username}`}
+              </MenuItem>
+              <MenuItem>
+                <BlackButton onClick={handleLogout}>Logout</BlackButton> {/* 로그아웃 버튼 */}
+              </MenuItem>
+            </>
           )}
           {!loggedIn && (
             <>

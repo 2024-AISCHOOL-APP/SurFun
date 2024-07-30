@@ -233,7 +233,9 @@ function SpotSelect({ username }) {
     <div className="App">
       <div className="map-container">
         <div id="map" className="map"></div>
-        <div className="spot-content">
+      </div>
+      {/* 오른쪽 스팟 목록 영역 */}
+      <div className="spot-content">
           <hr />
           <br />
           <h2>Home - 스팟 선택</h2>
@@ -275,7 +277,6 @@ function SpotSelect({ username }) {
               )}
             </div>
           </div>
-        </div>
       </div>
     </div>
   );

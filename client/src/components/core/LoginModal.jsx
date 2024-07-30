@@ -17,6 +17,7 @@ const ModalContainer = styled.div`
   margin: auto;
   text-align: center;
   font-family: 'Arial, sans-serif';
+  z-index: 1100; /* Header와 Footer의 z-index보다 높게 설정 */
 `;
 
 const SocialButtonWrapper = styled.div`
@@ -156,8 +157,8 @@ function LoginModal({ onLoginSuccess, onClose, toggleJoinModal, toggleLoginModal
         <a href="#">아이디/비밀번호 찾기</a>
       </FooterText>
       <FooterText>
-        계정이 없으신가요?
-        <LinkText onClick={handleClick}>회원가입</LinkText>
+        Don't you have an account?
+        <LinkText onClick={handleClick}>Sign Up</LinkText>
       </FooterText>
       <Button onClick={onClose}>Close</Button>
     </ModalContainer>

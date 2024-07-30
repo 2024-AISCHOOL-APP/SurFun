@@ -7,6 +7,7 @@ function formatDateToMySQL(date) {
     return d.toISOString().slice(0, 19).replace('T', ' ');
 }
 
+
 router.post('/', async (req, res) => {
     const { username, surfing_zone_id, diving_zone_id, favorite_date, last_notified } = req.body;
 
@@ -36,6 +37,7 @@ router.post('/', async (req, res) => {
             longitude = zone[0].longitude;
 
             const [result] = await db.query('INSERT INTO Favorite (username, surfing_zone_id, favorite_date, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?)', 
+
                 [username, surfing_zone_id, formattedFavoriteDate, latitude, longitude, formattedLastNotified]
             );
 
@@ -57,6 +59,7 @@ router.post('/', async (req, res) => {
             longitude = zone[0].longitude;
 
             const [result] = await db.query('INSERT INTO Favorite (username, diving_zone_id, favorite_date, latitude, longitude, last_notified) VALUES (?, ?, ?, ?, ?, ?)', 
+
                 [username, diving_zone_id, formattedFavoriteDate, latitude, longitude, formattedLastNotified]
             );
 
