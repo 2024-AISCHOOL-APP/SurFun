@@ -82,13 +82,22 @@ router.get('/:username', async (req, res) => {
             return res.status(400).json({ error: 'Invalid username' });
         }
 
-        const [favorites] = await db.query('SELECT * FROM Favorite WHERE username = ?', [username]);
+        const [favorites] = await db.query(`
+            SELECT f.*, 
+                   sz.name AS surfing_zone_name,
+                   dz.name AS diving_zone_name
+            FROM Favorite f
+            LEFT JOIN Surfing_Zone sz ON f.surfing_zone_id = sz.surfing_zone_id
+            LEFT JOIN Diving_Zone dz ON f.diving_zone_id = dz.diving_zone_id
+            WHERE f.username = ?
+        `, [username]);
         res.status(200).json(favorites);
     } catch (err) {
         console.error('Error during GET request:', err);
         res.status(500).json({ error: err.message });
     }
 });
+
 
 router.delete('/:id', async (req, res) => {
     const { id } = req.params;
@@ -106,4 +115,4 @@ router.delete('/:id', async (req, res) => {
     }
 });
 
-module.exports = router;
+module.exports = router; // 이 부분이 누락되었거나 잘못되었을 가능성 있음

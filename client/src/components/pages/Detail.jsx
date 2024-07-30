@@ -13,7 +13,7 @@ export default function DisplayWeather() {
   
   const getMidWeather = async () => {
     const response = await fetch(
-      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11G00201&tmFc=202407290600`
+      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11G00201&tmFc=202407300600`
     );
     const result = await response.json();
     setMidWeather(result.response.body.items.item[0]);

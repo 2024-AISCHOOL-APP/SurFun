@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import SpotInfo from './SpotInfo';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import { addFavorite, removeFavorite, setFavorites } from '../../store/slices/favoritesSlices.js';
 import '../../assets/scss/SpotSelect.scss';
 
 function SpotSelect({ username }) {
@@ -13,8 +15,8 @@ function SpotSelect({ username }) {
   const [allMarkers, setAllMarkers] = useState([]);
   const [zoneType, setZoneType] = useState('surfing');
   const [selectedRegion, setSelectedRegion] = useState('강원도');
-  const [favorites, setFavorites] = useState([]);
-
+  const favorites = useSelector((state) => state.favorites);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const weatherMarkerImages = {
@@ -115,7 +117,7 @@ function SpotSelect({ username }) {
     const fetchFavorites = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/favorites/${username}`);
-        setFavorites(response.data);
+        dispatch(setFavorites(response.data));
         console.log('Fetched favorites:', response.data);
       } catch (err) {
         console.error('Error fetching favorites:', err.message);
@@ -124,7 +126,7 @@ function SpotSelect({ username }) {
 
     fetchData();
     fetchFavorites();
-  }, [username]);
+  }, [username, dispatch]);
 
   const handleFavoriteClick = async (markerData) => {
     try {
@@ -149,11 +151,13 @@ function SpotSelect({ username }) {
       console.log('Response:', response); // 응답 데이터 로그 출력
   
       if (response.status === 201) {
-        setFavorites(prevFavorites => [...prevFavorites, {
+        dispatch(addFavorite({
           id: response.data.id,
           name: markerData.name,
-          type: markerData.type
-        }]);
+          type: markerData.type,
+          surfing_zone_name: markerData.type === 'surfing' ? markerData.name : null,
+          diving_zone_name: markerData.type === 'diving' ? markerData.name : null
+        }));
       }
     } catch (err) {
       if (err.response) {
@@ -185,7 +189,7 @@ function SpotSelect({ username }) {
 
       const response = await axios.delete(`http://localhost:5000/favorites/${favorite.id}`);
       if (response.status === 200) {
-        setFavorites(prevFavorites => prevFavorites.filter(fav => fav.id !== favorite.id));
+        dispatch(removeFavorite(favorite));
       }
     } catch (err) {
       console.error('Error removing favorite:', err.message);

@@ -1,11 +1,25 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
+import { setFavorites } from '../../store/slices/favoritesSlices.js';
 
 const Favorites = () => {
+    const dispatch = useDispatch();
+    const favorites = useSelector(state => state.favorites);
+    const username = useSelector(state => state.user.username);
     const [news, setNews] = useState([]);
 
     useEffect(() => {
-        const getNews = async () => {
+        const fetchFavorites = async () => {
+            try {
+                const response = await axios.get(`http://localhost:5000/favorites/${username}`);
+                dispatch(setFavorites(response.data));
+            } catch (error) {
+                console.error('Error fetching favorites', error);
+            }
+        };
+
+        const fetchNews = async () => {
             try {
                 const newsData = await axios.get('http://localhost:5000/api/news');
                 setNews(newsData.data);
@@ -13,28 +27,38 @@ const Favorites = () => {
                 console.error('Error fetching news', error);
             }
         };
-        getNews();
-    }, []);
+
+        if (username) {
+            fetchFavorites();
+        }
+
+        fetchNews();
+    }, [username, dispatch]);
 
     return (
         <div className="additional-sections">
             <section className="sortable-list">
                 <h2 className="heading">즐겨찾는 해변</h2>
                 <p className="description">나만의 즐겨찾는 서핑 스팟을 저장해 보세요.</p>
-                <div className="sortable-item" data-menu-id="yonghwa">
-                    <i className="fas fa-up-down-left-right drag-handle"></i>
-                    <a href="/yonghwa">삼척 용화 해변 파도차트</a>
-                    <span className="delete-icon">
-                        <i className="fas fa-minus-circle"></i>
-                    </span>
-                </div>
-                <div className="sortable-item" data-menu-id="yonghwa">
-                    <i className="fas fa-up-down-left-right drag-handle"></i>
-                    <a href="/yonghwa">어쩔 해변 파도차트</a>
-                    <span className="delete-icon">
-                        <i className="fas fa-minus-circle"></i>
-                    </span>
-                </div>
+                {username ? (
+                    favorites.length === 0 ? (
+                        <p>즐겨찾는 해변이 없습니다.</p>
+                    ) : (
+                        favorites.map((favorite, index) => (
+                            <div key={index} className="sortable-item" data-menu-id={favorite.id}>
+                                <i className="fas fa-up-down-left-right drag-handle"></i>
+                                <a href={`/detail/${favorite.surfing_zone_id || favorite.diving_zone_id}`}>
+                                    {favorite.surfing_zone_id ? `서핑존: ${favorite.surfing_zone_name}` : `다이빙존: ${favorite.diving_zone_name}`}
+                                </a>
+                                <span className="delete-icon">
+                                    <i className="fas fa-minus-circle"></i>
+                                </span>
+                            </div>
+                        ))
+                    )
+                ) : (
+                    <p>로그인이 필요합니다. <a href="/login">로그인</a>하세요.</p>
+                )}
             </section>
 
             <section className="lower-sections">
@@ -54,12 +78,11 @@ const Favorites = () => {
                         <div key={index} className="sortable-item">
                             <a href={item.link} target="_blank" rel="noopener noreferrer">
                                 {item.title}
-                                <br></br>
+                                <br />
                             </a>
                         </div>
                     ))}
                 </div>
-                <br></br>
             </section>
         </div>
     );
