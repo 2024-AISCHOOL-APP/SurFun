@@ -216,6 +216,7 @@ export default function DetailGW() {
             <h2>상세 예보 (1시간 간격)</h2>
             {Object.keys(shortForecastData).map((date) => (
               <div key={date} className="date-forecast">
+                
                 <h3 onClick={() => toggleDate(date)}>{getDayLabel(date)}</h3>
                 {expandedDates[date] && (
                   <div className="hourly-forecast-container">
@@ -227,6 +228,8 @@ export default function DetailGW() {
           </div>
         </div>
       )}
+          
     </>
+    
   );
 }

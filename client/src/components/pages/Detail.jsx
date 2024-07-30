@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Line } from 'react-chartjs-2';
 import 'chart.js/auto';
-import '../../assets/scss/WeatherStyles.scss'; //웹
+import '../../assets/scss/WeatherStyles.scss'; // CSS 파일 경로 확인
+
+const tideTable = {
+  '20240729': [
+    { time: '03:19', value: 224, change: '+72' },
+    { time: '17:20', value: 230, change: '+129' },
+    { time: '10:17', value: 101, change: '-123' },
+    { time: '23:16', value: 168, change: '-62' },
+  ],
+};
 
 export default function DisplayWeather() {
   const [midWeather, setMidWeather] = useState(null);
@@ -9,30 +18,35 @@ export default function DisplayWeather() {
   const [loading, setLoading] = useState(true);
   const [expandedDates, setExpandedDates] = useState({});
 
-
-  
   const getMidWeather = async () => {
-    const response = await fetch(
-      `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11G00201&tmFc=202407300600`
-    );
-    const result = await response.json();
-    setMidWeather(result.response.body.items.item[0]);
+    try {
+      const response = await fetch(
+        `https://apis.data.go.kr/1360000/MidFcstInfoService/getMidTa?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=10&dataType=JSON&regId=11G00201&tmFc=202407300600`
+      );
+      const result = await response.json();
+      setMidWeather(result.response.body.items.item[0]);
+    } catch (error) {
+      console.error("Error fetching mid weather:", error);
+    }
   };
 
   const getShortWeather = async () => {
-    const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const baseDate = `${year}${month}${day}`;
-  
-    const response = await fetch(
-      `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=${baseDate}&base_time=0500&nx=33&ny=126`
-    );
-    const result = await response.json();
-    setShortWeather(result.response.body.items.item);
+    try {
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const baseDate = `${year}${month}${day}`;
+    
+      const response = await fetch(
+        `https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=V0b7rWgoRS5gxO0CfD1KDpRRmDv3lq8Zx%2BAUCVpi%2FVzym7%2Fyf48i%2BL7grZzQo6fkDX5GKonjMWTYR1vZtEYrrQ%3D%3D&pageNo=1&numOfRows=1000&dataType=JSON&base_date=${baseDate}&base_time=0500&nx=33&ny=126`
+      );
+      const result = await response.json();
+      setShortWeather(result.response.body.items.item);
+    } catch (error) {
+      console.error("Error fetching short weather:", error);
+    }
   };
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -44,7 +58,6 @@ export default function DisplayWeather() {
   }, []);
 
   useEffect(() => {
-    // 페이지 로드 시 기본적으로 모든 차트를 열어놓기
     if (shortWeather.length > 0) {
       const dates = shortWeather.reduce((acc, item) => {
         acc[item.fcstDate] = true;
@@ -75,19 +88,17 @@ export default function DisplayWeather() {
   const getWeatherIcon = (condition) => {
     switch (condition) {
       case '맑음':
-        return 'http://openweathermap.org/img/wn/01d.png';
+        return '/verygood.png';
       case '구름조금':
-        return 'http://openweathermap.org/img/wn/02d.png';
+        return '/good.png';
       case '구름많음':
-        return 'http://openweathermap.org/img/wn/03d.png';
+        return '/cool.png';
       case '흐림':
-        return 'http://openweathermap.org/img/wn/04d.png';
+        return '/bad.png'; // 'bad.png'를 적절한 경로로 수정
       case '비':
-        return 'http://openweathermap.org/img/wn/09d.png';
-      case '눈':
-        return 'http://openweathermap.org/img/wn/13d.png';
+        return '/sobad.png'; // 'sobad.png'를 적절한 경로로 수정
       default:
-        return 'http://openweathermap.org/img/wn/01d.png';
+        return '/default.png';
     }
   };
 
@@ -115,7 +126,7 @@ export default function DisplayWeather() {
 
     if (shortForecastData[date]) {
       Object.keys(shortForecastData[date])
-        .filter(time => parseInt(time, 10) >= 600) // 시작 시간을 06시로 설정
+        .filter(time => parseInt(time, 10) >= 600)
         .sort()
         .forEach(time => {
           const forecast = shortForecastData[date][time];
@@ -124,7 +135,6 @@ export default function DisplayWeather() {
           wavData.push(forecast.WAV);
           wsdData.push(forecast.WSD);
         });
-
     }
 
     return {
@@ -160,7 +170,7 @@ export default function DisplayWeather() {
     maintainAspectRatio: false,
     animation: {
       duration: 2000, // 애니메이션 시간 설정 (ms)
-      easing: 'easeInOutBounce', // 애니메이션 이징 함수 easeInQuad, easeOutQuad, easeInOutQuad, linear,easeInOutBounce, easeInOutElastic
+      easing: 'easeInOutBounce', // 애니메이션 이징 함수
     }
   };
 
@@ -176,8 +186,8 @@ export default function DisplayWeather() {
               <h2>주간 해양 </h2>
               <div className="forecast-grid">
                 {[...Array(7)].map((_, index) => {
-                  const date =new Date();
-                  date.setDate(date.getDate() + index); //오늘 날짜부터 시작
+                  const date = new Date();
+                  date.setDate(date.getDate() + index); // 오늘 날짜부터 시작
                   const dateStr = date.toISOString().split('T')[0].replace(/-/g, '');
                   const label = getDayLabel(dateStr);
                   const taMin = midWeather[`taMin${index + 3}`];
@@ -207,6 +217,14 @@ export default function DisplayWeather() {
               </div>
             </div>
           )}
+          <div className="tide-info">
+            <h2>오늘의 물때표</h2>
+            {tideTable['20240729'] && tideTable['20240729'].map((entry, index) => (
+              <div key={index} className="tide-entry">
+                <span>{entry.time} ({entry.value}) {entry.change}</span>
+              </div>
+            ))}
+          </div>
           <div className="detailed-forecast">
             <h2>해양 상세</h2>
             {Object.keys(shortForecastData).map((date) => (

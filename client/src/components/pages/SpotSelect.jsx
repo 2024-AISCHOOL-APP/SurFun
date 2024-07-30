@@ -8,10 +8,10 @@ import '../../assets/scss/SpotSelect.scss';
 
 function SpotSelect({ username }) {
   const [selectedCoordinates, setSelectedCoordinates] = useState({
-    latitude: 37.795,
+    latitude: 37.995,
     longitude: 128.908,
   });
-  const [weatherCondition, setWeatherCondition] = useState(5);
+  const [weatherCondition, setWeatherCondition] = useState(2);
   const [allMarkers, setAllMarkers] = useState([]);
   const [zoneType, setZoneType] = useState('surfing');
   const [selectedRegion, setSelectedRegion] = useState('강원도');
@@ -53,37 +53,36 @@ function SpotSelect({ username }) {
           };
           const map = new kakao.maps.Map(mapContainer, options);
 
-          const markerImage = new kakao.maps.MarkerImage(weatherMarkerImages[weatherCondition], new kakao.maps.Size(64, 69), {
-            offset: new kakao.maps.Point(27, 69),
-          });
-
           allMarkers.forEach(markerData => {
             const position = new kakao.maps.LatLng(markerData.latitude, markerData.longitude);
             const marker = new kakao.maps.Marker({
               position: position,
-              image: markerImage,
+              image: new kakao.maps.MarkerImage(weatherMarkerImages[weatherCondition], new kakao.maps.Size(64, 69), {
+                offset: new kakao.maps.Point(27, 69),
+              }),
             });
             marker.setMap(map);
 
-            kakao.maps.event.addListener(marker, 'click', () => {
-              map.setCenter(position);
-            });
+            const content = `
+              <div class="customoverlay">
+                <h4>${markerData.name}</h4>
+                <img src="${weatherMarkerImages[weatherCondition]}" alt="${markerData.name}" style="width: 100px; height: 100px;">
+                <p>${markerData.description || ''}</p>
+              </div>
+            `;
 
-            const content = `<div class="customoverlay" data-name="${encodeURIComponent(markerData.name)}">${markerData.name}</div>`;
-            const customOverlay = new kakao.maps.CustomOverlay({
-              position: position,
+            const infowindow = new kakao.maps.InfoWindow({
               content: content,
-              yAnchor: 1,
+              removable: true,
             });
-            customOverlay.setMap(map);
-          });
 
-          // Event delegation to handle clicks on custom overlay
-          document.querySelector('#map').addEventListener('click', (e) => {
-            if (e.target && e.target.classList.contains('customoverlay')) {
-              const name = decodeURIComponent(e.target.getAttribute('data-name'));
-              handleSpotClick({ name });
-            }
+            kakao.maps.event.addListener(marker, 'mouseover', () => {
+              infowindow.open(map, marker);
+            });
+
+            kakao.maps.event.addListener(marker, 'mouseout', () => {
+              infowindow.close();
+            });
           });
         });
       } catch (error) {
@@ -210,7 +209,7 @@ function SpotSelect({ username }) {
     const newRegion = e.target.value;
     setSelectedRegion(newRegion);
     setSelectedCoordinates(
-      newRegion === '강원도' ? { latitude: 37.795, longitude: 128.908 } : { latitude: 33.249, longitude: 126.413 }
+      newRegion === '강원도' ? { latitude: 37.805, longitude: 128.908 } : { latitude: 33.249, longitude: 126.413 }
     );
   };
 
@@ -223,7 +222,7 @@ function SpotSelect({ username }) {
   };
 
   const handleSpotClick = (markerData) => {
-    const detailPage = selectedRegion === '제주' ? 'detail2' : 'detail';
+    const detailPage = selectedRegion === '제주' ? 'detail' : 'detailgw';
     navigate(`/${detailPage}?name=${encodeURIComponent(markerData.name)}`);
   };
 
@@ -277,6 +276,28 @@ function SpotSelect({ username }) {
               )}
             </div>
           </div>
+      </div>
+      <div className="weather-icons">
+        <div className="weather-item">
+          <img src='/verygood.png' alt="매우 좋음" />
+          <h4>매우 좋음</h4>
+        </div>
+        <div className="weather-item">
+          <img src='/good.png' alt="좋음" />
+          <h4>좋음</h4>
+        </div>
+        <div className="weather-item">
+          <img src='/cool.png' alt="보통" />
+          <h4>보통</h4>
+        </div>
+        <div className="weather-item">
+          <img src='/bad.png' alt="나쁨" />
+          <h4>나쁨</h4>
+        </div>
+        <div className="weather-item">
+          <img src='/sobad.png' alt="매우 나쁨" />
+          <h4>매우 나쁨</h4>
+        </div>
       </div>
     </div>
   );
