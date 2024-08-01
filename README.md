@@ -11,11 +11,10 @@
 <br>
 
 ## ⭐ 주요 기능
-* 기능1
-* 기능2
-* 기능3
-* 기능4
-* 기능5
+* 기능1) 해양활동지수 5단계 UI 표기 -지도 및 스팟 상세 페이지에서 해당 위치의 액티비티 활종 지수를 확인할 수 있다
+* 기능2) 즐겨찾는 장소 상황 변경 알림 (SNS / E-mail) - 회원 가입한 이용자가 장소 알림 받기를 추가한 경우, 해당 지역이 서핑/다이빙에 참여하기 좋은 여건으로 변했을 때 알림 발송
+* 기능3) 지역 기상 정보 상세 페이지 - 하나의 페이지에서 기상 여건을 한눈에 확인 가능, 다양한 지표들을 부드러운 UI로 제시하고 먼 바다 정보와 조류 정보도 한번에 제공
+* 기능4) 관심 장소 즐겨찾기 - 자주 찾고 싶은 장소 혹은 관심 있는 장소 즐겨찾기를 해두면 메인 화면에서도 해당 지역 정보로 입장이 가능
 <br>
 
 ## ⛏ 기술스택
@@ -31,13 +30,15 @@
             <img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=HTML5&logoColor=white"/>
             <img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=CSS3&logoColor=white"/>
             <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white"/>
+            <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white"/> 
         </td>
     </tr>
     <tr>
         <td>라이브러리</td>
         <td>
             <img src="https://img.shields.io/badge/KakaoMap-FFCD00?style=for-the-badge&logo=Kakao&logoColor=white"/>
-            <img src="https://img.shields.io/badge/Redux-toolkit-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white" >
+            <img src="https://img.shields.io/badge/React-61DAFB?style=for-the-badge&logo=React&logoColor=black">
+            <img src="https://img.shields.io/badge/Redux-%23593d88.svg?style=for-the-badge&logo=redux&logoColor=white" >
             <img src="https://img.shields.io/badge/React_Router-CA4245?style=for-the-badge&logo=react-router&logoColor=white">
             <img src="https://img.shields.io/badge/Axios-007CE2?style=for-the-badge&logo=axios&logoColor=white" >
         </td>
@@ -83,20 +84,24 @@
 
 <br>
 
-## ⚙ 시스템 아키텍처(구조) 예시 
-![서비스 아키텍처](https://user-images.githubusercontent.com/25995055/169925538-15867bd9-aa0b-42fc-a39b-88981e926e51.png)
+## ⚙ 개발 툴
+![개발 툴](https://github.com/user-attachments/assets/b85da564-aad5-4451-8ff8-21b9de0499a2)
+<br>
+
+## ⚙ 시스템 아키텍처
+![시스템 아키텍처](https://github.com/user-attachments/assets/5ccf8363-1e79-4beb-81f6-515ef715e58c)
 <br>
 
 ## 📌 SW유스케이스
-![image](https://user-images.githubusercontent.com/25995055/178401023-9a015e66-aa6e-4d74-8564-9b1f9d306649.png)
+![유스케이스](https://github.com/user-attachments/assets/9b8ef91b-dc45-4eca-8a4d-c36e6793d8e8)
 <br>
 
 ## 📌 서비스 흐름도
-![image](https://user-images.githubusercontent.com/25995055/178401048-d6484bda-a2d7-40e1-998b-2bd195cd9f89.png)
+![서비스 흐름](https://github.com/user-attachments/assets/35d5adf9-223c-47f4-a3aa-010b9bcfc8cc)
 <br>
 
 ## 📌 ER다이어그램
-![image](https://user-images.githubusercontent.com/25995055/169925318-102784c2-893f-4fd7-bec9-a54c44b669d4.png)
+![ERD](https://github.com/user-attachments/assets/4111395e-b5f6-4089-ae96-d33c7015f423)
 <br>
 
 ## 🖥 화면 구성
@@ -121,22 +126,26 @@
     <td align="center"><img src="https://mblogthumb-phinf.pstatic.net/20160127_177/krazymouse_1453865104404DjQIi_PNG/%C4%AB%C4%AB%BF%C0%C7%C1%B7%BB%C1%EE_%B6%F3%C0%CC%BE%F0.png?type=w2" width="100" height="100"/></td>
     <td align="center"><img src="https://i.pinimg.com/236x/ed/bb/53/edbb53d4f6dd710431c1140551404af9.jpg" width="100" height="100"/></td>
     <td align="center"><img src="https://pbs.twimg.com/media/B-n6uPYUUAAZSUx.png" width="100" height="100"/></td>
+    <td align="center"><img src="https://pbs.twimg.com/media/B-n6uPYUUAAZSUx.png" width="100" height="100"/></td>
   </tr>
   <tr>
-    <td align="center"><strong>홍O동</strong></td>
-    <td align="center"><strong>홍O동</strong></td>
-    <td align="center"><strong>홍O동</strong></td>
-    <td align="center"><strong>홍O동</strong></td>
-    <td align="center"><strong>홍O동</strong></td>
+    <td align="center"><strong>임정완</strong></td>
+    <td align="center"><strong>이지훈</strong></td>
+    <td align="center"><strong>조혜진</strong></td>
+    <td align="center"><strong>홍남우</strong></td>
+    <td align="center"><strong>김규민</strong></td>
+    <td align="center"><strong>이효빈</strong></td>
   </tr>
   <tr>
     <td align="center"><b>Frontend</b></td>
     <td align="center"><b>Frontend</b></td>
+    <td align="center"><b>Backend</b></td>
     <td align="center"><b>Backend</b></td>
     <td align="center"><b>Backend</b></td>
     <td align="center"><b>Deep Learning</b></td>
   </tr>
   <tr>
+    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
     <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
     <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
     <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
