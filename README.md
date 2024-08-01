@@ -162,12 +162,12 @@
     <td align="center"><b>Backend</b></td>
   </tr>
   <tr>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
-    <td align="center"><a href="https://github.com/자신의username작성해주세요" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/WayneBLim" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/dlwlgnsrhy" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/whgpwls7327" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/namu-hong" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/rlarbals0000" target='_blank'>github</a></td>
+    <td align="center"><a href="https://github.com/tpids" target='_blank'>github</a></td>
   </tr>
 </table>
 
