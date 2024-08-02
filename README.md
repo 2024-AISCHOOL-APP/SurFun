@@ -126,16 +126,22 @@
 
 ## 🖥 화면 구성
 
-### 로그인/회원가입/회원괸리/회원수정/회원탈퇴
-![image](https://user-images.githubusercontent.com/25995055/178401098-95f15a0e-a2de-415e-83d5-883bb4cb0656.png)
+### 로그인,회원가입 모달창
+![프레젠테이션1](https://github.com/user-attachments/assets/0d355cbe-8f83-4fa8-a9dc-b30d85202b69)
 <br>
 
-### 옷 정보/코디 추천(날씨, 팁, 오늘의 코디, 참고할 수 있는 코디)
-![image](https://user-images.githubusercontent.com/25995055/178401127-287e6de2-4396-49fc-a107-59c4d5cd55c7.png)
+### 메인페이지
+![메인_반응형](https://github.com/user-attachments/assets/0134767b-ead7-461d-afcf-a9ad71a10e23)
+
 <br>
 
-### 일정/고객센터
-![image](https://user-images.githubusercontent.com/25995055/178401150-861f0e93-0f40-4fae-98c1-2099bf513c8d.png)
+### 예보 상세 페이지
+![예보상세페이지](https://github.com/user-attachments/assets/d0bde4bc-a61b-468e-98fa-40f132343c94)
+
+### 커뮤니티 페이지/게시글, 글쓰기 모달창
+![커뮤니티](https://github.com/user-attachments/assets/560cf1e3-8a42-4b89-aaa5-7b761ffd248e)
+
+
 <br>
 
 ## 👨‍👩‍👦‍👦 팀원 역할
