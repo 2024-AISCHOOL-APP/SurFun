@@ -1,5 +1,7 @@
 # 🌊 서핑을 즐기자 (팀명: SurFun) 🏄
-![surfun_logo0](https://github.com/user-attachments/assets/03d3bee2-89bb-4a70-bc9d-1cd8a5726307)
+
+![Surfun logo](https://github.com/user-attachments/assets/247bd901-add8-480f-a25f-79e527196665)
+
 
 ## 👀 서비스 소개
 * 서비스명: 실시간 해양 날씨 분석을 통한 해양 액티비티 추천 서비스
