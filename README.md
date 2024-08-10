@@ -112,10 +112,6 @@
 ![시스템 아키텍처](https://github.com/user-attachments/assets/5ccf8363-1e79-4beb-81f6-515ef715e58c)
 <br>
 
-## 📌 SW유스케이스
-![유스케이스](https://github.com/user-attachments/assets/9b8ef91b-dc45-4eca-8a4d-c36e6793d8e8)
-<br>
-
 ## 📌 서비스 흐름도
 ![서비스 흐름](https://github.com/user-attachments/assets/35d5adf9-223c-47f4-a3aa-010b9bcfc8cc)
 <br>
