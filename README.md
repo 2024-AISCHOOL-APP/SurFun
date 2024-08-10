@@ -174,12 +174,19 @@
     <td align="center"><a href="https://github.com/namu-hong" target='_blank'>github</a></td>
     <td align="center"><a href="https://github.com/rlarbals0000" target='_blank'>github</a></td>
     <td align="center"><a href="https://github.com/tpids" target='_blank'>github</a></td>
-  </tr>
+  </tr
+    <tr>
+      <td align="center">
+      <td align="center"><b> 아키텍쳐 설계 <br>React,express.js 개발 환경 구축 <br> Database설계 <br> WBS작성 및 계획수립 <br> 개발총괄 <br> Redux를 활용한 상태관리 <br>Redis를 활용한 외부API 속도 개선 <br>Docker&AWS EC2를 이용한 서비스 배포 <br> React-Native Expo WebViewApp으로 어플리케이션 전환
+      <td align="center">
+      <td align="center">
+      <td align="center">
+      <td align="center">
+    </tr>
 </table>
 
 ## 🤾‍♂️ 트러블슈팅
-개념: 문제 해결을 위해 문제의 원인을 논리적이고 체계적으로 찾는 일이며 제품이나 프로세스의 운영을 재개
-프로젝트 진행하는 동안 발생했던 이슈 중 가장 기억에 남았던 문제와 해결 프로세스 나열(2~5가지 정도)
+
 
 **TS1. 외부 API 속도 저하 문제 - Redis 활용**<br>
 1. 문제의 명확한 정의
