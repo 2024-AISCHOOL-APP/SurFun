@@ -178,10 +178,10 @@
     <tr>
       <td align="center"><b>• 프로젝트 매니저 <br><br> • 기획 운영 및 총괄 <br><br> • 데이터 수집 <br><br> • 데이터 전처리 <br><br> • 모델 구현 및 검증 <br><br> • 모델 최적화 
       <td align="center"><b>• 아키텍쳐 설계 <br><br> •React,express.js 개발 환경 구축 <br><br> • Database설계 <br><br> • WBS작성 및 계획수립 <br><br> • 개발총괄 <br><br> • Swagger-Ui,GitHub branch,Code Review 협업 시스템 구축 <br><br> • Redux를 활용한 상태관리 <br><br> •Redis를 활용한 외부API 속도 개선 <br><br> •Docker&AWS EC2를 이용한 서비스 배포 <br><br> • React-Native Expo WebViewApp으로 어플리케이션 전환
-      <td align="center">
-      <td align="center">
-      <td align="center">
-      <td align="center">
+      <td align="center"><b>• 데이터 수집 <br><br> • 데이터 전처리 <br><br> • 모델 업로드 <br><br> • 플라스크 연동 <br><br> • 시연 영상 제작
+      <td align="center"><b>• 화면 기획 및 설계 <br><br> • 메인 페이지 구현 <br><br> • CSS적용 <br><br> • 반응형 디자인 제작
+      <td align="center"><b>• 스팟 페이지 구현 <br><br> • 외부 api호출 <br><br> • 검색기능 구현 <br><br> • CSS적용 <br><br> • 반응형 디자인 제작
+      <td align="center"><b>• RestFul api개발 <br><br> • 맞춤형 알림 구현 <br><br> • DB생성 및 관리 <br><br> • 커뮤니티 기능 구형
     </tr>
 </table>
 
