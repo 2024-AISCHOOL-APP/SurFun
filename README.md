@@ -176,7 +176,7 @@
     <td align="center"><a href="https://github.com/tpids" target='_blank'>github</a></td>
   </tr
     <tr>
-      <td align="center">
+      <td align="center"><b>• 프로젝트 매니저 <br><br> • 기획 운영 및 총괄 <br><br> • 데이터 수집 <br><br> • 데이터 전처리 <br><br> • 모델 구현 및 검증 <br><br> • 모델 최적화 
       <td align="center"><b>• 아키텍쳐 설계 <br><br> •React,express.js 개발 환경 구축 <br><br> • Database설계 <br><br> • WBS작성 및 계획수립 <br><br> • 개발총괄 <br><br> • Swagger-Ui,GitHub branch,Code Review 협업 시스템 구축 <br><br> • Redux를 활용한 상태관리 <br><br> •Redis를 활용한 외부API 속도 개선 <br><br> •Docker&AWS EC2를 이용한 서비스 배포 <br><br> • React-Native Expo WebViewApp으로 어플리케이션 전환
       <td align="center">
       <td align="center">
