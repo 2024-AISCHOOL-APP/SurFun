@@ -181,7 +181,7 @@
       <td align="center"><b>• 데이터 수집 <br><br> • 데이터 전처리 <br><br> • 모델 업로드 <br><br> • 플라스크 연동 <br><br> • 시연 영상 제작
       <td align="center"><b>• 화면 기획 및 설계 <br><br> • 메인 페이지 구현 <br><br> • CSS적용 <br><br> • 반응형 디자인 제작
       <td align="center"><b>• 스팟 페이지 구현 <br><br> • 외부 api호출 <br><br> • 검색기능 구현 <br><br> • CSS적용 <br><br> • 반응형 디자인 제작
-      <td align="center"><b>• RestFul api개발 <br><br> • 맞춤형 알림 구현 <br><br> • DB생성 및 관리 <br><br> • 커뮤니티 기능 구형
+      <td align="center"><b>• RestFul api개발 <br><br> • 맞춤형 알림 구현 email & sms <br><br> • DB생성 및 관리 <br><br> • 커뮤니티 기능 구현 <br><br> • 즐겨찾기 기능 구현 <br><br> • Swagger-Ui,GitHub 협업 
     </tr>
 </table>
 
