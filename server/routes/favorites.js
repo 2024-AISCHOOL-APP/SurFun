@@ -49,6 +49,8 @@ router.post('/', async (req, res) => {
             return;
         }
 
+
+        
         if (diving_zone_id) {
             const [zone] = await db.query('SELECT * FROM Diving_Zone WHERE diving_zone_id = ?', [diving_zone_id]);
             if (zone.length === 0) {
